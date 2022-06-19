@@ -15,6 +15,11 @@
     "webpack-dev-server": "^4.9.2"
   },
   "dependencies": {
+    "@babel/core": "^7.18.5",
+    "@emotion/react": "^11.9.3",
+    "@emotion/styled": "^11.9.3",
+    "@mui/lab": "5.0.0-alpha.86",
+    "@mui/material": "^5.8.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   }

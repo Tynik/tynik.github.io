@@ -24,7 +24,6 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      title: 'Mykhailo Aliinyk Profile',
       template: './src/index.ejs'
     })
   ],
