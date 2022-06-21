@@ -12,12 +12,23 @@ import {
 } from '@mui/lab';
 import { PlayArrow as PlayArrowIcon } from '@mui/icons-material';
 
+const FULLNAME = 'Mykhailo Aliinyk';
+const BIRTHDAY = '09/27/1992';
+const BIRTHDAY_YEAR = 1992;
+const CURRENT_POSITION = 'Senior Frontend Engineer';
+
 const timeline: Record<string, { icon: React.ReactElement; name: string; content: string }> = {
   2007: {
     name: 'Inspiration',
     icon: <PlayArrowIcon />,
-    content:
-      'Started from Pascal, C++ and Delphi. The Pascal was the first language which I faced.',
+    content: `
+      Started from Pascal, C++ and Delphi.
+      The Pascal was the first language which I faced.
+      Coding simple algorithms and computer viruses for Windows machines.
+      Why the viruses? - The code should work on the low level with computer resources 
+      (files, registry, injecting malware code into executing files and etc.). 
+      Interested logic which allows you to pump the brain.
+      `,
   },
 };
 
@@ -27,18 +38,21 @@ const Main = () => {
       <Grid item sm={3} md={6}>
         <img
           src="https://bafybeigoqmi3ratjk7kjm7jx5g6cpk7xbnuphq4ypg53odj77xz5on52re.ipfs.dweb.link/IMG_1459.jpeg"
-          alt="Mykhailo Aliinyk"
+          alt={FULLNAME}
           width="100%"
         />
       </Grid>
 
       <Grid item sm={9} md={6}>
         <Typography variant="h3" align="center" textTransform="uppercase" fontWeight={600}>
-          Mykhailo Aliinyk
+          {FULLNAME}
+          {/* {new Date().getFullYear() - BIRTHDAY_YEAR}y */}
         </Typography>
+
         <Typography variant="body2" align="center" color="text.secondary">
-          Senior Frontend Engineer
+          {CURRENT_POSITION}
         </Typography>
+
         <Timeline position="right">
           {Object.keys(timeline).map(year => (
             <TimelineItem key={year}>
@@ -49,7 +63,7 @@ const Main = () => {
                 color="text.secondary"
                 style={{ flex: 0.1 }}
               >
-                {year}
+                {year} ({+year - BIRTHDAY_YEAR}y)
               </TimelineOppositeContent>
               <TimelineSeparator>
                 <TimelineConnector />
