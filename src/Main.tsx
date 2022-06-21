@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Typography, Grid } from '@mui/material';
+import { Typography, Grid, Stack, Chip } from '@mui/material';
 import {
   Timeline,
   TimelineItem,
@@ -23,7 +23,9 @@ const BIRTHDAY = '09/27/1992';
 const BIRTHDAY_YEAR = 1992;
 const CURRENT_POSITION = 'Senior Frontend Engineer';
 
-const timeline: Record<string, { icon: React.ReactElement; name: string; content: string }> = {
+type TimelinePoint = { icon: React.ReactElement; name: string; content: string; stack?: string[] };
+
+const timeline: Record<string, TimelinePoint> = {
   2016: {
     name: 'Next Steps',
     icon: <DirectionsWalkIcon />,
@@ -38,6 +40,7 @@ const timeline: Record<string, { icon: React.ReactElement; name: string; content
       After half a year I decided to use Python instead of PHP and rewrote the whole backend on my own. 
       I did this in my free time because I was involved in learning a new language.
     `,
+    stack: ['PHP', 'Yii', 'Python', 'Django', 'MySQL'],
   },
   2011: {
     name: 'NAU',
@@ -48,6 +51,7 @@ const timeline: Record<string, { icon: React.ReactElement; name: string; content
       as a full-stack engineer, where the backend was PHP (Yii) and UI like usual templates generated on the backend side. 
       It was my first experience in Web development.
     `,
+    stack: ['PHP', 'Yii', 'MySQL', 'Action Script', 'HTML', 'CSS'],
   },
   2007: {
     name: 'Inspiration',
@@ -60,6 +64,7 @@ const timeline: Record<string, { icon: React.ReactElement; name: string; content
       (files, registry, injecting malware code into executing files and etc.). 
       Interested logic which allows you to pump the brain.
     `,
+    stack: ['C++', 'Delphi', 'Pascal'],
   },
 };
 
@@ -108,6 +113,19 @@ const Main = () => {
                   {timeline[year].name}
                 </Typography>
                 <Typography>{timeline[year].content}</Typography>
+
+                {timeline[year].stack?.length > 0 && (
+                  <Stack direction="row" spacing={1} mt={1}>
+                    {timeline[year].stack.map(technology => (
+                      <Chip
+                        key={technology}
+                        label={technology}
+                        variant="outlined"
+                        color="primary"
+                      />
+                    ))}
+                  </Stack>
+                )}
               </TimelineContent>
             </TimelineItem>
           ))}
