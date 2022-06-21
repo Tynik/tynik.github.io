@@ -14,6 +14,8 @@ import {
   PlayArrow as PlayArrowIcon,
   School as SchoolIcon,
   DirectionsWalk as DirectionsWalkIcon,
+  Psychology as PsychologyIcon,
+  Work as WorkIcon,
 } from '@mui/icons-material';
 
 const FULLNAME = 'Mykhailo Aliinyk';
@@ -27,13 +29,25 @@ const timeline: Record<string, { icon: React.ReactElement; name: string; content
     icon: <DirectionsWalkIcon />,
     content: `I graduated from KhAI.`,
   },
+  2014: {
+    name: 'Awareness',
+    icon: <PsychologyIcon />,
+    content: `
+      I realized that I have enough experience to move on.
+      I got a job in Kiyv as PHP backend developer. It was a startup.
+      After half a year I decided to use Python instead of PHP and rewrote the whole backend on my own. 
+      I did this in my free time because I was involved in learning a new language.
+    `,
+  },
   2011: {
     name: 'NAU',
     icon: <SchoolIcon />,
-    content: `I entered the second semester at KhAI (National Aerospace University "Kharkiv Aviation Institute").
-    Inside KhAI I got a job and worked there as Action Script 3.0 developer and after some time 
-    as a full-stack engineer, where the backend was PHP (Yii) and UI like usual templates generated on the backend side. 
-    It was my first experience in Web development.`,
+    content: `
+      I entered the second semester at KhAI (National Aerospace University "Kharkiv Aviation Institute").
+      Inside KhAI I got a job and worked there as Action Script 3.0 developer and after some time 
+      as a full-stack engineer, where the backend was PHP (Yii) and UI like usual templates generated on the backend side. 
+      It was my first experience in Web development.
+    `,
   },
   2007: {
     name: 'Inspiration',
@@ -45,7 +59,7 @@ const timeline: Record<string, { icon: React.ReactElement; name: string; content
       Why the viruses? - The code should work on the low level with computer resources 
       (files, registry, injecting malware code into executing files and etc.). 
       Interested logic which allows you to pump the brain.
-      `,
+    `,
   },
 };
 
