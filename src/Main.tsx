@@ -10,7 +10,11 @@ import {
   TimelineDot,
   TimelineOppositeContent,
 } from '@mui/lab';
-import { PlayArrow as PlayArrowIcon } from '@mui/icons-material';
+import {
+  PlayArrow as PlayArrowIcon,
+  School as SchoolIcon,
+  DirectionsWalk as DirectionsWalkIcon,
+} from '@mui/icons-material';
 
 const FULLNAME = 'Mykhailo Aliinyk';
 const BIRTHDAY = '09/27/1992';
@@ -18,6 +22,19 @@ const BIRTHDAY_YEAR = 1992;
 const CURRENT_POSITION = 'Senior Frontend Engineer';
 
 const timeline: Record<string, { icon: React.ReactElement; name: string; content: string }> = {
+  2016: {
+    name: 'Next Steps',
+    icon: <DirectionsWalkIcon />,
+    content: `I graduated from KhAI.`,
+  },
+  2011: {
+    name: 'NAU',
+    icon: <SchoolIcon />,
+    content: `I entered the second semester at KhAI (National Aerospace University "Kharkiv Aviation Institute").
+    Inside KhAI I got a job and worked there as Action Script 3.0 developer and after some time 
+    as a full-stack engineer, where the backend was PHP (Yii) and UI like usual templates generated on the backend side. 
+    It was my first experience in Web development.`,
+  },
   2007: {
     name: 'Inspiration',
     icon: <PlayArrowIcon />,
