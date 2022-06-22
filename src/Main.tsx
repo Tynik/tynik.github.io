@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Typography, Grid, Stack, Chip } from '@mui/material';
+import { Typography, Grid, Stack, Chip, Link, Box } from '@mui/material';
 import {
   Timeline,
   TimelineItem,
@@ -23,13 +23,28 @@ const BIRTHDAY = '09/27/1992';
 const BIRTHDAY_YEAR = 1992;
 const CURRENT_POSITION = 'Senior Frontend Engineer';
 
-type TimelinePoint = { icon: React.ReactElement; name: string; content: string; stack?: string[] };
+type TimelinePoint = {
+  icon: React.ReactElement;
+  name: string;
+  content: string;
+  stack?: string[];
+  position?: string;
+  links?: string[];
+};
 
 const timeline: Record<string, TimelinePoint> = {
   2016: {
     name: 'Next Steps',
     icon: <DirectionsWalkIcon />,
-    content: `I graduated from KhAI.`,
+    content: `
+      I graduated from KhAI. I taught PHP and Python at PHP Academy for 6 months. 
+      I released 2 groups of 25 people who successfully got a job.
+    `,
+    links: [
+      'https://jobs.dou.ua/companies/php-academy/reviews/#32182',
+      'https://jobs.dou.ua/companies/php-academy/reviews/#32064',
+      'https://jobs.dou.ua/companies/php-academy/reviews/#31865',
+    ],
   },
   2014: {
     name: 'Awareness',
@@ -41,6 +56,7 @@ const timeline: Record<string, TimelinePoint> = {
       I did this in my free time because I was involved in learning a new language.
     `,
     stack: ['PHP', 'Yii', 'Python', 'Django', 'MySQL'],
+    position: 'Backend Developer',
   },
   2011: {
     name: 'NAU',
@@ -52,6 +68,7 @@ const timeline: Record<string, TimelinePoint> = {
       It was my first experience in Web development.
     `,
     stack: ['PHP', 'Yii', 'MySQL', 'Action Script', 'HTML', 'CSS'],
+    position: 'Fullstack Developer',
   },
   2007: {
     name: 'Inspiration',
@@ -109,9 +126,16 @@ const Main = () => {
                 <TimelineConnector />
               </TimelineSeparator>
               <TimelineContent py="12px" px={2}>
-                <Typography variant="h6" component="span">
+                <Typography variant="h6" component="p">
                   {timeline[year].name}
                 </Typography>
+
+                {timeline[year].position && (
+                  <Typography color="text.secondary" component="p" variant="body2">
+                    {timeline[year].position}
+                  </Typography>
+                )}
+
                 <Typography>{timeline[year].content}</Typography>
 
                 {timeline[year].stack?.length > 0 && (
@@ -125,6 +149,21 @@ const Main = () => {
                       />
                     ))}
                   </Stack>
+                )}
+
+                {timeline[year].links?.length > 0 && (
+                  <Box mt={1}>
+                    <Typography variant="subtitle1" component="p" fontWeight={600}>
+                      Links
+                    </Typography>
+                    <Stack color="text.secondary">
+                      {timeline[year].links.map(href => (
+                        <Link key={href} href={href} target="_blank">
+                          {href}
+                        </Link>
+                      ))}
+                    </Stack>
+                  </Box>
                 )}
               </TimelineContent>
             </TimelineItem>
