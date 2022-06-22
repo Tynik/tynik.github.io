@@ -118,23 +118,44 @@ const timeline: Record<string, TimelinePoint> = {
 const Main = () => {
   return (
     <Grid container mt={2} spacing={2}>
-      <Grid item sm={3} md={6}>
-        <img
-          src="https://bafybeigoqmi3ratjk7kjm7jx5g6cpk7xbnuphq4ypg53odj77xz5on52re.ipfs.dweb.link/IMG_1459.jpeg"
-          alt={FULLNAME}
-          width="100%"
-        />
+      <Grid item xs={12} md={6} position="relative">
+        <Box sx={{ opacity: { xs: 0.4, md: 1 } }}>
+          <img
+            src="https://bafybeigoqmi3ratjk7kjm7jx5g6cpk7xbnuphq4ypg53odj77xz5on52re.ipfs.dweb.link/IMG_1459.jpeg"
+            alt={FULLNAME}
+            width="100%"
+          />
+        </Box>
+        <Box
+          display={{ md: 'none' }}
+          position="absolute"
+          top={0}
+          margin="auto"
+          left={0}
+          right={0}
+          mt={14}
+        >
+          <Typography variant="h3" align="center" textTransform="uppercase" fontWeight={600}>
+            {FULLNAME}
+          </Typography>
+
+          <Typography variant="body2" align="center" color="text.secondary">
+            {CURRENT_POSITION}
+          </Typography>
+        </Box>
       </Grid>
 
-      <Grid item sm={9} md={6}>
-        <Typography variant="h3" align="center" textTransform="uppercase" fontWeight={600}>
-          {FULLNAME}
-          {/* {new Date().getFullYear() - BIRTHDAY_YEAR}y */}
-        </Typography>
+      <Grid item xs={12} md={6}>
+        <Box display={{ xs: 'none', md: 'block' }}>
+          <Typography variant="h3" align="center" textTransform="uppercase" fontWeight={600}>
+            {FULLNAME}
+            {/* {new Date().getFullYear() - BIRTHDAY_YEAR}y */}
+          </Typography>
 
-        <Typography variant="body2" align="center" color="text.secondary">
-          {CURRENT_POSITION}
-        </Typography>
+          <Typography variant="body2" align="center" color="text.secondary">
+            {CURRENT_POSITION}
+          </Typography>
+        </Box>
 
         <Timeline position="right">
           {Object.keys(timeline)
@@ -146,7 +167,14 @@ const Main = () => {
                   align="right"
                   variant="body2"
                   color="text.secondary"
-                  style={{ flex: 0.1 }}
+                  whiteSpace="nowrap"
+                  sx={{
+                    writingMode: { xs: 'vertical-rl', sm: 'initial' },
+                    transform: { xs: 'rotate(-180deg)', sm: 'none' },
+                    maxWidth: { xs: '2rem', sm: '6rem' },
+                    paddingLeft: '0px',
+                    paddingRight: 1,
+                  }}
                 >
                   {year} ({Number.parseInt(year, 10) - BIRTHDAY_YEAR}y)
                 </TimelineOppositeContent>
