@@ -15,6 +15,7 @@ import {
   School as SchoolIcon,
   DirectionsWalk as DirectionsWalkIcon,
   Psychology as PsychologyIcon,
+  Business as BusinessIcon,
   Work as WorkIcon,
 } from '@mui/icons-material';
 
@@ -33,22 +34,52 @@ type TimelinePoint = {
 };
 
 const timeline: Record<string, TimelinePoint> = {
-  2016: {
+  '2019': {
+    name: 'SPSCommerce',
+    icon: <BusinessIcon />,
+    position: 'Middle Frontend Developer',
+    content: `
+    `,
+    stack: ['AngularJS', 'Webpack', 'Jest', 'HTML', 'CSS'],
+  },
+  '2016/07': {
+    name: 'SPSCommerce',
+    icon: <BusinessIcon />,
+    position: 'Middle Backend Developer',
+    content: `
+      I got a job at SPSCommerce. I graduated from KhAI.
+    `,
+    stack: [
+      'Python',
+      'Django',
+      'Flask',
+      'AWS',
+      'Ansible',
+      'Jenkins',
+      'REST',
+      'Redis',
+      'MySQL',
+      'Aurora',
+    ],
+  },
+  '2016': {
     name: 'Next Steps',
     icon: <DirectionsWalkIcon />,
     content: `
-      I graduated from KhAI. I taught PHP and Python at PHP Academy for 6 months. 
+      I taught PHP and Python at PHP Academy for 6 months. 
       I released 2 groups of 25 people who successfully got a job.
     `,
+    stack: ['Python', 'Flask', 'MySQL', 'PHP', 'Yii'],
     links: [
       'https://jobs.dou.ua/companies/php-academy/reviews/#32182',
       'https://jobs.dou.ua/companies/php-academy/reviews/#32064',
       'https://jobs.dou.ua/companies/php-academy/reviews/#31865',
     ],
   },
-  2014: {
+  '2014': {
     name: 'Awareness',
     icon: <PsychologyIcon />,
+    position: 'Backend Developer',
     content: `
       I realized that I have enough experience to move on.
       I got a job in Kiyv as PHP backend developer. It was a startup.
@@ -56,11 +87,11 @@ const timeline: Record<string, TimelinePoint> = {
       I did this in my free time because I was involved in learning a new language.
     `,
     stack: ['PHP', 'Yii', 'Python', 'Django', 'MySQL'],
-    position: 'Backend Developer',
   },
-  2011: {
+  '2011': {
     name: 'NAU',
     icon: <SchoolIcon />,
+    position: 'Fullstack Developer',
     content: `
       I entered the second semester at KhAI (National Aerospace University "Kharkiv Aviation Institute").
       Inside KhAI I got a job and worked there as Action Script 3.0 developer and after some time 
@@ -68,9 +99,8 @@ const timeline: Record<string, TimelinePoint> = {
       It was my first experience in Web development.
     `,
     stack: ['PHP', 'Yii', 'MySQL', 'Action Script', 'HTML', 'CSS'],
-    position: 'Fullstack Developer',
   },
-  2007: {
+  '2007': {
     name: 'Inspiration',
     icon: <PlayArrowIcon />,
     content: `
@@ -107,67 +137,69 @@ const Main = () => {
         </Typography>
 
         <Timeline position="right">
-          {Object.keys(timeline).map(year => (
-            <TimelineItem key={year}>
-              <TimelineOppositeContent
-                m="auto 0"
-                align="right"
-                variant="body2"
-                color="text.secondary"
-                style={{ flex: 0.1 }}
-              >
-                {year} ({+year - BIRTHDAY_YEAR}y)
-              </TimelineOppositeContent>
-              <TimelineSeparator>
-                <TimelineConnector />
-                <TimelineDot color="primary" variant="outlined">
-                  {timeline[year].icon}
-                </TimelineDot>
-                <TimelineConnector />
-              </TimelineSeparator>
-              <TimelineContent py="12px" px={2}>
-                <Typography variant="h6" component="p">
-                  {timeline[year].name}
-                </Typography>
-
-                {timeline[year].position && (
-                  <Typography color="text.secondary" component="p" variant="body2">
-                    {timeline[year].position}
+          {Object.keys(timeline)
+            .sort()
+            .map(year => (
+              <TimelineItem key={year}>
+                <TimelineOppositeContent
+                  m="auto 0"
+                  align="right"
+                  variant="body2"
+                  color="text.secondary"
+                  style={{ flex: 0.1 }}
+                >
+                  {year} ({Number.parseInt(year, 10) - BIRTHDAY_YEAR}y)
+                </TimelineOppositeContent>
+                <TimelineSeparator>
+                  <TimelineConnector />
+                  <TimelineDot color="primary" variant="outlined">
+                    {timeline[year].icon}
+                  </TimelineDot>
+                  <TimelineConnector />
+                </TimelineSeparator>
+                <TimelineContent py="12px" px={2}>
+                  <Typography variant="h6" component="p">
+                    {timeline[year].name}
                   </Typography>
-                )}
 
-                <Typography>{timeline[year].content}</Typography>
-
-                {timeline[year].stack?.length > 0 && (
-                  <Stack direction="row" spacing={1} mt={1}>
-                    {timeline[year].stack.map(technology => (
-                      <Chip
-                        key={technology}
-                        label={technology}
-                        variant="outlined"
-                        color="primary"
-                      />
-                    ))}
-                  </Stack>
-                )}
-
-                {timeline[year].links?.length > 0 && (
-                  <Box mt={1}>
-                    <Typography variant="subtitle1" component="p" fontWeight={600}>
-                      Links
+                  {timeline[year].position && (
+                    <Typography color="text.secondary" component="p" variant="body2">
+                      {timeline[year].position}
                     </Typography>
-                    <Stack color="text.secondary">
-                      {timeline[year].links.map(href => (
-                        <Link key={href} href={href} target="_blank">
-                          {href}
-                        </Link>
+                  )}
+
+                  <Typography>{timeline[year].content}</Typography>
+
+                  {timeline[year].stack?.length > 0 && (
+                    <Stack direction="row" mt={1} flexWrap="wrap" gap={1}>
+                      {timeline[year].stack.map(technology => (
+                        <Chip
+                          key={technology}
+                          label={technology}
+                          variant="outlined"
+                          color="primary"
+                        />
                       ))}
                     </Stack>
-                  </Box>
-                )}
-              </TimelineContent>
-            </TimelineItem>
-          ))}
+                  )}
+
+                  {timeline[year].links?.length > 0 && (
+                    <Box mt={1}>
+                      <Typography variant="subtitle1" component="p" fontWeight={600}>
+                        Links
+                      </Typography>
+                      <Stack color="text.secondary">
+                        {timeline[year].links.map(href => (
+                          <Link key={href} href={href} target="_blank">
+                            {href}
+                          </Link>
+                        ))}
+                      </Stack>
+                    </Box>
+                  )}
+                </TimelineContent>
+              </TimelineItem>
+            ))}
         </Timeline>
       </Grid>
     </Grid>
