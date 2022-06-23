@@ -161,8 +161,8 @@ const timeline: Record<string, TimelinePoint> = {
 
 const Main = () => {
   return (
-    <Grid container mt={2} spacing={2}>
-      <Grid item xs={12} md={6} position="relative">
+    <Grid container mt={1} spacing={1}>
+      <Grid item xs={12} md={4} position="relative">
         <Box sx={{ opacity: { xs: 0.4, md: 1 } }}>
           <img
             src="https://bafybeigoqmi3ratjk7kjm7jx5g6cpk7xbnuphq4ypg53odj77xz5on52re.ipfs.dweb.link/IMG_1459.jpeg"
@@ -189,7 +189,7 @@ const Main = () => {
         </Box>
       </Grid>
 
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={8}>
         <Box display={{ xs: 'none', md: 'block' }}>
           <Typography variant="h3" align="center" textTransform="uppercase" fontWeight={600}>
             {FULLNAME}
@@ -211,7 +211,6 @@ const Main = () => {
                   align="right"
                   variant="body2"
                   color="text.secondary"
-                  whiteSpace="nowrap"
                   sx={{
                     writingMode: { xs: 'vertical-rl', sm: 'initial' },
                     transform: { xs: 'rotate(-180deg)', sm: 'none' },
