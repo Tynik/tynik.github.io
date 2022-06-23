@@ -34,13 +34,21 @@ type TimelinePoint = {
 };
 
 const timeline: Record<string, TimelinePoint> = {
+  '2021': {
+    name: 'SPSCommerce',
+    icon: <BusinessIcon />,
+    position: 'Senior Frontend Developer',
+    content: `
+    `,
+    stack: ['React', 'SPA', 'AngularJS', 'Webpack', 'Jest', 'SASS'],
+  },
   '2019': {
     name: 'SPSCommerce',
     icon: <BusinessIcon />,
     position: 'Middle Frontend Developer',
     content: `
     `,
-    stack: ['AngularJS', 'Webpack', 'Jest', 'HTML', 'CSS'],
+    stack: ['React', 'AngularJS', 'Webpack', 'Jest', 'Enzyme', 'HTML', 'CSS'],
   },
   '2016/07': {
     name: 'SPSCommerce',
