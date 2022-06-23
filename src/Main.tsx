@@ -34,21 +34,55 @@ type TimelinePoint = {
 };
 
 const timeline: Record<string, TimelinePoint> = {
-  '2021': {
+  '2021 - current': {
     name: 'SPSCommerce',
     icon: <BusinessIcon />,
     position: 'Senior Frontend Developer',
     content: `
     `,
-    stack: ['React', 'SPA', 'AngularJS', 'Webpack', 'Jest', 'SASS'],
+    stack: [
+      'React',
+      'Redux',
+      'SingleSPA',
+      'AngularJS',
+      'Webpack',
+      'Jest',
+      'MSW',
+      'SASS',
+      'Azure',
+      'Bash',
+      'Jira',
+      'Agile',
+      'MacOS',
+    ],
   },
   '2019': {
     name: 'SPSCommerce',
     icon: <BusinessIcon />,
     position: 'Middle Frontend Developer',
     content: `
+      Working with the old AngularJS code and migrating code partially to React. 
+      For simplifying the migration process we use Single SPA.
+      Implementing new features on React and deprecate the old AngularJS code step by step.
     `,
-    stack: ['React', 'AngularJS', 'Webpack', 'Jest', 'Enzyme', 'HTML', 'CSS'],
+    stack: [
+      'React',
+      'Redux',
+      'Sofe',
+      'SingleSPA',
+      'AngularJS',
+      'Webpack',
+      'Jest',
+      'Enzyme',
+      'HTML',
+      'CSS',
+      'Jenkins',
+      'Drone',
+      'Bash',
+      'Jira',
+      'Agile',
+      'MacOS',
+    ],
   },
   '2016/07': {
     name: 'SPSCommerce',
@@ -68,6 +102,8 @@ const timeline: Record<string, TimelinePoint> = {
       'Redis',
       'MySQL',
       'Aurora',
+      'Jira',
+      'Agile',
     ],
   },
   '2016': {
@@ -77,7 +113,7 @@ const timeline: Record<string, TimelinePoint> = {
       I taught PHP and Python at PHP Academy for 6 months. 
       I released 2 groups of 25 people who successfully got a job.
     `,
-    stack: ['Python', 'Flask', 'MySQL', 'PHP', 'Yii'],
+    stack: ['Python', 'Flask', 'MySQL', 'PHP', 'Yii', 'Linux', 'Windows'],
     links: [
       'https://jobs.dou.ua/companies/php-academy/reviews/#32182',
       'https://jobs.dou.ua/companies/php-academy/reviews/#32064',
@@ -94,7 +130,7 @@ const timeline: Record<string, TimelinePoint> = {
       After half a year I decided to use Python instead of PHP and rewrote the whole backend on my own. 
       I did this in my free time because I was involved in learning a new language.
     `,
-    stack: ['PHP', 'Yii', 'Python', 'Django', 'MySQL'],
+    stack: ['PHP', 'Yii', 'Python', 'Django', 'MySQL', 'Linux'],
   },
   '2011': {
     name: 'NAU',
@@ -106,7 +142,7 @@ const timeline: Record<string, TimelinePoint> = {
       as a full-stack engineer, where the backend was PHP (Yii) and UI like usual templates generated on the backend side. 
       It was my first experience in Web development.
     `,
-    stack: ['PHP', 'Yii', 'MySQL', 'Action Script', 'HTML', 'CSS'],
+    stack: ['PHP', 'Yii', 'MySQL', 'Action Script', 'HTML', 'CSS', 'Linux'],
   },
   '2007': {
     name: 'Inspiration',
@@ -119,7 +155,7 @@ const timeline: Record<string, TimelinePoint> = {
       (files, registry, injecting malware code into executing files and etc.). 
       Interested logic which allows you to pump the brain.
     `,
-    stack: ['C++', 'Delphi', 'Pascal'],
+    stack: ['C++', 'Delphi', 'Pascal', 'Windows', 'Linux'],
   },
 };
 
