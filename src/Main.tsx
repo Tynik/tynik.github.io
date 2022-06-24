@@ -39,6 +39,9 @@ const timeline: Record<string, TimelinePoint> = {
     icon: <BusinessIcon />,
     position: 'Senior Frontend Developer',
     content: `
+      Continuing of migrating from AngularJS to React and implementing the new features. 
+      Writing Unit Tests. 
+      Creating custom jobs for Azure Pipeline.
     `,
     stack: [
       'React',
@@ -63,7 +66,7 @@ const timeline: Record<string, TimelinePoint> = {
     content: `
       Working with the old AngularJS code and migrating code partially to React. 
       For simplifying the migration process we use Single SPA.
-      Implementing new features on React and deprecate the old AngularJS code step by step.
+      Implementing new features on React and deprecating the old AngularJS code step by step.
     `,
     stack: [
       'React',
