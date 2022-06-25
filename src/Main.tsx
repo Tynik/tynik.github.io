@@ -34,14 +34,15 @@ type TimelinePoint = {
 };
 
 const timeline: Record<string, TimelinePoint> = {
-  '2021 - current': {
+  '2021': {
     name: 'SPSCommerce',
     icon: <BusinessIcon />,
     position: 'Senior Frontend Developer',
     content: `
-      Continuing of migrating from AngularJS to React and implementing the new features. 
-      Writing Unit Tests. 
-      Creating custom jobs for Azure Pipeline.
+      Continuing of migrating from AngularJS to React and implementing new features. 
+      Writing Unit Tests using React Testing Library + Jest, before was used Enzyme. 
+      To do not mock directly fetch data functions from the backend we use MSW.
+      Creating custom jobs for Azure Pipeline. UI is deployed via custom pipeline into S3 bucket.
     `,
     stack: [
       'React',
@@ -207,7 +208,7 @@ const Main = () => {
         <Timeline position="right">
           {Object.keys(timeline)
             .sort()
-            .map(year => (
+            .map((year, index, array) => (
               <TimelineItem key={year}>
                 <TimelineOppositeContent
                   m="auto 0"
@@ -222,7 +223,9 @@ const Main = () => {
                     paddingRight: 1,
                   }}
                 >
-                  {year} ({Number.parseInt(year, 10) - BIRTHDAY_YEAR}y)
+                  {year}
+                  {index === array.length - 1 ? ' - current' : ''} (
+                  {Number.parseInt(year, 10) - BIRTHDAY_YEAR}y)
                 </TimelineOppositeContent>
                 <TimelineSeparator>
                   <TimelineConnector />
