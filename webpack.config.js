@@ -24,7 +24,10 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: './src/index.ejs'
+      template: './src/index.ejs',
+      templateParameters: {
+        LOCAL_ENV: process.env.LOCAL_ENV || false
+      },
     })
   ],
   devServer: {
