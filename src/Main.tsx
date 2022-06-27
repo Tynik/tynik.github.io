@@ -35,7 +35,7 @@ type TimelinePoint = {
 
 const timeline: Record<string, TimelinePoint> = {
   '2021': {
-    name: 'SPSCommerce',
+    name: 'SPSCommerce. Raise',
     icon: <BusinessIcon />,
     position: 'Senior Frontend Developer',
     content: `
@@ -61,7 +61,7 @@ const timeline: Record<string, TimelinePoint> = {
     ],
   },
   '2019': {
-    name: 'SPSCommerce',
+    name: 'SPSCommerce. New Beginning',
     icon: <BusinessIcon />,
     position: 'Middle Frontend Developer',
     content: `
@@ -89,7 +89,7 @@ const timeline: Record<string, TimelinePoint> = {
     ],
   },
   '2016/07': {
-    name: 'SPSCommerce',
+    name: 'SPSCommerce. Start',
     icon: <BusinessIcon />,
     position: 'Middle Backend Developer',
     content: `
