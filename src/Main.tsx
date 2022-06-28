@@ -1,7 +1,24 @@
 import React from 'react';
 
-import { Typography, Grid, Stack, Chip, Link, Box } from '@mui/material';
 import {
+  Typography,
+  Grid,
+  Stack,
+  Chip,
+  Link,
+  Box,
+  Button,
+  TextField,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+  useTheme,
+  useMediaQuery,
+} from '@mui/material';
+import {
+  LoadingButton,
   Timeline,
   TimelineItem,
   TimelineSeparator,
@@ -18,6 +35,8 @@ import {
   Business as BusinessIcon,
   Work as WorkIcon,
 } from '@mui/icons-material';
+
+import { netlifyMakeOffer } from '~/netlify-functions';
 
 const FULLNAME = 'Mykhailo Aliinyk';
 const BIRTHDAY = '09/27/1992';
@@ -164,12 +183,40 @@ const timeline: Record<string, TimelinePoint> = {
 };
 
 const Main = () => {
+  const [isMakeOffer, setIsMakeOffer] = React.useState(false);
+  const [isSendingOffer, setIsSendingOffer] = React.useState(false);
+
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
+
+  const [company, setCompany] = React.useState<string>(null);
+  const [name, setName] = React.useState<string>(null);
+  const [contact, setContact] = React.useState<string>(null);
+  const [salaryRange, setSalaryRange] = React.useState<string>(null);
+  const [desc, setDesc] = React.useState<string>(null);
+
+  const onCloseMakeOffer = () => {
+    setIsMakeOffer(false);
+  };
+
+  const onSendOfferHandler = async () => {
+    try {
+      setIsSendingOffer(true);
+
+      await netlifyMakeOffer({ company, name, contact, salaryRange, desc });
+
+      setIsMakeOffer(false);
+    } finally {
+      setIsSendingOffer(false);
+    }
+  };
+
   return (
-    <Grid container mt={1} spacing={1}>
+    <Grid container pt={2} pb={2} spacing={2}>
       <Grid item xs={12} md={4} position="relative">
         <Box sx={{ opacity: { xs: 0.4, md: 1 } }}>
           <img
-            src="https://bafybeigoqmi3ratjk7kjm7jx5g6cpk7xbnuphq4ypg53odj77xz5on52re.ipfs.dweb.link/IMG_1459.jpeg"
+            src="https://bafybeicvt5t5hzfwox7atxv6wzojcumieufu4wksf36taklzbaps22eyba.ipfs.dweb.link/IMG_1459_Large.jpeg"
             alt={FULLNAME}
             width="100%"
           />
@@ -188,7 +235,7 @@ const Main = () => {
           </Typography>
 
           <Typography variant="body2" align="center" color="text.secondary">
-            {CURRENT_POSITION}
+            {CURRENT_POSITION}, {BIRTHDAY}
           </Typography>
         </Box>
       </Grid>
@@ -201,7 +248,7 @@ const Main = () => {
           </Typography>
 
           <Typography variant="body2" align="center" color="text.secondary">
-            {CURRENT_POSITION}
+            {CURRENT_POSITION}, {BIRTHDAY}
           </Typography>
         </Box>
 
@@ -278,7 +325,87 @@ const Main = () => {
               </TimelineItem>
             ))}
         </Timeline>
+
+        <Box textAlign="center">
+          <Button variant="contained" color="error" onClick={() => setIsMakeOffer(true)}>
+            Make Offer
+          </Button>
+        </Box>
       </Grid>
+
+      <Dialog fullScreen={fullScreen} open={isMakeOffer} onClose={onCloseMakeOffer}>
+        <DialogTitle>Make Offer For {FULLNAME}</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            To make offer please fill all required fields. I will send you a response to your
+            contact address.
+          </DialogContentText>
+          <TextField
+            margin="dense"
+            id="company"
+            label="Company"
+            variant="standard"
+            value={company || ''}
+            onChange={e => setCompany(e.target.value)}
+            error={company === ''}
+            autoFocus
+            fullWidth
+          />
+          <TextField
+            margin="dense"
+            id="name"
+            label="Name"
+            variant="standard"
+            value={name || ''}
+            onChange={e => setName(e.target.value)}
+            error={name === ''}
+            fullWidth
+          />
+          <TextField
+            margin="dense"
+            id="contact"
+            label="Contact"
+            variant="standard"
+            value={contact || ''}
+            onChange={e => setContact(e.target.value)}
+            error={contact === ''}
+            fullWidth
+          />
+          <TextField
+            margin="dense"
+            id="salaryRange"
+            label="Salary Range"
+            variant="standard"
+            value={salaryRange || ''}
+            onChange={e => setSalaryRange(e.target.value)}
+            error={salaryRange === ''}
+            fullWidth
+          />
+          <TextField
+            margin="dense"
+            id="desc"
+            label="Description"
+            variant="standard"
+            value={desc || ''}
+            onChange={e => setDesc(e.target.value)}
+            error={desc === ''}
+            rows={10}
+            multiline
+            fullWidth
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={onCloseMakeOffer}>Cancel</Button>
+          <LoadingButton
+            /* eslint-disable-next-line @typescript-eslint/no-misused-promises */
+            onClick={onSendOfferHandler}
+            disabled={!company || !name || !contact || !salaryRange || !desc}
+            loading={isSendingOffer}
+          >
+            Send
+          </LoadingButton>
+        </DialogActions>
+      </Dialog>
     </Grid>
   );
 };

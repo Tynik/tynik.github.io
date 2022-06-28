@@ -6,13 +6,17 @@ const CHAT_ID = 795507995;
 const app = new Telegraf(process.env.BOT_TOKEN);
 
 type DataT = {
-  fullname: string
-}
+  company: string;
+  name: string;
+  contact: string;
+  salaryRange: string;
+  desc: string;
+};
 
 const headers = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'Content-Type',
-  'Access-Control-Allow-Methods': 'GET, POST, OPTIONS'
+  'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
 };
 
 const handler: Handler = async (event, context) => {
@@ -20,7 +24,7 @@ const handler: Handler = async (event, context) => {
     return {
       statusCode: 200,
       headers,
-      body: JSON.stringify({ message: 'Successful preflight call.' })
+      body: JSON.stringify({ message: 'Successful preflight call.' }),
     };
   }
   if (event.httpMethod !== 'POST') {
@@ -28,25 +32,26 @@ const handler: Handler = async (event, context) => {
       statusCode: 400,
       body: 'You are not using a http POST method for this endpoint.',
       headers: {
-        'Allow': 'POST'
-      }
+        Allow: 'POST',
+      },
     };
   }
-  const data: DataT = JSON.parse(event.body);
+  const data = JSON.parse(event.body) as DataT;
 
-  let offer = `*Full name:* ${data.fullname}\n`;
+  let offer = `*Company:* ${data.company}\n`;
+  offer += `*Name:* ${data.name}\n`;
+  offer += `*Contact:* ${data.contact}\n`;
+  offer += `*Salary Range:* ${data.salaryRange}\n`;
+  offer += `*Description:* ${data.desc}`;
 
-  await app.telegram.sendMessage(
-    CHAT_ID,
-    offer.replace(/[-.+?^$[\](){}\\=]/g, '\\$&'),
-    {
-      parse_mode: 'MarkdownV2'
-    });
+  await app.telegram.sendMessage(CHAT_ID, offer.replace(/[-.+?^$[\](){}\\=]/g, '\\$&'), {
+    parse_mode: 'MarkdownV2',
+  });
 
   return {
     headers,
     statusCode: 200,
-    body: JSON.stringify({ status: 'ok' })
+    body: JSON.stringify({ status: 'ok' }),
   };
 };
 
