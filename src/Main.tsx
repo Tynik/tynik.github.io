@@ -53,6 +53,25 @@ type TimelinePoint = {
 };
 
 const timeline: Record<string, TimelinePoint> = {
+  '2022': {
+    name: 'ManageGo. New Way',
+    icon: <BusinessIcon />,
+    position: 'Frontend Developer',
+    content: `
+      Creating fully custom React components using Typescript and Styled Components relying on Figma design. 
+      Building new pages using created components.
+    `,
+    stack: [
+      'React',
+      'Typescript',
+      'CSS',
+      'Styled Components',
+      'React Router',
+      'Figma',
+      'NX',
+      'Jira',
+    ],
+  },
   '2021': {
     name: 'SPSCommerce. Raise',
     icon: <BusinessIcon />,
