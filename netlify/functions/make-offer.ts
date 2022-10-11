@@ -1,8 +1,6 @@
 import { Handler } from '@netlify/functions';
 import { Telegraf } from 'telegraf';
 
-const CHAT_ID = 795507995;
-
 const app = new Telegraf(process.env.BOT_TOKEN);
 
 type DataT = {
@@ -44,9 +42,13 @@ const handler: Handler = async (event, context) => {
   offer += `*Salary Range:* ${data.salaryRange}\n`;
   offer += `*Description:* ${data.desc}`;
 
-  await app.telegram.sendMessage(CHAT_ID, offer.replace(/[-.+?^$[\](){}\\=]/g, '\\$&'), {
-    parse_mode: 'MarkdownV2',
-  });
+  await app.telegram.sendMessage(
+    process.env.BOT_CHAT_ID,
+    offer.replace(/[-.+?^$[\](){}\\=]/g, '\\$&'),
+    {
+      parse_mode: 'MarkdownV2',
+    }
+  );
 
   return {
     headers,
