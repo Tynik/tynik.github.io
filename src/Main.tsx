@@ -10,7 +10,7 @@ import {
   TimelineDot,
   TimelineOppositeContent,
 } from '@mui/lab';
-import { BIRTHDAY_YEAR, CURRENT_POSITION, FULL_NAME, TIMELINE } from '~/constants';
+import { BIO, BIRTHDAY_YEAR, CURRENT_POSITION, FULL_NAME, TIMELINE } from '~/constants';
 import { Offer } from '~/components/Offer';
 
 export const Main = () => {
@@ -65,6 +65,10 @@ export const Main = () => {
           </Typography>
         </Box>
 
+        <Box mt={2}>
+          <Typography>{BIO}</Typography>
+        </Box>
+
         <Box mt={2} textAlign="center">
           <Button variant="contained" color="error" onClick={() => setIsMakeOffer(true)}>
             Make Offer
@@ -107,7 +111,11 @@ export const Main = () => {
                     {TIMELINE[year].name}
                   </Typography>
 
-                  <Stack direction="row" spacing={1}>
+                  <Stack
+                    direction="row"
+                    spacing={1}
+                    sx={{ justifyContent: { xs: 'space-between', sm: 'normal' } }}
+                  >
                     {TIMELINE[year].position && (
                       <Typography color="text.secondary" component="p" variant="body2">
                         {TIMELINE[year].position}
@@ -115,7 +123,7 @@ export const Main = () => {
                     )}
 
                     {TIMELINE[year].location && (
-                      <Stack direction="row">
+                      <Stack direction="row" spacing={0.5} alignItems="center">
                         <PlaceIcon fontSize="small" />
 
                         <Typography component="p" variant="body2">

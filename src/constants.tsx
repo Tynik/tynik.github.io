@@ -12,13 +12,14 @@ import type { TimelinePoint } from '~/types';
 export const FULL_NAME = 'Mykhailo Aliinyk';
 export const BIRTHDAY_YEAR = 1992;
 export const CURRENT_POSITION = 'Principal Frontend Developer';
+export const BIO = '';
 
 export const TIMELINE: Record<string, TimelinePoint> = {
   '2022': {
     name: 'ManageGO. New Way',
     icon: <BusinessIcon />,
     position: 'Principal Frontend Developer',
-    location: 'New York',
+    location: 'New York, US',
     content: `
       Creating fully customized React components using Typescript and Styled Components relying on Figma design. 
       Building new pages using created components. Managing and inspection of existing components for keeping the best UX.
@@ -40,6 +41,7 @@ export const TIMELINE: Record<string, TimelinePoint> = {
     name: 'SPSCommerce. Raise',
     icon: <BusinessIcon />,
     position: 'Senior Frontend Developer',
+    location: 'Kyiv, Ukraine',
     content: `
       Continuing of migrating from AngularJS to React and implementing new features. 
       Writing Unit Tests using React Testing Library + Jest, before was used Enzyme. 
@@ -66,6 +68,7 @@ export const TIMELINE: Record<string, TimelinePoint> = {
     name: 'SPSCommerce. New Beginning',
     icon: <BusinessIcon />,
     position: 'Middle Frontend Developer',
+    location: 'Kyiv, Ukraine',
     content: `
       Working with the old AngularJS code and migrating code partially to React. 
       For simplifying the migration process we use Single SPA.
@@ -94,6 +97,7 @@ export const TIMELINE: Record<string, TimelinePoint> = {
     name: 'SPSCommerce. Start',
     icon: <BusinessIcon />,
     position: 'Middle Backend Developer',
+    location: 'Kyiv, Ukraine',
     content: `
       I got a job at SPSCommerce. I graduated from KhAI.
     `,
@@ -115,6 +119,7 @@ export const TIMELINE: Record<string, TimelinePoint> = {
   '2016': {
     name: 'Next Steps',
     icon: <DirectionsWalkIcon />,
+    location: 'Kyiv, Ukraine',
     content: `
       I taught PHP and Python at PHP Academy for 6 months. 
       I released 2 groups of 25 people who successfully got a job.
@@ -130,9 +135,10 @@ export const TIMELINE: Record<string, TimelinePoint> = {
     name: 'Awareness',
     icon: <PsychologyIcon />,
     position: 'Backend Developer',
+    location: 'Kyiv, Ukraine',
     content: `
       I realized that I have enough experience to move on.
-      I got a job in Kiyv as PHP backend developer. It was a startup.
+      I got a job in Kyiv as PHP backend developer. It was a startup.
       After half a year I decided to use Python instead of PHP and rewrote the whole backend on my own. 
       I did this in my free time because I was involved in learning a new language.
     `,
@@ -142,6 +148,7 @@ export const TIMELINE: Record<string, TimelinePoint> = {
     name: 'NAU',
     icon: <SchoolIcon />,
     position: 'Fullstack Developer',
+    location: 'Kharkiv, Ukraine',
     content: `
       I entered the second semester at KhAI (National Aerospace University "Kharkiv Aviation Institute").
       Inside KhAI I got a job and worked there as Action Script 3.0 developer and after some time 
@@ -153,6 +160,7 @@ export const TIMELINE: Record<string, TimelinePoint> = {
   '2007': {
     name: 'Inspiration',
     icon: <PlayArrowIcon />,
+    location: 'Chernigiv, Ukraine',
     content: `
       Started from Pascal, C++ and Delphi.
       The Pascal was the first language which I faced.
