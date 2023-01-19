@@ -10,18 +10,20 @@ import {
 import type { TimelinePoint } from '~/types';
 
 export const FULL_NAME = 'Mykhailo Aliinyk';
-export const YEARS = 30;
 export const BIRTHDAY_YEAR = 1992;
-export const CURRENT_POSITION = 'Senior Frontend Engineer';
+export const CURRENT_POSITION = 'Principal Frontend Developer';
 
 export const TIMELINE: Record<string, TimelinePoint> = {
   '2022': {
-    name: 'ManageGo. New Way',
+    name: 'ManageGO. New Way',
     icon: <BusinessIcon />,
-    position: 'Frontend Developer',
+    position: 'Principal Frontend Developer',
+    location: 'New York',
     content: `
       Creating fully customized React components using Typescript and Styled Components relying on Figma design. 
-      Building new pages using created components.
+      Building new pages using created components. Managing and inspection of existing components for keeping the best UX.
+      Following the code review and refactoring as the routine every day.
+      Keeping and thinking about the best code performance.
     `,
     stack: [
       'React',

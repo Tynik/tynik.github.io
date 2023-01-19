@@ -6,5 +6,6 @@ export type TimelinePoint = {
   content: string;
   stack?: string[];
   position?: string;
+  location?: string;
   links?: string[];
 };
