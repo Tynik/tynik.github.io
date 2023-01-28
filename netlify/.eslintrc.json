@@ -16,13 +16,6 @@
     "import/prefer-default-export": "off",
     "no-param-reassign": "off",
     "import/extensions": "off",
-    "import/no-extraneous-dependencies": "off",
-    "react/no-array-index-key": "off",
-    "react/function-component-definition": [
-      2,
-      {
-        "namedComponents": "arrow-function"
-      }
-    ]
+    "import/no-extraneous-dependencies": "off"
   }
 }

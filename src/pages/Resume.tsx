@@ -1,19 +1,19 @@
 import React, { useMemo } from 'react';
-import { Typography, Grid, Stack, Chip, Link, Box, Button } from '@mui/material';
-import { Place as PlaceIcon } from '@mui/icons-material';
+import { Box, Button, Chip, Grid, Link, Stack, Typography } from '@mui/material';
 import {
   Timeline,
-  TimelineItem,
-  TimelineSeparator,
   TimelineConnector,
   TimelineContent,
   TimelineDot,
+  TimelineItem,
   TimelineOppositeContent,
+  TimelineSeparator,
 } from '@mui/lab';
+import { Place as PlaceIcon } from '@mui/icons-material';
 import { BIO, BIRTHDAY_YEAR, CURRENT_POSITION, FULL_NAME, TIMELINE } from '~/constants';
-import { Offer } from '~/components/Offer';
+import { Offer } from '~/components';
 
-export const Main = () => {
+export const Resume = () => {
   const [isMakeOffer, setIsMakeOffer] = React.useState(false);
 
   const onCloseMakeOffer = () => {
@@ -25,7 +25,7 @@ export const Main = () => {
   const years = new Date().getFullYear() - BIRTHDAY_YEAR;
 
   return (
-    <Grid container pt={2} pb={2} spacing={2}>
+    <Grid container spacing={2}>
       <Grid item xs={12} md={4} position="relative">
         <Box sx={{ opacity: { xs: 0.4, md: 1 } }}>
           <img

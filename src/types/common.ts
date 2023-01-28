@@ -9,3 +9,8 @@ export type TimelinePoint = {
   location?: string;
   links?: string[];
 };
+
+export type Post = {
+  title: string;
+  content: string;
+};

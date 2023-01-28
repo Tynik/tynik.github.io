@@ -1,9 +1,9 @@
-import { Handler } from '@netlify/functions';
+import type { Handler } from '@netlify/functions';
 import { Telegraf } from 'telegraf';
 
 const app = new Telegraf(process.env.BOT_TOKEN);
 
-type DataT = {
+type Payload = {
   company: string;
   name: string;
   contact: string;
@@ -14,17 +14,18 @@ type DataT = {
 const headers = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'Content-Type',
-  'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS',
 };
 
-const handler: Handler = async (event, context) => {
+export const handler: Handler = async event => {
   if (event.httpMethod === 'OPTIONS') {
     return {
-      statusCode: 200,
       headers,
+      statusCode: 200,
       body: JSON.stringify({ message: 'Successful preflight call.' }),
     };
   }
+
   if (event.httpMethod !== 'POST') {
     return {
       statusCode: 400,
@@ -34,13 +35,14 @@ const handler: Handler = async (event, context) => {
       },
     };
   }
-  const data = JSON.parse(event.body) as DataT;
 
-  let offer = `*Company:* ${data.company}\n`;
-  offer += `*Name:* ${data.name}\n`;
-  offer += `*Contact:* ${data.contact}\n`;
-  offer += `*Salary Range:* ${data.salaryRange}\n`;
-  offer += `*Description:* ${data.desc}`;
+  const payload = JSON.parse(event.body) as Payload;
+
+  let offer = `*Company:* ${payload.company}\n`;
+  offer += `*Name:* ${payload.name}\n`;
+  offer += `*Contact:* ${payload.contact}\n`;
+  offer += `*Salary Range:* ${payload.salaryRange}\n`;
+  offer += `*Description:* ${payload.desc}`;
 
   await app.telegram.sendMessage(
     process.env.BOT_CHAT_ID,
@@ -56,5 +58,3 @@ const handler: Handler = async (event, context) => {
     body: JSON.stringify({ status: 'ok' }),
   };
 };
-
-export { handler };
