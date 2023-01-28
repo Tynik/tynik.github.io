@@ -57,7 +57,6 @@ dependencies:
   '@mui/material': 5.11.6_rqh7qj4464ntrqrt6banhaqg4q
   '@netlify/functions': 1.4.0
   draft-js: 0.11.7_biqbaboplfbrettd7655fr4n2y
-  graceful-fs: 4.2.10
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
   react-router-dom: 6.7.0_biqbaboplfbrettd7655fr4n2y
@@ -80,6 +79,7 @@ devDependencies:
   eslint-plugin-prettier: 4.2.1_cn4lalcyadplruoxa5mhp7j3dq
   eslint-plugin-react: 7.32.0_eslint@8.32.0
   eslint-plugin-react-hooks: 4.6.0_eslint@8.32.0
+  graceful-fs: 4.2.10
   html-webpack-plugin: 5.5.0_webpack@5.75.0
   jest: 29.4.1_zfha7dvnw4nti6zkbsmhmn6xo4
   netlify-cli: 12.10.0_@types+node@18.11.18
