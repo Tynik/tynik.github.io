@@ -35,7 +35,6 @@ specifiers:
   react: 18.2.0
   react-dom: 18.2.0
   react-router-dom: 6.7.0
-  secp256k1: 4.0.3
   telegraf: 4.11.2
   ts-jest: 29.0.5
   ts-loader: 9.4.2
@@ -84,7 +83,6 @@ devDependencies:
   netlify-cli: 12.10.0_@types+node@18.11.18
   node-fetch: 3.3.0
   prettier: 2.8.3
-  secp256k1: 4.0.3
   telegraf: 4.11.2
   ts-jest: 29.0.5_ehrjq5j3p3w6ehmmrpkazz7pvu
   ts-loader: 9.4.2_3fkjkrd3audxnith3e7fo4fnxi

@@ -11,4 +11,4 @@
 
 [functions]
   node_bundler = "esbuild"
-  external_node_modules = ["keyv", "secp256k1"]
+  external_node_modules = ["keyv", "ethereum-cryptography"]
