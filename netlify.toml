@@ -10,4 +10,5 @@
   command = "npx pnpm install --store=node_modules/.pnpm-store && npx pnpm build"
 
 [functions]
+  node_bundler = "esbuild"
   external_node_modules = ["keyv", "secp256k1"]
