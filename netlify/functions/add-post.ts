@@ -1,6 +1,7 @@
 import type { Handler } from '@netlify/functions';
 
 import {
+  createResponse,
   getMyProfileContract,
   getWeb3Client,
   getWeb3StorageClient,
@@ -13,29 +14,16 @@ type Payload = {
   ethAccount: string;
 };
 
-const headers = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'Content-Type',
-  'Access-Control-Allow-Methods': 'POST, OPTIONS',
-};
-
 export const handler: Handler = async event => {
   if (event.httpMethod === 'OPTIONS') {
-    return {
-      headers,
-      statusCode: 200,
-      body: JSON.stringify({ message: 'Successful preflight call.' }),
-    };
+    return createResponse({ message: 'Successful preflight call.' });
   }
 
   if (event.httpMethod !== 'POST') {
-    return {
+    return createResponse('You are not using a http POST method for this endpoint.', {
       statusCode: 400,
-      body: 'You are not using a http POST method for this endpoint.',
-      headers: {
-        Allow: 'POST',
-      },
-    };
+      allowMethods: ['POST', 'OPTIONS'],
+    });
   }
 
   const payload = JSON.parse(event.body) as Payload;
@@ -48,6 +36,7 @@ export const handler: Handler = async event => {
       JSON.stringify({
         title: payload.title,
         content: payload.content,
+        created: new Date().getTime(),
       })
     );
 
@@ -66,18 +55,21 @@ export const handler: Handler = async event => {
 
     tx.send({ from: payload.ethAccount, gas: 1000000 });
 
-    return {
-      headers,
-      statusCode: 200,
-      body: JSON.stringify({ status: 'ok' }),
-    };
+    return createResponse(
+      { status: 'ok' },
+      {
+        allowMethods: ['POST', 'OPTIONS'],
+      }
+    );
   } catch (e) {
     console.error(e);
 
-    return {
-      headers,
-      statusCode: 500,
-      body: JSON.stringify({ status: 'error' }),
-    };
+    return createResponse(
+      { status: 'error' },
+      {
+        statusCode: 500,
+        allowMethods: ['POST', 'OPTIONS'],
+      }
+    );
   }
 };

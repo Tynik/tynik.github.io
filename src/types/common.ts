@@ -16,4 +16,5 @@ export type Post = {
   cid: PostCID;
   title: string;
   content: string;
+  created: number;
 };

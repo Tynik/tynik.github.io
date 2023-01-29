@@ -1,20 +1,10 @@
 import type { Handler } from '@netlify/functions';
 
-import { getMyProfileContract, getWeb3Client } from '../netlify.helpers';
-
-const headers = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'Content-Type',
-  'Access-Control-Allow-Methods': 'GET, OPTIONS',
-};
+import { createResponse, getMyProfileContract, getWeb3Client } from '../netlify.helpers';
 
 export const handler: Handler = async event => {
   if (event.httpMethod === 'OPTIONS') {
-    return {
-      headers,
-      statusCode: 200,
-      body: JSON.stringify({ message: 'Successful preflight call.' }),
-    };
+    return createResponse({ message: 'Successful preflight call.' });
   }
 
   try {
@@ -25,18 +15,21 @@ export const handler: Handler = async event => {
 
     const postCIDs = (await tx.call()) as string[];
 
-    return {
-      headers,
-      statusCode: 200,
-      body: JSON.stringify({ status: 'ok', data: postCIDs }),
-    };
+    return createResponse(
+      { status: 'ok', data: postCIDs },
+      {
+        allowMethods: ['GET', 'OPTIONS'],
+      }
+    );
   } catch (e) {
     console.error(e);
 
-    return {
-      headers,
-      statusCode: 500,
-      body: JSON.stringify({ status: 'error' }),
-    };
+    return createResponse(
+      { status: 'error' },
+      {
+        statusCode: 500,
+        allowMethods: ['GET', 'OPTIONS'],
+      }
+    );
   }
 };

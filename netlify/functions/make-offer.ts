@@ -1,7 +1,6 @@
 import type { Handler } from '@netlify/functions';
-import { Telegraf } from 'telegraf';
 
-const app = new Telegraf(process.env.BOT_TOKEN);
+import { createResponse, getTelegrafClient } from '../netlify.helpers';
 
 type Payload = {
   company: string;
@@ -11,29 +10,22 @@ type Payload = {
   desc: string;
 };
 
-const headers = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'Content-Type',
-  'Access-Control-Allow-Methods': 'POST, OPTIONS',
-};
-
 export const handler: Handler = async event => {
   if (event.httpMethod === 'OPTIONS') {
-    return {
-      headers,
-      statusCode: 200,
-      body: JSON.stringify({ message: 'Successful preflight call.' }),
-    };
+    return createResponse({ message: 'Successful preflight call.' });
   }
 
   if (event.httpMethod !== 'POST') {
-    return {
+    return createResponse('You are not using a http POST method for this endpoint.', {
       statusCode: 400,
-      body: 'You are not using a http POST method for this endpoint.',
-      headers: {
-        Allow: 'POST',
-      },
-    };
+      allowMethods: ['POST', 'OPTIONS'],
+    });
+  }
+
+  const botChatId = process.env.BOT_CHAT_ID;
+
+  if (!botChatId) {
+    throw new Error('BOT_CHAT_ID environment variable should be set');
   }
 
   const payload = JSON.parse(event.body) as Payload;
@@ -44,17 +36,20 @@ export const handler: Handler = async event => {
   offer += `*Salary Range:* ${payload.salaryRange}\n`;
   offer += `*Description:* ${payload.desc}`;
 
-  await app.telegram.sendMessage(
-    process.env.BOT_CHAT_ID,
+  const telegrafClient = getTelegrafClient();
+
+  await telegrafClient.telegram.sendMessage(
+    botChatId,
     offer.replace(/[-.+?^$[\](){}\\=]/g, '\\$&'),
     {
       parse_mode: 'MarkdownV2',
     }
   );
 
-  return {
-    headers,
-    statusCode: 200,
-    body: JSON.stringify({ status: 'ok' }),
-  };
+  return createResponse(
+    { status: 'ok' },
+    {
+      allowMethods: ['POST', 'OPTIONS'],
+    }
+  );
 };
