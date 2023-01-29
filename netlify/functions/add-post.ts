@@ -1,6 +1,11 @@
 import type { Handler } from '@netlify/functions';
 
-import { getMyProfileContract, getWeb3Client, getWeb3StorageClient, Web3File } from '../helpers';
+import {
+  getMyProfileContract,
+  getWeb3Client,
+  getWeb3StorageClient,
+  Web3File,
+} from '../netlify.helpers';
 
 type Payload = {
   title: string;
@@ -50,12 +55,16 @@ export const handler: Handler = async event => {
 
     const web3Client = getWeb3Client();
 
-    const signer = web3Client.eth.accounts.privateKeyToAccount(process.env.SIGNER_PRIVATE_KEY);
-    web3Client.eth.accounts.wallet.add(signer);
+    if (process.env.NODE_ENV !== 'development') {
+      const signer = web3Client.eth.accounts.privateKeyToAccount(process.env.SIGNER_PRIVATE_KEY);
+      web3Client.eth.accounts.wallet.add(signer);
+    }
 
     const myProfileContract = getMyProfileContract(web3Client);
 
-    myProfileContract.methods.addPost(postCID).send({ from: payload.ethAccount, gas: 1000000 });
+    const tx = await myProfileContract.methods.addPost(postCID);
+
+    tx.send({ from: payload.ethAccount, gas: 1000000 });
 
     return {
       headers,

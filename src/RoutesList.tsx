@@ -1,12 +1,14 @@
-import { Route, Routes } from 'react-router-dom';
 import React from 'react';
-import { Main, Resume } from '~/pages';
+import { Route, Routes } from 'react-router-dom';
+
+import { AddPostPage, MainPage, ResumePage } from '~/pages';
 
 export const RoutesList = () => {
   return (
     <Routes>
-      <Route path="resume" element={<Resume />} />
-      <Route path="*" element={<Main />} />
+      <Route path="add-post" element={<AddPostPage />} />
+      <Route path="resume" element={<ResumePage />} />
+      <Route path="*" element={<MainPage />} />
     </Routes>
   );
 };

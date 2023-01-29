@@ -1,2 +1,3 @@
-export * from './Main';
-export * from './Resume';
+export * from './MainPage';
+export * from './AddPostPage';
+export * from './ResumePage';

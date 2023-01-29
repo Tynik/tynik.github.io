@@ -1,6 +1,6 @@
 import type { Handler } from '@netlify/functions';
 
-import { getMyProfileContract, getWeb3Client } from '../helpers';
+import { getMyProfileContract, getWeb3Client } from '../netlify.helpers';
 
 const headers = {
   'Access-Control-Allow-Origin': '*',

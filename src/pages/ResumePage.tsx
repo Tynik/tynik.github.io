@@ -13,7 +13,7 @@ import { Place as PlaceIcon } from '@mui/icons-material';
 import { BIO, BIRTHDAY_YEAR, CURRENT_POSITION, FULL_NAME, TIMELINE } from '~/constants';
 import { Offer } from '~/components';
 
-export const Resume = () => {
+export const ResumePage = () => {
   const [isMakeOffer, setIsMakeOffer] = React.useState(false);
 
   const onCloseMakeOffer = () => {

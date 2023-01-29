@@ -17,7 +17,8 @@ import {
   useTheme,
   Toolbar,
   IconButton,
-  Container,
+  Stack,
+  GlobalStyles,
 } from '@mui/material';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import {
@@ -30,6 +31,7 @@ import {
 } from '@mui/icons-material';
 
 import { RoutesList } from '~/RoutesList';
+import { Content } from '~/components';
 
 interface AppBarProps extends MuiAppBarProps {
   open?: boolean;
@@ -45,18 +47,18 @@ const darkTheme = createTheme({
 
 const MainContent = styled('main', { shouldForwardProp: prop => prop !== 'open' })<{
   open?: boolean;
-}>(({ theme, open }) => ({
+}>(({ theme: { transitions }, open }) => ({
   flexGrow: 1,
-  padding: theme.spacing(3),
-  transition: theme.transitions.create('margin', {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen,
+  padding: 0,
+  transition: transitions.create('margin', {
+    easing: transitions.easing.sharp,
+    duration: transitions.duration.leavingScreen,
   }),
   marginLeft: `-${drawerWidth}px`,
   ...(open && {
-    transition: theme.transitions.create('margin', {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen,
+    transition: transitions.create('margin', {
+      easing: transitions.easing.easeOut,
+      duration: transitions.duration.enteringScreen,
     }),
     marginLeft: 0,
   }),
@@ -64,17 +66,17 @@ const MainContent = styled('main', { shouldForwardProp: prop => prop !== 'open' 
 
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: prop => prop !== 'open',
-})<AppBarProps>(({ theme, open }) => ({
-  transition: theme.transitions.create(['margin', 'width'], {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen,
+})<AppBarProps>(({ theme: { transitions }, open }) => ({
+  transition: transitions.create(['margin', 'width'], {
+    easing: transitions.easing.sharp,
+    duration: transitions.duration.leavingScreen,
   }),
   ...(open && {
     width: `calc(100% - ${drawerWidth}px)`,
     marginLeft: `${drawerWidth}px`,
-    transition: theme.transitions.create(['margin', 'width'], {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen,
+    transition: transitions.create(['margin', 'width'], {
+      easing: transitions.easing.easeOut,
+      duration: transitions.duration.enteringScreen,
     }),
   }),
 }));
@@ -105,7 +107,19 @@ const App = () => {
       <ThemeProvider theme={darkTheme}>
         <CssBaseline />
 
-        <Box sx={{ display: 'flex' }}>
+        <GlobalStyles
+          styles={{
+            'html, body': {
+              height: '100%',
+              overflow: 'hidden',
+            },
+            '#app': {
+              height: '100%',
+            },
+          }}
+        />
+
+        <Box display="flex" height="100%">
           <AppBar position="fixed" open={open}>
             <Toolbar>
               <IconButton
@@ -124,9 +138,15 @@ const App = () => {
 
               <Box sx={{ flexGrow: 1 }} />
 
-              <Button component={Link} to="/resume">
-                Resume
-              </Button>
+              <Stack direction="row" spacing={1}>
+                <Button component={Link} to="/add-post">
+                  Add Post
+                </Button>
+
+                <Button component={Link} to="/resume">
+                  Resume
+                </Button>
+              </Stack>
             </Toolbar>
           </AppBar>
 
@@ -167,9 +187,9 @@ const App = () => {
           <MainContent open={open}>
             <DrawerHeader />
 
-            <Container>
+            <Content>
               <RoutesList />
-            </Container>
+            </Content>
           </MainContent>
         </Box>
       </ThemeProvider>
