@@ -3,5 +3,8 @@ import ReactDOM from 'react-dom/client';
 
 import App from '~/App';
 
-const root = ReactDOM.createRoot(document.getElementById('app'));
-root.render(<App />);
+const appContainer = document.getElementById('app');
+if (appContainer) {
+  const root = ReactDOM.createRoot(appContainer);
+  root.render(<App />);
+}

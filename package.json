@@ -8,13 +8,13 @@
     "lint": "eslint ./src"
   },
   "devDependencies": {
+    "@netlify/functions": "1.4.0",
     "@types/draft-js": "0.11.10",
     "@types/node": "18.11.18",
     "@types/react": "18.0.27",
     "@types/react-dom": "18.0.10",
     "@typescript-eslint/eslint-plugin": "5.49.0",
     "@typescript-eslint/parser": "5.49.0",
-    "@netlify/functions": "1.4.0",
     "eslint": "8.32.0",
     "eslint-config-airbnb": "19.0.4",
     "eslint-config-airbnb-typescript": "17.0.0",
@@ -29,12 +29,11 @@
     "netlify-cli": "12.10.0",
     "node-fetch": "3.3.0",
     "prettier": "2.8.3",
+    "telegraf": "4.11.2",
     "ts-jest": "29.0.5",
     "ts-loader": "9.4.2",
     "ts-node": "10.9.1",
     "typescript": "4.9.4",
-    "graceful-fs": "4.2.10",
-    "telegraf": "4.11.2",
     "web3": "1.8.1",
     "web3.storage": "4.4.0",
     "webpack": "5.75.0",
@@ -53,6 +52,7 @@
     "draft-js": "0.11.7",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-query": "3.39.3",
     "react-router-dom": "6.7.0"
   },
   "jest": {

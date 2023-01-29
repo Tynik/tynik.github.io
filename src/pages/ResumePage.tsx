@@ -135,9 +135,9 @@ export const ResumePage = () => {
 
                   <Typography>{TIMELINE[year].content}</Typography>
 
-                  {TIMELINE[year].stack?.length > 0 && (
+                  {(TIMELINE[year].stack?.length ?? 0) > 0 && (
                     <Stack direction="row" mt={1} flexWrap="wrap" gap={1}>
-                      {TIMELINE[year].stack.map(technology => (
+                      {TIMELINE[year].stack?.map(technology => (
                         <Chip
                           key={technology}
                           label={technology}
@@ -148,14 +148,14 @@ export const ResumePage = () => {
                     </Stack>
                   )}
 
-                  {TIMELINE[year].links?.length > 0 && (
+                  {(TIMELINE[year].links?.length ?? 0) > 0 && (
                     <Box mt={1}>
                       <Typography variant="subtitle1" component="p" fontWeight={600}>
                         Links
                       </Typography>
 
                       <Stack color="text.secondary">
-                        {TIMELINE[year].links.map(href => (
+                        {TIMELINE[year].links?.map(href => (
                           <Link key={href} href={href} target="_blank">
                             {href}
                           </Link>

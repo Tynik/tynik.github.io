@@ -14,8 +14,9 @@ export const useEth = () => {
         }
 
         return requestEthAccounts().then(accounts => {
-          if (!accounts.length) {
+          if (!accounts?.length || !accounts[0]) {
             console.log('Please connect to MetaMask.');
+            return;
           }
 
           setEthAccount(accounts[0]);

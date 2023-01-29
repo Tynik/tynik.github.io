@@ -1,5 +1,5 @@
 import type { Post, PostCID } from '~/types';
-import { netlifyRequest } from '~/api/client';
+import { netlifyRequest } from '~/api/apiClient';
 
 export type MakeOfferPayload = {
   company: string;
@@ -21,8 +21,11 @@ export type AddPostPayload = {
 export const addPostRequest = async (payload: AddPostPayload) =>
   netlifyRequest('add-post', { payload, method: 'POST' });
 
-const getPostRequest = async (postCID: PostCID) =>
-  (await (await fetch(`https://${postCID}.ipfs.w3s.link/post.json`)).json()) as Post;
+export const getPostRequest = async (postCID: PostCID) =>
+  ({
+    cid: postCID,
+    ...(await (await fetch(`https://${postCID}.ipfs.w3s.link/post.json`)).json()),
+  } as Post);
 
 export const getPostsRequest = async () => {
   const postCIDs = (await netlifyRequest<PostCID[]>('get-posts')).data;

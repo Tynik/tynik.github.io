@@ -1,22 +1,26 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Button, Card, CardActions, CardContent, Typography } from '@mui/material';
 
+import type { Post } from '~/types';
+
 type PostCardProps = {
-  title: string;
-  content: string;
+  post: Post;
 };
 
-export const PostCard = ({ title, content }: PostCardProps) => {
+export const PostCard = ({ post }: PostCardProps) => {
   return (
     <Card sx={{ width: 275 }}>
       <CardContent>
-        <Typography variant="h6">{title}</Typography>
+        <Typography variant="h6">{post.title}</Typography>
 
-        <Typography variant="body1" dangerouslySetInnerHTML={{ __html: content }} />
+        <Typography variant="body1" dangerouslySetInnerHTML={{ __html: post.content }} />
       </CardContent>
 
-      <CardActions>
-        <Button size="small">Read</Button>
+      <CardActions sx={{ justifyContent: 'right' }}>
+        <Button size="small" component={Link} to={`/post/${post.cid}`}>
+          Read
+        </Button>
       </CardActions>
     </Card>
   );

@@ -30,6 +30,7 @@ import {
   Home as HomeIcon,
 } from '@mui/icons-material';
 
+import { QueryClient, QueryClientProvider } from 'react-query';
 import { RoutesList } from '~/RoutesList';
 import { Content } from '~/components';
 
@@ -90,6 +91,8 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   justifyContent: 'flex-end',
 }));
 
+const queryClient = new QueryClient();
+
 const App = () => {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
@@ -122,15 +125,15 @@ const App = () => {
         <Box display="flex" height="100%">
           <AppBar position="fixed" open={open}>
             <Toolbar>
-              <IconButton
-                color="inherit"
-                aria-label="open drawer"
-                onClick={handleDrawerOpen}
-                edge="start"
-                sx={{ ...(open && { display: 'none' }) }}
-              >
-                <MenuIcon />
-              </IconButton>
+              {/* <IconButton */}
+              {/*  color="inherit" */}
+              {/*  aria-label="open drawer" */}
+              {/*  onClick={handleDrawerOpen} */}
+              {/*  edge="start" */}
+              {/*  sx={{ ...(open && { display: 'none' }) }} */}
+              {/* > */}
+              {/*  <MenuIcon /> */}
+              {/* </IconButton> */}
 
               <IconButton component={Link} to="/">
                 <HomeIcon />
@@ -188,7 +191,9 @@ const App = () => {
             <DrawerHeader />
 
             <Content>
-              <RoutesList />
+              <QueryClientProvider client={queryClient}>
+                <RoutesList />
+              </QueryClientProvider>
             </Content>
           </MainContent>
         </Box>

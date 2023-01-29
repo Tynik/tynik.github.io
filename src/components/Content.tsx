@@ -8,8 +8,10 @@ const ContentStyled = styled('div')(({ theme }) => ({
   overflow: 'auto',
 
   '> *': {
+    maxWidth: '1200px',
     minHeight: '100%',
 
+    margin: '0 auto',
     padding: theme.spacing(3),
   },
 }));

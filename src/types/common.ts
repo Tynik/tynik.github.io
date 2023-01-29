@@ -13,6 +13,7 @@ export type TimelinePoint = {
 };
 
 export type Post = {
+  cid: PostCID;
   title: string;
   content: string;
 };

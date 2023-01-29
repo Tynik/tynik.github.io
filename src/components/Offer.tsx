@@ -23,15 +23,19 @@ export const Offer = ({ onClose }: OfferProps) => {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
-  const [company, setCompany] = React.useState<string>(null);
-  const [name, setName] = React.useState<string>(null);
-  const [contact, setContact] = React.useState<string>(null);
-  const [salaryRange, setSalaryRange] = React.useState<string>(null);
-  const [desc, setDesc] = React.useState<string>(null);
+  const [company, setCompany] = React.useState<string | null>(null);
+  const [name, setName] = React.useState<string | null>(null);
+  const [contact, setContact] = React.useState<string | null>(null);
+  const [salaryRange, setSalaryRange] = React.useState<string | null>(null);
+  const [desc, setDesc] = React.useState<string | null>(null);
 
   const [isSendingOffer, setIsSendingOffer] = React.useState(false);
 
   const onSendOfferHandler = async () => {
+    if (!company || !name || !contact || !salaryRange || !desc) {
+      return;
+    }
+
     try {
       setIsSendingOffer(true);
 

@@ -13,6 +13,10 @@ export const AddPostPage = () => {
   const { ethAccount } = useEth();
 
   const addPostHandler = async () => {
+    if (!title || !ethAccount) {
+      return;
+    }
+
     try {
       await addPostRequest({
         title,
@@ -23,6 +27,10 @@ export const AddPostPage = () => {
       console.error(e);
     }
   };
+
+  const isCanBeAdded = Boolean(
+    title && editorState.getCurrentContent().getPlainText() && ethAccount
+  );
 
   return (
     <>
@@ -37,7 +45,9 @@ export const AddPostPage = () => {
       <RichEditor editorState={editorState} onChange={setEditorState} />
 
       <Box mt={2} textAlign="right">
-        <Button onClick={addPostHandler}>Add Post</Button>
+        <Button onClick={addPostHandler} disabled={!isCanBeAdded}>
+          Add Post
+        </Button>
       </Box>
     </>
   );
