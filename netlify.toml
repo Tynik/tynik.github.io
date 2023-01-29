@@ -2,10 +2,3 @@
   from = "/*"
   to = "/index.html"
   status = 200
-
-[build.environment]
-  NPM_FLAGS = "--version"
-
-[functions]
-  node_bundler = "esbuild"
-  external_node_modules = ["keyv"]
