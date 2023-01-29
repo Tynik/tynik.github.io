@@ -13,7 +13,7 @@ import {
 import { LoadingButton } from '@mui/lab';
 
 import { FULL_NAME } from '~/constants';
-import { makeOffer } from '~/api';
+import { makeOfferRequest } from '~/api';
 
 type OfferProps = {
   onClose: () => void;
@@ -35,7 +35,7 @@ export const Offer = ({ onClose }: OfferProps) => {
     try {
       setIsSendingOffer(true);
 
-      await makeOffer({ company, name, contact, salaryRange, desc });
+      await makeOfferRequest({ company, name, contact, salaryRange, desc });
 
       onClose();
     } finally {

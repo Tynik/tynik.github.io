@@ -1,5 +1,7 @@
 import React from 'react';
 
+export type PostCID = string;
+
 export type TimelinePoint = {
   icon: React.ReactElement;
   name: string;

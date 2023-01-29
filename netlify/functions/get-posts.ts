@@ -1,10 +1,6 @@
 import type { Handler } from '@netlify/functions';
 
-import { getMyProfileContract, getWeb3Client, getWeb3StorageClient } from '../helpers';
-
-type Web3File = {
-  content: string;
-};
+import { getMyProfileContract, getWeb3Client } from '../helpers';
 
 const headers = {
   'Access-Control-Allow-Origin': '*',
@@ -29,31 +25,10 @@ export const handler: Handler = async event => {
 
     const postCIDs = (await tx.call()) as string[];
 
-    const web3PostFiles: Web3File[] = [];
-
-    const web3StorageClient = getWeb3StorageClient();
-
-    await Promise.all(
-      postCIDs.map(async postCID => {
-        const list = await web3StorageClient.get(postCID);
-        const files = await list.files();
-
-        return Promise.all(
-          files.map(async file => {
-            const content = await file.text();
-
-            web3PostFiles.push({
-              content,
-            });
-          })
-        );
-      })
-    );
-
     return {
       headers,
       statusCode: 200,
-      body: JSON.stringify({ status: 'ok', data: web3PostFiles }),
+      body: JSON.stringify({ status: 'ok', data: postCIDs }),
     };
   } catch (e) {
     console.error(e);

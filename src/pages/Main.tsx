@@ -6,7 +6,7 @@ import { Editor, EditorState } from 'draft-js';
 import type { Post } from '~/types';
 
 import { PostCard } from '~/components';
-import { addPost, getPosts } from '~/api';
+import { addPostRequest, getPostsRequest } from '~/api';
 
 const requestEthAccounts = async (): Promise<string[]> => {
   try {
@@ -45,7 +45,7 @@ export const Main = () => {
   }, []);
 
   useEffect(() => {
-    getPosts()
+    getPostsRequest()
       .then(setPosts)
       .catch(() => {
         //
@@ -53,7 +53,7 @@ export const Main = () => {
   }, []);
 
   const addPostHandler = () => {
-    addPost({
+    addPostRequest({
       title: 'test',
       content: editorState.getCurrentContent().getPlainText(),
       ethAccount,
