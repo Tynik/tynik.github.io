@@ -15,6 +15,7 @@ export type TimelinePoint = {
 export type Post = {
   cid: PostCID;
   title: string;
+  subtitle: string;
   content: string;
   created: number;
 };

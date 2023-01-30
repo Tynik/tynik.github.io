@@ -13,7 +13,8 @@ export const ViewPostPage = () => {
   return (
     <>
       <Typography variant="h4">{post?.title}</Typography>
-      <Typography variant="body1">{post?.content}</Typography>
+
+      <Typography variant="body1" dangerouslySetInnerHTML={{ __html: post?.content ?? '' }} />
     </>
   );
 };

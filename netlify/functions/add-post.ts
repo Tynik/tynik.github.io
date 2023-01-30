@@ -10,6 +10,7 @@ import {
 
 type Payload = {
   title: string;
+  subtitle: string;
   content: string;
   ethAccount: string;
 };
@@ -36,6 +37,7 @@ export const handler: Handler = async event => {
       JSON.stringify({
         title: payload.title,
         content: payload.content,
+        subtitle: payload.subtitle,
         created: new Date().getTime(),
       })
     );

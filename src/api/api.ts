@@ -14,6 +14,7 @@ export const makeOfferRequest = (payload: MakeOfferPayload) =>
 
 export type AddPostPayload = {
   title: string;
+  subtitle: string;
   content: string;
   ethAccount: string;
 };
