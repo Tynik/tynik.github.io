@@ -39,7 +39,9 @@ export const handler: Handler = async event => {
         title: payload.title,
         content: payload.content,
         subtitle: payload.subtitle,
+        // read created date from post
         created: new Date().getTime(),
+        updated: new Date().getTime(),
       })
     );
 

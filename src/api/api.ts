@@ -26,6 +26,17 @@ export type AddPostPayload = {
 export const addPostRequest = async (payload: AddPostPayload) =>
   netlifyRequest('add-post', { payload, method: 'POST' });
 
+export type EditPostPayload = {
+  cid: PostCID;
+  title: string;
+  subtitle: string;
+  content: string;
+  ethAccount: string;
+};
+
+export const editPostRequest = async (payload: EditPostPayload) =>
+  netlifyRequest('edit-post', { payload, method: 'POST' });
+
 export const getPostRequest = async (postCID: PostCID) =>
   ({
     cid: postCID,
