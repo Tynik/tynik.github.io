@@ -12,6 +12,10 @@ export type MakeOfferPayload = {
 export const makeOfferRequest = (payload: MakeOfferPayload) =>
   netlifyRequest('make-offer', { payload, method: 'POST' });
 
+export const authRequest = async (ethAccount: string) => {
+  return netlifyRequest('auth', { params: { ethAccount } });
+};
+
 export type AddPostPayload = {
   title: string;
   subtitle: string;

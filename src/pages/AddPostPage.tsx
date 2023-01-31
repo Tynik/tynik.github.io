@@ -3,10 +3,12 @@ import { Editor, EditorState } from 'draft-js';
 import { Button, Box, TextField, Grid } from '@mui/material';
 
 import { addPostRequest } from '~/api';
-import { useEth } from '~/hooks';
 import { RichEditor } from '~/components';
+import { useUser } from '~/providers';
 
 export const AddPostPage = () => {
+  const user = useUser();
+
   const [title, setTitle] = useState<string | null>(null);
   const [subtitle, setSubtitle] = useState<string | null>(null);
 
@@ -14,12 +16,10 @@ export const AddPostPage = () => {
 
   const editorRef = useRef<Editor | null>(null);
 
-  const { ethAccount } = useEth();
-
   const addPostHandler = async () => {
     const editorEl = editorRef.current;
 
-    if (!title || !subtitle || !ethAccount || !editorEl || !editorEl.editor) {
+    if (!title || !subtitle || !user.ethAccount || !editorEl || !editorEl.editor) {
       return;
     }
 
@@ -27,7 +27,7 @@ export const AddPostPage = () => {
       await addPostRequest({
         title,
         subtitle,
-        ethAccount,
+        ethAccount: user.ethAccount,
         content: editorEl.editor.innerHTML,
       });
     } catch (e) {
@@ -36,7 +36,7 @@ export const AddPostPage = () => {
   };
 
   const isCanBeAdded = Boolean(
-    ethAccount && title && subtitle && editorState.getCurrentContent().getPlainText()
+    user.ethAccount && title && subtitle && editorState.getCurrentContent().getPlainText()
   );
 
   return (

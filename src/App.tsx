@@ -1,7 +1,6 @@
 import React from 'react';
-import { BrowserRouter, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import {
-  CssBaseline,
   Drawer,
   Box,
   Button,
@@ -11,18 +10,14 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
-  ThemeProvider,
-  createTheme,
   styled,
   useTheme,
   Toolbar,
   IconButton,
   Stack,
-  GlobalStyles,
 } from '@mui/material';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import {
-  Menu as MenuIcon,
   ChevronLeft as ChevronLeftIcon,
   ChevronRight as ChevronRightIcon,
   Inbox as InboxIcon,
@@ -30,21 +25,15 @@ import {
   Home as HomeIcon,
 } from '@mui/icons-material';
 
-import { QueryClient, QueryClientProvider } from 'react-query';
 import { RoutesList } from '~/RoutesList';
 import { Content } from '~/components';
+import { useUser } from '~/providers';
 
 interface AppBarProps extends MuiAppBarProps {
   open?: boolean;
 }
 
 const drawerWidth = 240;
-
-const darkTheme = createTheme({
-  palette: {
-    mode: 'dark',
-  },
-});
 
 const MainContent = styled('main', { shouldForwardProp: prop => prop !== 'open' })<{
   open?: boolean;
@@ -91,114 +80,96 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   justifyContent: 'flex-end',
 }));
 
-const queryClient = new QueryClient();
-
 const App = () => {
   const theme = useTheme();
+  const { isAuthenticated } = useUser();
+
   const [open, setOpen] = React.useState(false);
 
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
+  // const handleDrawerOpen = () => {
+  //   setOpen(true);
+  // };
 
   const handleDrawerClose = () => {
     setOpen(false);
   };
 
   return (
-    <BrowserRouter>
-      <ThemeProvider theme={darkTheme}>
-        <CssBaseline />
+    <Box display="flex" height="100%">
+      <AppBar position="fixed" open={open}>
+        <Toolbar>
+          {/* <IconButton */}
+          {/*  color="inherit" */}
+          {/*  aria-label="open drawer" */}
+          {/*  onClick={handleDrawerOpen} */}
+          {/*  edge="start" */}
+          {/*  sx={{ ...(open && { display: 'none' }) }} */}
+          {/* > */}
+          {/*  <MenuIcon /> */}
+          {/* </IconButton> */}
 
-        <GlobalStyles
-          styles={{
-            'html, body': {
-              height: '100%',
-              overflow: 'hidden',
-            },
-            '#app': {
-              height: '100%',
-            },
-          }}
-        />
+          <IconButton component={Link} to="/">
+            <HomeIcon />
+          </IconButton>
 
-        <Box display="flex" height="100%">
-          <AppBar position="fixed" open={open}>
-            <Toolbar>
-              {/* <IconButton */}
-              {/*  color="inherit" */}
-              {/*  aria-label="open drawer" */}
-              {/*  onClick={handleDrawerOpen} */}
-              {/*  edge="start" */}
-              {/*  sx={{ ...(open && { display: 'none' }) }} */}
-              {/* > */}
-              {/*  <MenuIcon /> */}
-              {/* </IconButton> */}
+          <Box sx={{ flexGrow: 1 }} />
 
-              <IconButton component={Link} to="/">
-                <HomeIcon />
-              </IconButton>
+          <Stack direction="row" spacing={1}>
+            {isAuthenticated && (
+              <Button component={Link} to="/add-post">
+                Add Post
+              </Button>
+            )}
 
-              <Box sx={{ flexGrow: 1 }} />
+            <Button component={Link} to="/resume">
+              Resume
+            </Button>
+          </Stack>
+        </Toolbar>
+      </AppBar>
 
-              <Stack direction="row" spacing={1}>
-                <Button component={Link} to="/add-post">
-                  Add Post
-                </Button>
+      <Drawer
+        sx={{
+          width: drawerWidth,
+          flexShrink: 0,
+          '& .MuiDrawer-paper': {
+            width: drawerWidth,
+            boxSizing: 'border-box',
+          },
+        }}
+        variant="persistent"
+        anchor="left"
+        open={open}
+      >
+        <DrawerHeader>
+          <IconButton onClick={handleDrawerClose}>
+            {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+          </IconButton>
+        </DrawerHeader>
 
-                <Button component={Link} to="/resume">
-                  Resume
-                </Button>
-              </Stack>
-            </Toolbar>
-          </AppBar>
+        <Divider />
 
-          <Drawer
-            sx={{
-              width: drawerWidth,
-              flexShrink: 0,
-              '& .MuiDrawer-paper': {
-                width: drawerWidth,
-                boxSizing: 'border-box',
-              },
-            }}
-            variant="persistent"
-            anchor="left"
-            open={open}
-          >
-            <DrawerHeader>
-              <IconButton onClick={handleDrawerClose}>
-                {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-              </IconButton>
-            </DrawerHeader>
+        <List>
+          {['Solidity'].map((text, index) => (
+            <ListItem key={text} disablePadding>
+              <ListItemButton component={Link} to="/solidity">
+                <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
 
-            <Divider />
+                <ListItemText primary={text} />
+              </ListItemButton>
+            </ListItem>
+          ))}
+        </List>
+      </Drawer>
 
-            <List>
-              {['Solidity'].map((text, index) => (
-                <ListItem key={text} disablePadding>
-                  <ListItemButton component={Link} to="/solidity">
-                    <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+      <MainContent open={open}>
+        <DrawerHeader />
 
-                    <ListItemText primary={text} />
-                  </ListItemButton>
-                </ListItem>
-              ))}
-            </List>
-          </Drawer>
-
-          <MainContent open={open}>
-            <DrawerHeader />
-
-            <Content>
-              <QueryClientProvider client={queryClient}>
-                <RoutesList />
-              </QueryClientProvider>
-            </Content>
-          </MainContent>
-        </Box>
-      </ThemeProvider>
-    </BrowserRouter>
+        <Content>
+          <RoutesList />
+        </Content>
+      </MainContent>
+    </Box>
   );
 };
 
