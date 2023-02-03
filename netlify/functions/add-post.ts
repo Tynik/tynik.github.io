@@ -32,7 +32,7 @@ export const handler = createHandler<Payload>(
 
     const myProfileContract = getMyProfileContract(web3Client);
 
-    myProfileContract.methods
+    await myProfileContract.methods
       .addPost(postCID, postCreatedTime)
       .send({ from: payload.ethAccount, gas: 1000000 });
 

@@ -34,7 +34,7 @@ export const handler = createHandler<Payload>(
 
     const postCID = await putWeb3PostFiles({ ...payload, created: postCreatedTime });
 
-    myProfileContract.methods
+    await myProfileContract.methods
       .editPost(payload.cid, postCID)
       .send({ from: payload.ethAccount, gas: 1000000 });
 
