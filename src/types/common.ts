@@ -12,10 +12,13 @@ export type TimelinePoint = {
   links?: string[];
 };
 
-export type Post = {
+export interface PostInfo {
   cid: PostCID;
   title: string;
   subtitle: string;
-  content: string;
   created: number;
-};
+}
+
+export interface Post extends PostInfo {
+  content: string;
+}

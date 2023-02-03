@@ -4,14 +4,9 @@ import Web3 from 'web3';
 import fs from 'graceful-fs';
 
 import type { Handler, HandlerResponse, HandlerEvent, HandlerContext } from '@netlify/functions';
+import type { Post } from './netlify.types';
 
 import MyProfileContract from './smart-contracts/MyProfile.json';
-
-type Post = {
-  title: string;
-  subtitle: string;
-  content: string;
-};
 
 class Web3File {
   name: string;
@@ -24,28 +19,11 @@ class Web3File {
   }
 
   stream(): fs.ReadStream {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
     return this.content;
   }
 }
-
-const createWeb3File = (name: string, data: any) => {
-  return new Web3File(name, JSON.stringify(data));
-};
-
-export const createWeb3PostFiles = (post: Post) => {
-  const postWeb3File = createWeb3File('post.json', {
-    title: post.title,
-    subtitle: post.subtitle,
-    created: new Date().getTime(),
-  });
-
-  // full post content should be stored in separate file
-  const fullPostWeb3File = createWeb3File('full-post.json', {
-    content: post.content,
-  });
-
-  return [postWeb3File, fullPostWeb3File];
-};
 
 export const getWeb3Client = () => new Web3(process.env.WEB3_PROVIDER || 'http://127.0.0.1:7545');
 
@@ -72,6 +50,37 @@ export const getWeb3StorageClient = () => {
   return new Web3Storage({ token });
 };
 
+const createWeb3File = (name: string, data: any) => {
+  return new Web3File(name, JSON.stringify(data));
+};
+
+export const createWeb3PostFiles = (post: Post) => {
+  const postWeb3File = createWeb3File('post.json', {
+    title: post.title,
+    subtitle: post.subtitle,
+    created: post.created,
+  });
+
+  // full post content should be stored in separate file
+  const fullPostWeb3File = createWeb3File('post-content.json', {
+    content: post.content,
+  });
+
+  return [postWeb3File, fullPostWeb3File];
+};
+
+export const putWeb3PostFiles = (post: Post) => {
+  const web3PostFiles = createWeb3PostFiles(post);
+
+  const web3StorageClient = getWeb3StorageClient();
+
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-expect-error
+  return web3StorageClient.put(web3PostFiles, {
+    name: 'maliinyk-posts',
+  });
+};
+
 export const getTelegrafClient = () => {
   const token = process.env.BOT_TOKEN;
 
@@ -89,16 +98,16 @@ export const getMyProfileContract = (web3Client: Web3) => {
   );
 };
 
-type AllowMethod = 'POST' | 'GET' | 'OPTIONS' | 'PUT' | '*';
+type HTTPMethod = 'POST' | 'GET' | 'OPTIONS' | 'PUT' | 'UPDATE' | 'DELETE';
 
 type CreateResponseOptions = {
   statusCode?: number;
-  allowMethods?: AllowMethod[];
+  allowMethods?: HTTPMethod[] | null;
 };
 
 export const createResponse = (
   data: any,
-  { statusCode = 200, allowMethods = ['*'] }: CreateResponseOptions = {}
+  { statusCode = 200, allowMethods = null }: CreateResponseOptions = {}
 ): HandlerResponse => {
   return {
     statusCode,
@@ -106,21 +115,52 @@ export const createResponse = (
     headers: {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Headers': 'Content-Type',
-      'Access-Control-Allow-Methods': allowMethods?.join(', '),
+      'Access-Control-Allow-Methods': allowMethods?.join(', ') ?? '*',
     },
   };
 };
 
-export const createHandler = (
-  func: (event: HandlerEvent, context: HandlerContext) => Promise<HandlerResponse>
+type CreateHandlerFunctionOptions<Payload = unknown> = {
+  event: HandlerEvent;
+  context: HandlerContext;
+  payload: Payload | null;
+};
+
+type CreateHandlerOptions = {
+  allowMethods?: HTTPMethod[];
+} | null;
+
+type CreateHandlerFunction<Payload = unknown> = (
+  options: CreateHandlerFunctionOptions<Payload>
+) => Promise<object | null>;
+
+export const createHandler = <Payload = unknown>(
+  options: CreateHandlerOptions,
+  func: CreateHandlerFunction<Payload>
 ): Handler => {
   return async (event, context) => {
     if (event.httpMethod === 'OPTIONS') {
       return createResponse({ message: 'Successful preflight call.' });
     }
 
+    if (options?.allowMethods && !options.allowMethods.includes(event.httpMethod as HTTPMethod)) {
+      return createResponse(`You cannot use HTTP method "${event.httpMethod}" for this endpoint`, {
+        statusCode: 400,
+        allowMethods: options.allowMethods,
+      });
+    }
+
     try {
-      return await func(event, context);
+      const payload = event.body ? (JSON.parse(event.body) as Payload) : null;
+
+      const result = await func({ event, context, payload });
+
+      return createResponse(
+        { status: 'ok', data: result ?? null },
+        {
+          allowMethods: options?.allowMethods,
+        }
+      );
     } catch (e) {
       console.error(e);
 
@@ -128,7 +168,7 @@ export const createHandler = (
         { status: 'error' },
         {
           statusCode: 500,
-          allowMethods: ['POST', 'OPTIONS'],
+          allowMethods: options?.allowMethods,
         }
       );
     }

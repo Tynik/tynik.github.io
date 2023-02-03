@@ -1,5 +1,6 @@
-import type { Post, PostCID } from '~/types';
-import { netlifyRequest } from '~/api/apiClient';
+import type { PostInfo, Post, PostCID } from '~/types';
+
+import { netlifyRequest } from './apiClient';
 
 export type MakeOfferPayload = {
   company: string;
@@ -37,14 +38,36 @@ export type EditPostPayload = {
 export const editPostRequest = async (payload: EditPostPayload) =>
   netlifyRequest('edit-post', { payload, method: 'POST' });
 
-export const getPostRequest = async (postCID: PostCID) =>
+export const getPostInfoRequest = async (postCID: PostCID) =>
   ({
     cid: postCID,
     ...(await (await fetch(`https://${postCID}.ipfs.w3s.link/post.json`)).json()),
-  } as Post);
+  } as PostInfo);
+
+export const getPostContentRequest = async (postCID: PostCID) =>
+  (
+    (await (await fetch(`https://${postCID}.ipfs.w3s.link/post-content.json`)).json()) as {
+      content: string;
+    }
+  ).content;
+
+export const getPostRequest = async (postCID: PostCID) => {
+  const [postInfo, content] = await Promise.all([
+    getPostInfoRequest(postCID),
+    getPostContentRequest(postCID),
+  ]);
+
+  return {
+    ...postInfo,
+    content,
+  } as Post;
+};
+
+type GetPostsResponse = {
+  list: PostCID[];
+  total: number;
+};
 
 export const getPostsRequest = async () => {
-  const postCIDs = (await netlifyRequest<PostCID[]>('get-posts')).data;
-
-  return Promise.all(postCIDs.map(getPostRequest));
+  return (await netlifyRequest<GetPostsResponse>('get-posts')).data;
 };

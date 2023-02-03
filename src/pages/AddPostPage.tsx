@@ -1,4 +1,5 @@
 import React, { useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Editor, EditorState } from 'draft-js';
 import { Button, Box, TextField, Grid } from '@mui/material';
 
@@ -7,6 +8,8 @@ import { RichEditor } from '~/components';
 import { useUser } from '~/providers';
 
 export const AddPostPage = () => {
+  const navigate = useNavigate();
+
   const user = useUser();
 
   const [title, setTitle] = useState<string | null>(null);
@@ -30,6 +33,8 @@ export const AddPostPage = () => {
         ethAccount: user.ethAccount,
         content: editorEl.editor.innerHTML,
       });
+
+      navigate('/');
     } catch (e) {
       console.error(e);
     }

@@ -1,14 +1,30 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Button, Card, CardActions, CardHeader, CardContent, Typography } from '@mui/material';
+import { useQuery } from 'react-query';
+import {
+  Button,
+  Card,
+  CardActions,
+  CardHeader,
+  CardContent,
+  Typography,
+  Skeleton,
+} from '@mui/material';
 
-import type { Post } from '~/types';
+import type { PostCID } from '~/types';
+import { getPostInfoRequest } from '~/api';
 
 type PostCardProps = {
-  post: Post;
+  postCID: PostCID;
 };
 
-export const PostCard = ({ post }: PostCardProps) => {
+export const PostCard = ({ postCID }: PostCardProps) => {
+  const { data: post } = useQuery(['get-post'], () => getPostInfoRequest(postCID));
+
+  if (!post) {
+    return <Skeleton width={550} height={200} />;
+  }
+
   return (
     <Card sx={{ display: 'flex', flexDirection: 'column', width: 550, height: 200 }}>
       <CardHeader

@@ -2,10 +2,9 @@ import {
   createResponse,
   getMyProfileContract,
   getWeb3Client,
-  getWeb3StorageClient,
   web3WalletAddPrivateKey,
-  createWeb3PostFiles,
   createHandler,
+  putWeb3PostFiles,
 } from '../netlify.helpers';
 
 type Payload = {
@@ -15,35 +14,28 @@ type Payload = {
   ethAccount: string;
 };
 
-export const handler = createHandler(async event => {
-  if (event.httpMethod !== 'POST') {
-    return createResponse('You are not using a http POST method for this endpoint.', {
-      statusCode: 400,
-      allowMethods: ['POST', 'OPTIONS'],
-    });
-  }
-
-  const payload = JSON.parse(event.body) as Payload;
-
-  const web3StorageClient = getWeb3StorageClient();
-
-  const postCID = await web3StorageClient.put(createWeb3PostFiles(payload), {
-    name: 'maliinyk-posts',
-  });
-
-  const web3Client = getWeb3Client();
-  web3WalletAddPrivateKey(web3Client);
-
-  const myProfileContract = getMyProfileContract(web3Client);
-
-  const tx = await myProfileContract.methods.addPost(postCID);
-
-  tx.send({ from: payload.ethAccount, gas: 1000000 });
-
-  return createResponse(
-    { status: 'ok' },
-    {
-      allowMethods: ['POST', 'OPTIONS'],
+export const handler = createHandler<Payload>(
+  { allowMethods: ['POST', 'OPTIONS'] },
+  async ({ payload }) => {
+    if (!payload) {
+      return createResponse('Payload is required', {
+        statusCode: 400,
+        allowMethods: ['POST', 'OPTIONS'],
+      });
     }
-  );
-});
+
+    const postCreatedTime = new Date().getTime();
+    const postCID = await putWeb3PostFiles({ ...payload, created: postCreatedTime });
+
+    const web3Client = getWeb3Client();
+    web3WalletAddPrivateKey(web3Client);
+
+    const myProfileContract = getMyProfileContract(web3Client);
+
+    myProfileContract.methods
+      .addPost(postCID, postCreatedTime)
+      .send({ from: payload.ethAccount, gas: 1000000 });
+
+    return null;
+  }
+);
