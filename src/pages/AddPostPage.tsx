@@ -1,11 +1,12 @@
 import React, { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Editor, EditorState } from 'draft-js';
-import { Button, Box, TextField, Grid } from '@mui/material';
+import { Button, Stack, TextField, Grid } from '@mui/material';
 
 import { addPostRequest } from '~/api';
 import { RichEditor } from '~/components';
 import { useUser } from '~/providers';
+import { PreviewPostPage } from './PreviewPostPage';
 
 export const AddPostPage = () => {
   const navigate = useNavigate();
@@ -17,7 +18,13 @@ export const AddPostPage = () => {
 
   const [editorState, setEditorState] = useState(() => EditorState.createEmpty());
 
+  const [isPreviewMode, setIsPreviewMode] = useState(false);
+
   const editorRef = useRef<Editor | null>(null);
+
+  const togglePreviewMode = () => {
+    setIsPreviewMode(!isPreviewMode);
+  };
 
   const addPostHandler = async () => {
     const editorEl = editorRef.current;
@@ -44,6 +51,17 @@ export const AddPostPage = () => {
     user.ethAccount && title && subtitle && editorState.getCurrentContent().getPlainText()
   );
 
+  if (isPreviewMode) {
+    return (
+      <PreviewPostPage
+        title={title ?? ''}
+        subtitle={subtitle ?? ''}
+        editor={editorRef.current}
+        onExit={togglePreviewMode}
+      />
+    );
+  }
+
   return (
     <Grid spacing={2} container>
       <Grid xs={12} item>
@@ -69,11 +87,15 @@ export const AddPostPage = () => {
       <Grid xs={12} item>
         <RichEditor ref={editorRef} editorState={editorState} onChange={setEditorState} />
 
-        <Box mt={2} textAlign="right">
+        <Stack mt={2} spacing={2} direction="row" justifyContent="right">
+          <Button onClick={togglePreviewMode} disabled={!isCanBeAdded}>
+            Preview
+          </Button>
+
           <Button onClick={addPostHandler} disabled={!isCanBeAdded}>
             Add Post
           </Button>
-        </Box>
+        </Stack>
       </Grid>
     </Grid>
   );

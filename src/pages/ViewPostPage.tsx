@@ -1,8 +1,8 @@
 import React from 'react';
-import { Typography } from '@mui/material';
 
 import { useCurrentPost } from '~/hooks';
 import { PostSkeleton } from './components';
+import { ViewPostPageFit } from './ViewPostPageFit';
 
 export const ViewPostPage = () => {
   const { post } = useCurrentPost();
@@ -11,17 +11,5 @@ export const ViewPostPage = () => {
     return <PostSkeleton />;
   }
 
-  return (
-    <>
-      <Typography variant="h2" fontWeight="bold">
-        {post.title}
-      </Typography>
-
-      <Typography mt={2} variant="h4">
-        {post.subtitle}
-      </Typography>
-
-      <Typography mt={2} variant="body1" dangerouslySetInnerHTML={{ __html: post.content }} />
-    </>
-  );
+  return <ViewPostPageFit post={post} />;
 };
