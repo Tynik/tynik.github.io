@@ -140,7 +140,10 @@ export const createHandler = <Payload = unknown>(
 ): Handler => {
   return async (event, context) => {
     if (event.httpMethod === 'OPTIONS') {
-      return createResponse({ message: 'Successful preflight call.' });
+      return createResponse(
+        { message: 'Successful preflight call.' },
+        { allowMethods: options?.allowMethods }
+      );
     }
 
     if (options?.allowMethods && !options.allowMethods.includes(event.httpMethod as HTTPMethod)) {

@@ -1,30 +1,27 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
-import { useQuery } from 'react-query';
-import { Skeleton, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 
-import { getPostRequest } from '~/api';
+import { useCurrentPost } from '~/hooks';
+import { PostSkeleton } from './components';
 
 export const ViewPostPage = () => {
-  const { postCID } = useParams<{ postCID: string }>();
-
-  const { data: post } = useQuery(['get-post', postCID], () => getPostRequest(postCID!));
+  const { post } = useCurrentPost();
 
   if (!post) {
-    return (
-      <>
-        <Skeleton width="100%" height={50} />
-
-        <Skeleton width="100%" height={300} />
-      </>
-    );
+    return <PostSkeleton />;
   }
 
   return (
     <>
-      <Typography variant="h4">{post.title}</Typography>
+      <Typography variant="h2" fontWeight="bold">
+        {post.title}
+      </Typography>
 
-      <Typography variant="body1" dangerouslySetInnerHTML={{ __html: post.content }} />
+      <Typography mt={2} variant="h4">
+        {post.subtitle}
+      </Typography>
+
+      <Typography mt={2} variant="body1" dangerouslySetInnerHTML={{ __html: post.content }} />
     </>
   );
 };

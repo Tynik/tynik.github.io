@@ -32,10 +32,15 @@ export const handler = createHandler<Payload>(
 
     const myProfileContract = getMyProfileContract(web3Client);
 
-    await myProfileContract.methods
-      .addPost(postCID, postCreatedTime)
-      .send({ from: payload.ethAccount, gas: 1000000 });
-
-    return null;
+    return new Promise(resolve => {
+      myProfileContract.methods
+        .addPost(postCID, postCreatedTime)
+        .send({ from: payload.ethAccount, gas: 1000000 })
+        .on('transactionHash', (transactionHash: string) => {
+          resolve({
+            transactionHash,
+          });
+        });
+    });
   }
 );

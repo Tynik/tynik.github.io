@@ -7,7 +7,7 @@ export type NetlifyResponse<Response> = {
 
 type NetlifyRequestOptions<Payload> = {
   payload?: Payload;
-  method?: 'POST' | 'GET';
+  method?: 'POST' | 'GET' | 'UPDATE' | 'PUT' | 'DELETE';
   params?: Record<string, string>;
 };
 

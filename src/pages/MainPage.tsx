@@ -13,8 +13,8 @@ export const MainPage = () => {
       <Typography variant="h4">Posts</Typography>
 
       <Stack mt={2} direction="row" sx={{ flexWrap: 'wrap', gap: 2 }}>
-        {posts?.list.map((postCID, index) => (
-          <PostCard key={index} postCID={postCID} />
+        {posts?.list.map(postCID => (
+          <PostCard key={postCID} postCID={postCID} />
         ))}
       </Stack>
     </>

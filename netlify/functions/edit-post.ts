@@ -16,12 +16,12 @@ type Payload = {
 };
 
 export const handler = createHandler<Payload>(
-  { allowMethods: ['UPDATE', 'OPTIONS'] },
+  { allowMethods: ['POST', 'OPTIONS'] },
   async ({ payload }) => {
     if (!payload) {
       return createResponse('Payload is required', {
         statusCode: 400,
-        allowMethods: ['UPDATE', 'OPTIONS'],
+        allowMethods: ['POST', 'OPTIONS'],
       });
     }
 
@@ -30,14 +30,22 @@ export const handler = createHandler<Payload>(
 
     const myProfileContract = getMyProfileContract(web3Client);
 
-    const postCreatedTime = (await myProfileContract.methods.getPost(payload.cid).call()) as number;
+    const postInfo = (await myProfileContract.methods.getPost(payload.cid).call()) as {
+      created: string;
+      index: string;
+    };
 
-    const postCID = await putWeb3PostFiles({ ...payload, created: postCreatedTime });
+    const postCID = await putWeb3PostFiles({ ...payload, created: +postInfo.created });
 
-    await myProfileContract.methods
-      .editPost(payload.cid, postCID)
-      .send({ from: payload.ethAccount, gas: 1000000 });
-
-    return null;
+    return new Promise(resolve => {
+      myProfileContract.methods
+        .editPost(payload.cid, postCID)
+        .send({ from: payload.ethAccount, gas: 1000000 })
+        .on('transactionHash', (transactionHash: string) => {
+          resolve({
+            transactionHash,
+          });
+        });
+    });
   }
 );

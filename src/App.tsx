@@ -116,7 +116,7 @@ const App = () => {
 
           <Stack direction="row" spacing={1}>
             {isAuthenticated && (
-              <Button component={Link} to="/add-post">
+              <Button component={Link} to="/post">
                 Add Post
               </Button>
             )}

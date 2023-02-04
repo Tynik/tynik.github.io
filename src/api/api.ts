@@ -17,7 +17,7 @@ export const authRequest = async (ethAccount: string) => {
   return netlifyRequest('auth', { params: { ethAccount } });
 };
 
-export type AddPostPayload = {
+type AddPostPayload = {
   title: string;
   subtitle: string;
   content: string;
@@ -27,7 +27,7 @@ export type AddPostPayload = {
 export const addPostRequest = async (payload: AddPostPayload) =>
   netlifyRequest('add-post', { payload, method: 'POST' });
 
-export type EditPostPayload = {
+type EditPostPayload = {
   cid: PostCID;
   title: string;
   subtitle: string;

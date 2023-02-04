@@ -1,5 +1,5 @@
 ### To test netlify functions locally
 
 ```bash
-netlify functions:serve
+NODE_ENV=development netlify functions:serve
 ```
