@@ -1,14 +1,15 @@
 import React, { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Editor, EditorState } from 'draft-js';
+import { convertToRaw, Editor, EditorState } from 'draft-js';
 import { Button, Stack, TextField, Grid } from '@mui/material';
 
-import { addPostRequest } from '~/api';
+import { toast } from 'react-toastify';
+import { publishPostRequest } from '~/api';
 import { RichEditor } from '~/components';
 import { useUser } from '~/providers';
 import { PreviewPostPage } from './PreviewPostPage';
 
-export const AddPostPage = () => {
+export const NewPostPage = () => {
   const navigate = useNavigate();
 
   const user = useUser();
@@ -26,7 +27,7 @@ export const AddPostPage = () => {
     setIsPreviewMode(!isPreviewMode);
   };
 
-  const addPostHandler = async () => {
+  const publishPostHandler = async () => {
     const editorEl = editorRef.current;
 
     if (!title || !subtitle || !user.ethAccount || !editorEl || !editorEl.editor) {
@@ -34,16 +35,21 @@ export const AddPostPage = () => {
     }
 
     try {
-      await addPostRequest({
+      await publishPostRequest({
         title,
         subtitle,
         ethAccount: user.ethAccount,
         content: editorEl.editor.innerHTML,
+        richContent: JSON.stringify(convertToRaw(editorState.getCurrentContent())),
       });
+
+      toast('Successfully published', { type: 'success' });
 
       navigate('/');
     } catch (e) {
       console.error(e);
+
+      toast('Something went wrong', { type: 'error' });
     }
   };
 
@@ -92,8 +98,8 @@ export const AddPostPage = () => {
             Preview
           </Button>
 
-          <Button onClick={addPostHandler} disabled={!isCanBeAdded}>
-            Add Post
+          <Button onClick={publishPostHandler} disabled={!isCanBeAdded}>
+            Publish
           </Button>
         </Stack>
       </Grid>

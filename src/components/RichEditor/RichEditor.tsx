@@ -1,6 +1,9 @@
 import React, { ComponentProps, forwardRef } from 'react';
 import { Box } from '@mui/material';
+import type { ContentBlock, DraftHandleValue, EditorState } from 'draft-js';
 import { Editor, RichUtils } from 'draft-js';
+
+import 'draft-js/dist/Draft.css';
 
 import { RichEditorStyled } from './RichEditor.styled';
 
@@ -30,7 +33,40 @@ export const RichEditor = forwardRef<Editor, RichEditorProps>(
     };
 
     const toggleCode = () => {
-      onChange(RichUtils.toggleCode(editorState));
+      onChange(RichUtils.toggleBlockType(editorState, 'code-block'));
+    };
+
+    const handleKeyCommand = (command: string, editorState: EditorState): DraftHandleValue => {
+      const newState = RichUtils.handleKeyCommand(editorState, command);
+
+      if (newState) {
+        onChange(newState);
+        return 'handled';
+      }
+
+      return 'not-handled';
+    };
+
+    const handleReturn = (e: React.KeyboardEvent, editorState: EditorState): DraftHandleValue => {
+      if (
+        e.code === 'Enter' &&
+        (e.getModifierState('Shift') || e.getModifierState('Alt') || e.getModifierState('Control'))
+      ) {
+        onChange(RichUtils.insertSoftNewline(editorState));
+        return 'handled';
+      }
+
+      return 'not-handled';
+    };
+
+    const getBlockStyle = (contentBlock: ContentBlock): string => {
+      const type = contentBlock.getType();
+
+      if (type === 'code-block') {
+        return 'code';
+      }
+
+      return '';
     };
 
     return (
@@ -48,6 +84,9 @@ export const RichEditor = forwardRef<Editor, RichEditorProps>(
             editorState={editorState}
             onChange={onChange}
             customStyleMap={customStyleMap}
+            blockStyleFn={getBlockStyle}
+            handleKeyCommand={handleKeyCommand}
+            handleReturn={handleReturn}
             {...props}
           />
         </Box>

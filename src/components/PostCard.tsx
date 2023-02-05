@@ -2,10 +2,8 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import {
-  Button,
   IconButton,
   Card,
-  CardActions,
   CardHeader,
   CardContent,
   Typography,
@@ -14,6 +12,7 @@ import {
   MenuItem,
   ListItemText,
   ListItemIcon,
+  CardActionArea,
 } from '@mui/material';
 import { MoreVert as MoreVertIcon, Edit as EditIcon } from '@mui/icons-material';
 
@@ -43,48 +42,69 @@ export const PostCard = ({ postCID }: PostCardProps) => {
     );
   }
 
+  const onActionsMenu: React.MouseEventHandler<HTMLElement> = e => {
+    e.preventDefault();
+
+    setActionsMenuAnchorEl(e.currentTarget);
+  };
+
   const onEditPost = () => {
     navigate(`/post/${postCID}/edit`);
   };
 
   return (
     <>
-      <Card sx={{ display: 'flex', flexDirection: 'column', width: 550, height: 200 }}>
-        <CardHeader
-          title={post.title}
-          subheader={post.created && new Date(post.created).toDateString()}
-          action={
-            isAuthenticated && (
-              <IconButton
-                aria-label="post-actions"
-                onClick={e => setActionsMenuAnchorEl(e.currentTarget)}
-                aria-expanded={Boolean(actionsMenuAnchorEl)}
-                aria-controls={actionsMenuAnchorEl ? 'post-actions-menu' : undefined}
-                aria-haspopup
-              >
-                <MoreVertIcon />
-              </IconButton>
-            )
-          }
-        />
+      <Card
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          width: 550,
+        }}
+      >
+        <CardActionArea component={Link} to={`/post/${post.cid}`} sx={{ height: '100%' }}>
+          <CardHeader
+            title={post.title}
+            subheader={post.created && new Date(post.created).toDateString()}
+            action={
+              isAuthenticated && (
+                <IconButton
+                  aria-label="post-actions"
+                  onClick={onActionsMenu}
+                  aria-expanded={Boolean(actionsMenuAnchorEl)}
+                  aria-controls={actionsMenuAnchorEl ? 'post-actions-menu' : undefined}
+                  aria-haspopup
+                >
+                  <MoreVertIcon />
+                </IconButton>
+              )
+            }
+            titleTypographyProps={{
+              sx: {
+                display: '-webkit-box',
+                overflow: 'hidden',
+                WebkitLineClamp: '2',
+                WebkitBoxOrient: 'vertical',
+              },
+            }}
+            sx={{
+              '& .MuiCardHeader-content': { overflow: 'hidden' },
+            }}
+          />
 
-        <CardContent sx={{ flexGrow: 1 }}>
-          <Typography
-            variant="body1"
-            overflow="hidden"
-            height="100%"
-            whiteSpace="nowrap"
-            textOverflow="ellipsis"
-          >
-            {post.subtitle}
-          </Typography>
-        </CardContent>
-
-        <CardActions sx={{ justifyContent: 'right' }}>
-          <Button size="small" component={Link} to={`/post/${post.cid}`}>
-            Read
-          </Button>
-        </CardActions>
+          <CardContent sx={{ flexGrow: 1 }}>
+            <Typography
+              variant="body1"
+              sx={{
+                display: '-webkit-box',
+                overflow: 'hidden',
+                WebkitLineClamp: '2',
+                WebkitBoxOrient: 'vertical',
+              }}
+            >
+              {post.subtitle}
+            </Typography>
+          </CardContent>
+        </CardActionArea>
       </Card>
 
       <Menu
@@ -104,12 +124,12 @@ export const PostCard = ({ postCID }: PostCardProps) => {
           horizontal: 'right',
         }}
       >
-        <MenuItem onClick={() => {}}>
+        <MenuItem onClick={onEditPost}>
           <ListItemIcon>
             <EditIcon fontSize="small" />
           </ListItemIcon>
 
-          <ListItemText onClick={onEditPost}>Edit</ListItemText>
+          <ListItemText>Edit</ListItemText>
         </MenuItem>
       </Menu>
     </>

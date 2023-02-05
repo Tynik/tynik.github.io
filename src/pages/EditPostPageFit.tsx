@@ -1,17 +1,24 @@
 import React, { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Editor, EditorState, ContentState, convertFromHTML } from 'draft-js';
+import {
+  Editor,
+  EditorState,
+  convertToRaw,
+  convertFromRaw,
+} from 'draft-js';
 import { Button, Stack, TextField, Grid } from '@mui/material';
 
-import type { Post } from '~/types';
+import { toast } from 'react-toastify';
 
-import { editPostRequest } from '~/api';
+import type { RichPost } from '~/types';
+
+import { updatePostRequest } from '~/api';
 import { RichEditor } from '~/components';
 import { useUser } from '~/providers';
 import { PreviewPostPage } from './PreviewPostPage';
 
 type EditPostPageFitProps = {
-  post: Post;
+  post: RichPost;
 };
 
 export const EditPostPageFit = ({ post }: EditPostPageFitProps) => {
@@ -22,11 +29,11 @@ export const EditPostPageFit = ({ post }: EditPostPageFitProps) => {
   const [title, setTitle] = useState(post.title);
   const [subtitle, setSubtitle] = useState(post.subtitle);
 
-  const [editorState, setEditorState] = useState(() =>
-    EditorState.createWithContent(
-      ContentState.createFromBlockArray(convertFromHTML(post.content).contentBlocks)
-    )
-  );
+  const [editorState, setEditorState] = useState(() => {
+    const content = convertFromRaw(JSON.parse(post.richContent) as never);
+
+    return EditorState.createWithContent(content);
+  });
 
   const [isPreviewMode, setIsPreviewMode] = useState(false);
 
@@ -36,7 +43,7 @@ export const EditPostPageFit = ({ post }: EditPostPageFitProps) => {
     setIsPreviewMode(!isPreviewMode);
   };
 
-  const editPostHandler = async () => {
+  const savePostHandler = async () => {
     const editorEl = editorRef.current;
 
     if (!title || !subtitle || !user.ethAccount || !editorEl || !editorEl.editor) {
@@ -44,21 +51,26 @@ export const EditPostPageFit = ({ post }: EditPostPageFitProps) => {
     }
 
     try {
-      await editPostRequest({
+      await updatePostRequest({
         title,
         subtitle,
         cid: post.cid,
         ethAccount: user.ethAccount,
         content: editorEl.editor.innerHTML,
+        richContent: JSON.stringify(convertToRaw(editorState.getCurrentContent())),
       });
+
+      toast('Successfully updated', { type: 'success' });
 
       navigate('/');
     } catch (e) {
       console.error(e);
+
+      toast('Something went wrong', { type: 'error' });
     }
   };
 
-  const isCanBeEdited = Boolean(
+  const isCanBeSaved = Boolean(
     user.ethAccount && title && subtitle && editorState.getCurrentContent().getPlainText()
   );
 
@@ -99,12 +111,12 @@ export const EditPostPageFit = ({ post }: EditPostPageFitProps) => {
         <RichEditor ref={editorRef} editorState={editorState} onChange={setEditorState} />
 
         <Stack mt={2} spacing={2} direction="row" justifyContent="right">
-          <Button onClick={togglePreviewMode} disabled={!isCanBeEdited}>
+          <Button onClick={togglePreviewMode} disabled={!isCanBeSaved}>
             Preview
           </Button>
 
-          <Button onClick={editPostHandler} disabled={!isCanBeEdited}>
-            Edit Post
+          <Button onClick={savePostHandler} disabled={!isCanBeSaved}>
+            Save
           </Button>
         </Stack>
       </Grid>

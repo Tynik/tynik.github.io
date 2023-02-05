@@ -1,4 +1,4 @@
-import type { PostInfo, Post, PostCID } from '~/types';
+import type { PostInfo, Post, PostCID, RichPost } from '~/types';
 
 import { netlifyRequest } from './apiClient';
 
@@ -17,26 +17,28 @@ export const authRequest = async (ethAccount: string) => {
   return netlifyRequest('auth', { params: { ethAccount } });
 };
 
-type AddPostPayload = {
+type PublishPostPayload = {
   title: string;
   subtitle: string;
   content: string;
+  richContent: string;
   ethAccount: string;
 };
 
-export const addPostRequest = async (payload: AddPostPayload) =>
-  netlifyRequest('add-post', { payload, method: 'POST' });
+export const publishPostRequest = async (payload: PublishPostPayload) =>
+  netlifyRequest('publish-post', { payload, method: 'POST' });
 
-type EditPostPayload = {
+type UpdatePostPayload = {
   cid: PostCID;
   title: string;
   subtitle: string;
   content: string;
+  richContent: string;
   ethAccount: string;
 };
 
-export const editPostRequest = async (payload: EditPostPayload) =>
-  netlifyRequest('edit-post', { payload, method: 'POST' });
+export const updatePostRequest = async (payload: UpdatePostPayload) =>
+  netlifyRequest('update-post', { payload, method: 'POST' });
 
 export const getPostInfoRequest = async (postCID: PostCID) =>
   ({
@@ -61,6 +63,25 @@ export const getPostRequest = async (postCID: PostCID) => {
     ...postInfo,
     content,
   } as Post;
+};
+
+export const getRichPostContentRequest = async (postCID: PostCID) =>
+  (
+    (await (await fetch(`https://${postCID}.ipfs.w3s.link/post-rich-content.json`)).json()) as {
+      content: string;
+    }
+  ).content;
+
+export const getRichPostRequest = async (postCID: PostCID) => {
+  const [postInfo, content] = await Promise.all([
+    getPostInfoRequest(postCID),
+    getRichPostContentRequest(postCID),
+  ]);
+
+  return {
+    ...postInfo,
+    richContent: content,
+  } as RichPost;
 };
 
 type GetPostsResponse = {

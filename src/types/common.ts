@@ -22,3 +22,7 @@ export interface PostInfo {
 export interface Post extends PostInfo {
   content: string;
 }
+
+export interface RichPost extends PostInfo {
+  richContent: string;
+}

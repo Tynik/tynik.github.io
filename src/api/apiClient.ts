@@ -1,4 +1,4 @@
-export type NetlifyFunction = 'auth' | 'add-post' | 'edit-post' | 'get-posts' | 'make-offer';
+export type NetlifyFunction = 'auth' | 'update-post' | 'publish-post' | 'get-posts' | 'make-offer';
 
 export type NetlifyResponse<Response> = {
   status: string;

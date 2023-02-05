@@ -55,18 +55,22 @@ const createWeb3File = (name: string, data: any) => {
 };
 
 export const createWeb3PostFiles = (post: Post) => {
-  const postWeb3File = createWeb3File('post.json', {
+  const postInfoWeb3File = createWeb3File('post.json', {
     title: post.title,
     subtitle: post.subtitle,
     created: post.created,
   });
 
   // full post content should be stored in separate file
-  const fullPostWeb3File = createWeb3File('post-content.json', {
+  const postContentWeb3File = createWeb3File('post-content.json', {
     content: post.content,
   });
 
-  return [postWeb3File, fullPostWeb3File];
+  const richPostContentWeb3File = createWeb3File('post-rich-content.json', {
+    content: post.richContent,
+  });
+
+  return [postInfoWeb3File, postContentWeb3File, richPostContentWeb3File];
 };
 
 export const putWeb3PostFiles = (post: Post) => {
