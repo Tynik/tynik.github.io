@@ -18,13 +18,32 @@ export const ViewPostPageFit = ({ post }: ViewPostPageFitProps) => {
   return (
     <Grid spacing={2} container>
       <Grid xs={12} item>
-        <Typography variant="h2" fontWeight="bold">
+        <Typography
+          variant="h2"
+          fontWeight="bold"
+          sx={{
+            display: '-webkit-box',
+            overflow: 'hidden',
+            WebkitLineClamp: '2',
+            WebkitBoxOrient: 'vertical',
+          }}
+        >
           {post.title}
         </Typography>
       </Grid>
 
       <Grid xs={12} item>
-        <Typography variant="h4">{post.subtitle}</Typography>
+        <Typography
+          variant="h4"
+          sx={{
+            display: '-webkit-box',
+            overflow: 'hidden',
+            WebkitLineClamp: '2',
+            WebkitBoxOrient: 'vertical',
+          }}
+        >
+          {post.subtitle}
+        </Typography>
       </Grid>
 
       <Grid xs={12} item>

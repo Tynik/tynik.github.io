@@ -8,7 +8,7 @@ import type { Post } from './netlify.types';
 
 import MyProfileContract from './smart-contracts/MyProfile.json';
 
-class Web3File {
+export class Web3File {
   name: string;
 
   content: string;
@@ -24,6 +24,10 @@ class Web3File {
     return this.content;
   }
 }
+
+const createWeb3JSONFile = (name: string, data: any) => {
+  return new Web3File(name, JSON.stringify(data));
+};
 
 export const getWeb3Client = () => new Web3(process.env.WEB3_PROVIDER || 'http://127.0.0.1:7545');
 
@@ -50,23 +54,19 @@ export const getWeb3StorageClient = () => {
   return new Web3Storage({ token });
 };
 
-const createWeb3File = (name: string, data: any) => {
-  return new Web3File(name, JSON.stringify(data));
-};
-
 export const createWeb3PostFiles = (post: Post) => {
-  const postInfoWeb3File = createWeb3File('post.json', {
+  const postInfoWeb3File = createWeb3JSONFile('post.json', {
     title: post.title,
     subtitle: post.subtitle,
     created: post.created,
   });
 
   // full post content should be stored in separate file
-  const postContentWeb3File = createWeb3File('post-content.json', {
+  const postContentWeb3File = createWeb3JSONFile('post-content.json', {
     content: post.content,
   });
 
-  const richPostContentWeb3File = createWeb3File('post-rich-content.json', {
+  const richPostContentWeb3File = createWeb3JSONFile('post-rich-content.json', {
     content: post.richContent,
   });
 
@@ -134,9 +134,14 @@ type CreateHandlerOptions = {
   allowMethods?: HTTPMethod[];
 } | null;
 
-type CreateHandlerFunction<Payload = unknown> = (
+type CreateHandlerFunction<Payload = unknown, Response = unknown> = (
   options: CreateHandlerFunctionOptions<Payload>
-) => Promise<object | null>;
+) => Promise<{
+  status: 'ok' | 'error';
+  // TODO: not implemented
+  statusCode?: number;
+  data?: Response;
+} | null>;
 
 export const createHandler = <Payload = unknown>(
   options: CreateHandlerOptions,
@@ -158,16 +163,14 @@ export const createHandler = <Payload = unknown>(
     }
 
     try {
-      const payload = event.body ? (JSON.parse(event.body) as Payload) : null;
+      const payload =
+        event.body && !event.isBase64Encoded ? (JSON.parse(event.body) as Payload) : null;
 
       const result = await func({ event, context, payload });
 
-      return createResponse(
-        { status: 'ok', data: result ?? null },
-        {
-          allowMethods: options?.allowMethods,
-        }
-      );
+      return createResponse(result, {
+        allowMethods: options?.allowMethods,
+      });
     } catch (e) {
       console.error(e);
 

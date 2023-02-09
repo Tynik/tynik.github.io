@@ -40,6 +40,20 @@ type UpdatePostPayload = {
 export const updatePostRequest = async (payload: UpdatePostPayload) =>
   netlifyRequest('update-post', { payload, method: 'POST' });
 
+type UploadPostFilePayload = {
+  files: Blob[];
+  ethAccount: string;
+};
+
+export const uploadPostFileRequest = async ({ files, ethAccount }: UploadPostFilePayload) => {
+  const fd = new FormData();
+
+  fd.append('file', files[0]);
+  fd.append('ethAccount', ethAccount);
+
+  return (await netlifyRequest('upload-post-file', { payload: fd, method: 'POST' })).data as string;
+};
+
 export const getPostInfoRequest = async (postCID: PostCID) =>
   ({
     cid: postCID,

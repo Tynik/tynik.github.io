@@ -1,13 +1,14 @@
 import React, { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Editor, EditorState, convertToRaw, convertFromRaw } from 'draft-js';
+import type { DraftHandleValue } from 'draft-js';
+import { Editor, EditorState, convertToRaw, convertFromRaw, AtomicBlockUtils } from 'draft-js';
 import { Button, Stack, TextField, Grid } from '@mui/material';
 
 import { toast } from 'react-toastify';
 
 import type { RichPost } from '~/types';
 
-import { updatePostRequest } from '~/api';
+import { updatePostRequest, uploadPostFileRequest } from '~/api';
 import { RichEditor } from '~/components';
 import { useUser } from '~/providers';
 import { PreviewPostPage } from './PreviewPostPage';
@@ -80,6 +81,34 @@ export const EditPostPageFit = ({ post }: EditPostPageFitProps) => {
     );
   }
 
+  const handlePastedFiles = (files: Blob[]): DraftHandleValue => {
+    uploadPostFileRequest({ files, ethAccount: '' })
+      .then(fileURL => {
+        const contentStateWithEntity = editorState
+          .getCurrentContent()
+          .createEntity('IMAGE', 'IMMUTABLE', {
+            src: fileURL,
+          });
+
+        const newEditorState = EditorState.set(editorState, {
+          currentContent: contentStateWithEntity,
+        });
+
+        setEditorState(
+          AtomicBlockUtils.insertAtomicBlock(
+            newEditorState,
+            contentStateWithEntity.getLastCreatedEntityKey(),
+            ' '
+          )
+        );
+      })
+      .catch(() => {
+        toast('Something went wrong', { type: 'error' });
+      });
+
+    return 'handled';
+  };
+
   return (
     <Grid spacing={2} container>
       <Grid xs={12} item>
@@ -103,7 +132,12 @@ export const EditPostPageFit = ({ post }: EditPostPageFitProps) => {
       </Grid>
 
       <Grid xs={12} item>
-        <RichEditor ref={editorRef} editorState={editorState} onChange={setEditorState} />
+        <RichEditor
+          ref={editorRef}
+          editorState={editorState}
+          onChange={setEditorState}
+          handlePastedFiles={handlePastedFiles}
+        />
 
         <Stack mt={2} spacing={2} direction="row" justifyContent="right">
           <Button onClick={togglePreviewMode} disabled={!isCanBeSaved}>

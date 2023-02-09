@@ -1,4 +1,4 @@
-import { createHandler, createResponse, getTelegrafClient } from '../netlify.helpers';
+import { createHandler, getTelegrafClient } from '../netlify.helpers';
 
 type Payload = {
   company: string;
@@ -12,10 +12,12 @@ export const handler = createHandler<Payload>(
   { allowMethods: ['POST', 'OPTIONS'] },
   async ({ payload }) => {
     if (!payload) {
-      return createResponse('Payload is required', {
-        statusCode: 400,
-        allowMethods: ['POST', 'OPTIONS'],
-      });
+      return {
+        status: 'error',
+        data: {
+          message: 'Payload is required',
+        },
+      };
     }
 
     const botChatId = process.env.BOT_CHAT_ID;
@@ -40,6 +42,8 @@ export const handler = createHandler<Payload>(
       }
     );
 
-    return null;
+    return {
+      status: 'ok',
+    };
   }
 );

@@ -1,11 +1,13 @@
-import React, { ComponentProps, forwardRef } from 'react';
+import type { ComponentProps } from 'react';
+import React, { forwardRef, useState } from 'react';
 import { Box } from '@mui/material';
-import type { ContentBlock, DraftHandleValue, EditorState } from 'draft-js';
-import { Editor, RichUtils } from 'draft-js';
+import type { ContentBlock, DraftHandleValue } from 'draft-js';
+import { ContentState, Editor, RichUtils, EditorState } from 'draft-js';
 
 import 'draft-js/dist/Draft.css';
 
 import { RichEditorStyled } from './RichEditor.styled';
+import { MediaRenderer } from './renderers';
 
 const customStyleMap: Record<string, React.CSSProperties> = {
   FONT_SIZE_H1: {
@@ -20,6 +22,8 @@ type RichEditorProps = ComponentProps<typeof Editor>;
 
 export const RichEditor = forwardRef<Editor, RichEditorProps>(
   ({ editorState, onChange, ...props }, ref) => {
+    const [readOnly, setReadOnly] = useState(false);
+
     const toggleH1 = () => {
       onChange(RichUtils.toggleInlineStyle(editorState, 'FONT_SIZE_H1'));
     };
@@ -59,7 +63,7 @@ export const RichEditor = forwardRef<Editor, RichEditorProps>(
       return 'not-handled';
     };
 
-    const getBlockStyle = (contentBlock: ContentBlock): string => {
+    const blockStyleFn = (contentBlock: ContentBlock): string => {
       const type = contentBlock.getType();
 
       if (type === 'code-block') {
@@ -67,6 +71,23 @@ export const RichEditor = forwardRef<Editor, RichEditorProps>(
       }
 
       return '';
+    };
+
+    const blockRendererFn = (block: ContentBlock) => {
+      if (block.getType() === 'atomic') {
+        return {
+          component: MediaRenderer,
+          editable: false,
+          props: {
+            setEditorReadOnly: setReadOnly,
+            onUpdateContent: (contentState: ContentState) => {
+              onChange(EditorState.push(editorState, contentState, 'apply-entity'));
+            },
+          },
+        };
+      }
+
+      return null;
     };
 
     return (
@@ -84,9 +105,11 @@ export const RichEditor = forwardRef<Editor, RichEditorProps>(
             editorState={editorState}
             onChange={onChange}
             customStyleMap={customStyleMap}
-            blockStyleFn={getBlockStyle}
+            blockStyleFn={blockStyleFn}
+            blockRendererFn={blockRendererFn}
             handleKeyCommand={handleKeyCommand}
             handleReturn={handleReturn}
+            readOnly={readOnly}
             {...props}
           />
         </Box>

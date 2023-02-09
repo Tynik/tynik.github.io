@@ -1,5 +1,4 @@
 import {
-  createResponse,
   getMyProfileContract,
   getWeb3Client,
   web3WalletAddPrivateKey,
@@ -20,10 +19,12 @@ export const handler = createHandler<Payload>(
   { allowMethods: ['POST', 'OPTIONS'] },
   async ({ payload }) => {
     if (!payload) {
-      return createResponse('Payload is required', {
-        statusCode: 400,
-        allowMethods: ['POST', 'OPTIONS'],
-      });
+      return {
+        status: 'error',
+        data: {
+          message: 'Payload is required',
+        },
+      };
     }
 
     const web3Client = getWeb3Client();
@@ -38,15 +39,18 @@ export const handler = createHandler<Payload>(
 
     const postCID = await putWeb3PostFiles({ ...payload, created: +postInfo.created });
 
-    return new Promise(resolve => {
-      myProfileContract.methods
-        .updatePost(payload.cid, postCID)
-        .send({ from: payload.ethAccount, gas: 1000000 })
-        .on('transactionHash', (transactionHash: string) => {
-          resolve({
-            transactionHash,
+    return {
+      status: 'ok',
+      data: await new Promise(resolve => {
+        myProfileContract.methods
+          .updatePost(payload.cid, postCID)
+          .send({ from: payload.ethAccount, gas: 1000000 })
+          .on('transactionHash', (transactionHash: string) => {
+            resolve({
+              transactionHash,
+            });
           });
-        });
-    });
+      }),
+    };
   }
 );

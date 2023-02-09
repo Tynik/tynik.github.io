@@ -20,6 +20,8 @@ import type { PostCID } from '~/types';
 import { getPostInfoRequest } from '~/api';
 import { useUser } from '~/providers';
 
+const CARD_WIDTH = 500;
+
 type PostCardProps = {
   postCID: PostCID;
 };
@@ -36,8 +38,8 @@ export const PostCard = ({ postCID }: PostCardProps) => {
   if (!post) {
     return (
       <div>
-        <Skeleton width={550} height={30} variant="rounded" />
-        <Skeleton width={550} height={162} variant="rounded" sx={{ mt: 1 }} />
+        <Skeleton width={CARD_WIDTH} height={30} variant="rounded" />
+        <Skeleton width={CARD_WIDTH} height={162} variant="rounded" sx={{ mt: 1 }} />
       </div>
     );
   }
@@ -58,7 +60,7 @@ export const PostCard = ({ postCID }: PostCardProps) => {
         sx={{
           display: 'flex',
           flexDirection: 'column',
-          width: 550,
+          width: CARD_WIDTH,
         }}
       >
         <CardActionArea component={Link} to={`/post/${post.cid}`} sx={{ height: '100%' }}>

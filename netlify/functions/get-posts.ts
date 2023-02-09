@@ -10,7 +10,10 @@ export const handler = createHandler({ allowMethods: ['GET', 'OPTIONS'] }, async
   };
 
   return {
-    list: result['0'],
-    total: +result['1'],
+    status: 'ok',
+    data: {
+      list: result['0'],
+      total: +result['1'],
+    },
   };
 });
