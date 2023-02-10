@@ -26,11 +26,17 @@ export const MediaRenderer = ({
   if (type === 'IMAGE') {
     const imageAttributes = entity.getData() as ImageAttributes;
 
-    const onUpdate = (data: Partial<ImageAttributes>) => {
+    const onUpdateImageAttributes = (data: Partial<ImageAttributes>) => {
       onUpdateContent(contentState.mergeEntityData(entityKey, data));
     };
 
-    return <Image setEditorReadOnly={setEditorReadOnly} onUpdate={onUpdate} {...imageAttributes} />;
+    return (
+      <Image
+        setEditorReadOnly={setEditorReadOnly}
+        onUpdateAttributes={onUpdateImageAttributes}
+        {...imageAttributes}
+      />
+    );
   }
 
   return null;

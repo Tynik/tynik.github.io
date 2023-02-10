@@ -1,118 +1,160 @@
 import React, { useEffect, useState } from 'react';
 import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
+  Divider,
+  IconButton,
+  Popover,
+  Stack,
   TextField,
+  ToggleButton,
+  ToggleButtonGroup,
 } from '@mui/material';
+import {
+  Check as CheckIcon,
+  AlignHorizontalCenter as AlignHorizontalCenterIcon,
+  AlignHorizontalLeft as AlignHorizontalLeftIcon,
+  AlignHorizontalRight as AlignHorizontalRightIcon,
+} from '@mui/icons-material';
 import { useHoneyForm } from '@tynik/react-honey-form';
+
+type ImageAlign = 'left' | 'center' | 'right';
 
 export type ImageSettingsForm = {
   width: string;
   height: string;
+  align: ImageAlign;
 };
 
-export type ImageAttributes = {
+export type ImageAttributes = Partial<ImageSettingsForm> & {
   src: string;
-  width?: string;
-  height?: string;
 };
 
 type ImageProps = ImageAttributes & {
   setEditorReadOnly: (state: boolean) => void;
-  onUpdate: (data: Partial<ImageAttributes>) => void;
+  onUpdateAttributes: (data: Partial<ImageAttributes>) => void;
 };
 
 export const Image = ({
   src,
   setEditorReadOnly,
-  onUpdate,
+  onUpdateAttributes,
   width = '100%',
   height = '100%',
+  align = 'left',
 }: ImageProps) => {
-  const [isShowSettings, setIsShowSettings] = useState(false);
+  const [settingsAnchorEl, setSettingsAnchorEl] = useState<HTMLElement | null>(null);
 
-  const [imageSettings, setImageSettings] = useState<ImageSettingsForm>({
+  const [imageAttributes, setImageAttributes] = useState<ImageSettingsForm>({
     width,
     height,
+    align,
   });
 
   const { formFields, submit } = useHoneyForm<ImageSettingsForm>({
     fields: {
       width: {
-        value: imageSettings.width,
+        value: imageAttributes.width,
       },
       height: {
-        value: imageSettings.height,
+        value: imageAttributes.height,
+      },
+      align: {
+        value: imageAttributes.align,
       },
     },
     onSubmit: data => {
-      setImageSettings(data);
+      setImageAttributes(data);
 
-      onUpdate(data);
+      onUpdateAttributes(data);
 
       return Promise.resolve();
     },
   });
 
   useEffect(() => {
-    setEditorReadOnly(isShowSettings);
-  }, [isShowSettings]);
+    setEditorReadOnly(Boolean(settingsAnchorEl));
+  }, [settingsAnchorEl]);
 
-  const openSettings = () => {
-    setIsShowSettings(true);
+  const openSettings: React.MouseEventHandler<HTMLElement> = e => {
+    setSettingsAnchorEl(e.currentTarget);
   };
 
   const applySettings = () => {
     submit()
       .then(() => {
-        setIsShowSettings(false);
+        setSettingsAnchorEl(null);
       })
       .catch(() => {});
   };
 
   const closeSettings = () => {
-    setIsShowSettings(false);
+    setSettingsAnchorEl(null);
   };
 
   return (
-    <>
+    <div style={{ textAlign: formFields.align.value }}>
       <img
         src={src}
         alt=""
-        width={imageSettings.width}
-        height={imageSettings.height}
+        style={{
+          width: imageAttributes.width,
+          height: imageAttributes.height,
+        }}
         onClick={openSettings}
       />
 
-      <Dialog open={isShowSettings} onClose={closeSettings}>
-        <DialogTitle>Image Settings</DialogTitle>
+      <Popover
+        anchorEl={settingsAnchorEl}
+        open={Boolean(settingsAnchorEl)}
+        onClose={closeSettings}
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'center',
+        }}
+        transformOrigin={{
+          vertical: 'bottom',
+          horizontal: 'center',
+        }}
+      >
+        <Stack p={1} direction="row" spacing={1} alignItems="center">
+          <ToggleButtonGroup
+            value={formFields.align.value}
+            exclusive
+            onChange={(event, value: ImageAlign) => formFields.align.setValue(value)}
+          >
+            <ToggleButton value="left">
+              <AlignHorizontalLeftIcon />
+            </ToggleButton>
 
-        <DialogContent>
+            <ToggleButton value="center">
+              <AlignHorizontalCenterIcon />
+            </ToggleButton>
+
+            <ToggleButton value="right">
+              <AlignHorizontalRightIcon />
+            </ToggleButton>
+          </ToggleButtonGroup>
+
           <TextField
             margin="dense"
-            label="Width"
             variant="standard"
+            label="Width"
             {...formFields.width.props}
-            fullWidth
             autoFocus
           />
           <TextField
             margin="dense"
-            label="Height"
             variant="standard"
+            label="Height"
             {...formFields.height.props}
-            fullWidth
           />
-        </DialogContent>
 
-        <DialogActions>
-          <Button onClick={applySettings}>Apply</Button>
-          <Button onClick={closeSettings}>Cancel</Button>
-        </DialogActions>
-      </Dialog>
-    </>
+          <Divider orientation="vertical" flexItem />
+
+          <IconButton onClick={applySettings}>
+            <CheckIcon />
+          </IconButton>
+        </Stack>
+      </Popover>
+    </div>
   );
 };
