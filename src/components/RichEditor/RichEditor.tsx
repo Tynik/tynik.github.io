@@ -1,10 +1,13 @@
 import type { ComponentProps } from 'react';
+import type { ContentBlock, DraftHandleValue, ContentState } from 'draft-js';
+
 import React, { forwardRef, useState } from 'react';
 import { Box } from '@mui/material';
-import type { ContentBlock, DraftHandleValue } from 'draft-js';
-import { ContentState, Editor, RichUtils, EditorState } from 'draft-js';
+import { Editor, RichUtils, EditorState } from 'draft-js';
 
 import 'draft-js/dist/Draft.css';
+
+import type { BlockRenderer } from './richEditor.types';
 
 import { RichEditorStyled } from './RichEditor.styled';
 import { MediaRenderer } from './renderers';
@@ -73,7 +76,7 @@ export const RichEditor = forwardRef<Editor, RichEditorProps>(
       return '';
     };
 
-    const blockRendererFn = (block: ContentBlock) => {
+    const blockRendererFn = (block: ContentBlock): BlockRenderer => {
       if (block.getType() === 'atomic') {
         return {
           component: MediaRenderer,

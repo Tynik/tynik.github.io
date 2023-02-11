@@ -1,6 +1,6 @@
 import React from 'react';
 import { useQuery } from 'react-query';
-import { Stack, Typography } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
 
 import { PostCard } from '~/components';
 import { getPostsRequest } from '~/api';
@@ -12,11 +12,11 @@ export const MainPage = () => {
     <>
       <Typography variant="h4">Posts</Typography>
 
-      <Stack mt={2} direction="row" sx={{ flexWrap: 'wrap', gap: 2 }}>
+      <Grid mt={1} spacing={2} container>
         {posts?.list.map(postCID => (
           <PostCard key={postCID} postCID={postCID} />
         ))}
-      </Stack>
+      </Grid>
     </>
   );
 };

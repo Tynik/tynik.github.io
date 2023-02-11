@@ -1,42 +1,37 @@
 import React from 'react';
-import type { ContentBlock, ContentState } from 'draft-js';
 
+import type { ContentState } from 'draft-js';
 import type { ImageAttributes } from '../components';
-import { Image } from '../components';
+import type { ActiveBlockRendererComponent, OnUpdateEntityDateHandler } from '../RichEditor.types';
 
-type MediaProps = {
-  contentState: ContentState;
-  block: ContentBlock;
-  blockProps: {
-    setEditorReadOnly: (state: boolean) => void;
-    onUpdateContent: (contentState: ContentState) => void;
-  };
-};
+import { Image } from '../components';
 
 export const MediaRenderer = ({
   contentState,
   block,
   blockProps: { onUpdateContent, setEditorReadOnly },
-}: MediaProps) => {
+}: ActiveBlockRendererComponent) => {
   const entityKey = block.getEntityAt(0);
   const entity = contentState.getEntity(entityKey);
 
   const type = entity.getType();
 
+  const onUpdate: OnUpdateEntityDateHandler = (data, mode = 'soft') => {
+    let newContentState: ContentState;
+
+    if (mode === 'soft') {
+      newContentState = contentState.mergeEntityData(entityKey, data);
+    } else {
+      newContentState = contentState.replaceEntityData(entityKey, data);
+    }
+
+    onUpdateContent(newContentState);
+  };
+
   if (type === 'IMAGE') {
     const imageAttributes = entity.getData() as ImageAttributes;
 
-    const onUpdateImageAttributes = (data: Partial<ImageAttributes>) => {
-      onUpdateContent(contentState.mergeEntityData(entityKey, data));
-    };
-
-    return (
-      <Image
-        setEditorReadOnly={setEditorReadOnly}
-        onUpdateAttributes={onUpdateImageAttributes}
-        {...imageAttributes}
-      />
-    );
+    return <Image setEditorReadOnly={setEditorReadOnly} onUpdate={onUpdate} {...imageAttributes} />;
   }
 
   return null;

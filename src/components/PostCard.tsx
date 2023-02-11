@@ -13,14 +13,13 @@ import {
   ListItemText,
   ListItemIcon,
   CardActionArea,
+  Grid,
 } from '@mui/material';
 import { MoreVert as MoreVertIcon, Edit as EditIcon } from '@mui/icons-material';
 
 import type { PostCID } from '~/types';
 import { getPostInfoRequest } from '~/api';
 import { useUser } from '~/providers';
-
-const CARD_WIDTH = 500;
 
 type PostCardProps = {
   postCID: PostCID;
@@ -37,10 +36,10 @@ export const PostCard = ({ postCID }: PostCardProps) => {
 
   if (!post) {
     return (
-      <div>
-        <Skeleton width={CARD_WIDTH} height={30} variant="rounded" />
-        <Skeleton width={CARD_WIDTH} height={162} variant="rounded" sx={{ mt: 1 }} />
-      </div>
+      <Grid xs={12} md={6} item>
+        <Skeleton width="100%" height={50} variant="rounded" />
+        <Skeleton width="100%" height={142} variant="rounded" sx={{ mt: 1 }} />
+      </Grid>
     );
   }
 
@@ -55,12 +54,11 @@ export const PostCard = ({ postCID }: PostCardProps) => {
   };
 
   return (
-    <>
+    <Grid xs={12} md={6} item>
       <Card
         sx={{
           display: 'flex',
           flexDirection: 'column',
-          width: CARD_WIDTH,
         }}
       >
         <CardActionArea component={Link} to={`/post/${post.cid}`} sx={{ height: '100%' }}>
@@ -134,6 +132,6 @@ export const PostCard = ({ postCID }: PostCardProps) => {
           <ListItemText>Edit</ListItemText>
         </MenuItem>
       </Menu>
-    </>
+    </Grid>
   );
 };

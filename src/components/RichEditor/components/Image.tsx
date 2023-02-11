@@ -16,6 +16,8 @@ import {
 } from '@mui/icons-material';
 import { useHoneyForm } from '@tynik/react-honey-form';
 
+import type { ActiveEntityComponent } from '../RichEditor.types';
+
 type ImageAlign = 'left' | 'center' | 'right';
 
 export type ImageSettingsForm = {
@@ -28,18 +30,15 @@ export type ImageAttributes = Partial<ImageSettingsForm> & {
   src: string;
 };
 
-type ImageProps = ImageAttributes & {
-  setEditorReadOnly: (state: boolean) => void;
-  onUpdateAttributes: (data: Partial<ImageAttributes>) => void;
-};
+type ImageProps = ActiveEntityComponent<ImageAttributes>;
 
 export const Image = ({
   src,
   setEditorReadOnly,
-  onUpdateAttributes,
+  onUpdate,
   width = '100%',
   height = '100%',
-  align = 'left',
+  align = 'center',
 }: ImageProps) => {
   const [settingsAnchorEl, setSettingsAnchorEl] = useState<HTMLElement | null>(null);
 
@@ -64,7 +63,7 @@ export const Image = ({
     onSubmit: data => {
       setImageAttributes(data);
 
-      onUpdateAttributes(data);
+      onUpdate(data);
 
       return Promise.resolve();
     },
