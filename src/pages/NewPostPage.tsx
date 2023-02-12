@@ -1,12 +1,12 @@
 import React, { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { convertToRaw, Editor, EditorState } from 'draft-js';
+import { Editor, EditorState } from 'draft-js';
 import { Button, Stack, TextField, Grid } from '@mui/material';
-
 import { toast } from 'react-toastify';
-import { publishPostRequest } from '~/api';
+
 import { RichEditor } from '~/components';
 import { useUser } from '~/providers';
+import { publishPost } from '~/helpers';
 import { PreviewPostPage } from './PreviewPostPage';
 
 export const NewPostPage = () => {
@@ -30,17 +30,15 @@ export const NewPostPage = () => {
   const publishPostHandler = async () => {
     const editorEl = editorRef.current;
 
-    if (!title || !subtitle || !user.ethAccount || !editorEl || !editorEl.editor) {
+    if (!title || !subtitle || !user.ethAccount || !editorEl) {
       return;
     }
 
     try {
-      await publishPostRequest({
+      await publishPost(editorEl, editorState, {
         title,
         subtitle,
         ethAccount: user.ethAccount,
-        content: editorEl.editor.innerHTML,
-        richContent: JSON.stringify(convertToRaw(editorState.getCurrentContent())),
       });
 
       toast('Successfully published', { type: 'success' });

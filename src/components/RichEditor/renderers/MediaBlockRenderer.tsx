@@ -6,7 +6,7 @@ import type { ActiveBlockRendererComponent, OnUpdateEntityDateHandler } from '..
 
 import { Image } from '../components';
 
-export const MediaRenderer = ({
+export const MediaBlockRenderer = ({
   contentState,
   block,
   blockProps: { onUpdateContent, setEditorReadOnly },

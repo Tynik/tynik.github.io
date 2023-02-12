@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { css, Grid, styled, Typography } from '@mui/material';
+import hljs from 'highlight.js/lib/core';
 
 import type { Post } from '~/types';
 import { RichEditorCodeStyles } from '~/components/RichEditor/RichEditor.styled';
@@ -15,6 +16,14 @@ type ViewPostPageFitProps = {
 };
 
 export const ViewPostPageFit = ({ post }: ViewPostPageFitProps) => {
+  useEffect(() => {
+    document
+      .querySelectorAll('[contenteditable=true]')
+      .forEach(el => el.setAttribute('contentEditable', 'false'));
+
+    hljs.highlightAll();
+  }, []);
+
   return (
     <Grid spacing={2} container>
       <Grid xs={12} item>

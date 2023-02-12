@@ -1,1 +1,2 @@
-export * from './MediaRenderer';
+export * from './MediaBlockRenderer';
+export * from './CodeBlockRenderer';

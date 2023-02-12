@@ -1,16 +1,28 @@
 import type { ComponentProps } from 'react';
 import type { ContentBlock, DraftHandleValue, ContentState } from 'draft-js';
-
 import React, { forwardRef, useState } from 'react';
+
 import { Box } from '@mui/material';
 import { Editor, RichUtils, EditorState } from 'draft-js';
 
+import hljs from 'highlight.js/lib/core';
+import javascript from 'highlight.js/lib/languages/javascript';
+
 import 'draft-js/dist/Draft.css';
+import 'highlight.js/styles/github-dark-dimmed.css';
 
 import type { BlockRenderer } from './richEditor.types';
 
 import { RichEditorStyled } from './RichEditor.styled';
-import { MediaRenderer } from './renderers';
+import { CodeBlockRenderer, MediaBlockRenderer } from './renderers';
+
+// eslint-disable-next-line @typescript-eslint/no-var-requires,@typescript-eslint/no-unsafe-assignment
+const hljsDefineSolidity = require('highlightjs-solidity');
+
+hljs.registerLanguage('javascript', javascript);
+
+// eslint-disable-next-line @typescript-eslint/no-unsafe-call
+hljsDefineSolidity(hljs);
 
 const customStyleMap: Record<string, React.CSSProperties> = {
   FONT_SIZE_H1: {
@@ -40,7 +52,7 @@ export const RichEditor = forwardRef<Editor, RichEditorProps>(
     };
 
     const toggleCode = () => {
-      onChange(RichUtils.toggleBlockType(editorState, 'code-block'));
+      onChange(RichUtils.toggleBlockType(editorState, 'code'));
     };
 
     const handleKeyCommand = (command: string, editorState: EditorState): DraftHandleValue => {
@@ -66,25 +78,30 @@ export const RichEditor = forwardRef<Editor, RichEditorProps>(
       return 'not-handled';
     };
 
-    const blockStyleFn = (contentBlock: ContentBlock): string => {
-      const type = contentBlock.getType();
-
-      if (type === 'code-block') {
-        return 'code';
-      }
-
-      return '';
-    };
-
     const blockRendererFn = (block: ContentBlock): BlockRenderer => {
-      if (block.getType() === 'atomic') {
+      const type = block.getType();
+
+      if (type === 'atomic') {
         return {
-          component: MediaRenderer,
+          component: MediaBlockRenderer,
           editable: false,
           props: {
             setEditorReadOnly: setReadOnly,
-            onUpdateContent: (contentState: ContentState) => {
-              onChange(EditorState.push(editorState, contentState, 'apply-entity'));
+            onUpdateContent: (newContentState: ContentState) => {
+              onChange(EditorState.push(editorState, newContentState, 'apply-entity'));
+            },
+          },
+        };
+      }
+
+      if (type === 'code') {
+        return {
+          component: CodeBlockRenderer,
+          editable: true,
+          props: {
+            setEditorReadOnly: setReadOnly,
+            onUpdateContent: (newContentState: ContentState) => {
+              onChange(EditorState.push(editorState, newContentState, 'change-block-data'));
             },
           },
         };
@@ -108,7 +125,6 @@ export const RichEditor = forwardRef<Editor, RichEditorProps>(
             editorState={editorState}
             onChange={onChange}
             customStyleMap={customStyleMap}
-            blockStyleFn={blockStyleFn}
             blockRendererFn={blockRendererFn}
             handleKeyCommand={handleKeyCommand}
             handleReturn={handleReturn}

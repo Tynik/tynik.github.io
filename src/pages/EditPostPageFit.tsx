@@ -1,16 +1,17 @@
 import React, { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { DraftHandleValue } from 'draft-js';
-import { Editor, EditorState, convertToRaw, convertFromRaw, AtomicBlockUtils } from 'draft-js';
+import { Editor, EditorState, convertFromRaw, AtomicBlockUtils } from 'draft-js';
 import { Button, Stack, TextField, Grid } from '@mui/material';
 
 import { toast } from 'react-toastify';
 
 import type { RichPost } from '~/types';
 
-import { updatePostRequest, uploadPostFileRequest } from '~/api';
+import { uploadPostFileRequest } from '~/api';
 import { RichEditor } from '~/components';
 import { useUser } from '~/providers';
+import { updatePost } from '~/helpers';
 import { PreviewPostPage } from './PreviewPostPage';
 
 type EditPostPageFitProps = {
@@ -42,18 +43,16 @@ export const EditPostPageFit = ({ post }: EditPostPageFitProps) => {
   const savePostHandler = async () => {
     const editorEl = editorRef.current;
 
-    if (!title || !subtitle || !user.ethAccount || !editorEl || !editorEl.editor) {
+    if (!title || !subtitle || !user.ethAccount || !editorEl) {
       return;
     }
 
     try {
-      await updatePostRequest({
+      await updatePost(editorEl, editorState, {
         title,
         subtitle,
         cid: post.cid,
         ethAccount: user.ethAccount,
-        content: editorEl.editor.innerHTML,
-        richContent: JSON.stringify(convertToRaw(editorState.getCurrentContent())),
       });
 
       toast('Successfully updated', { type: 'success' });

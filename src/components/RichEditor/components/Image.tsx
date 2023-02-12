@@ -77,16 +77,16 @@ export const Image = ({
     setSettingsAnchorEl(e.currentTarget);
   };
 
+  const closeSettings = () => {
+    setSettingsAnchorEl(null);
+  };
+
   const applySettings = () => {
     submit()
       .then(() => {
         setSettingsAnchorEl(null);
       })
       .catch(() => {});
-  };
-
-  const closeSettings = () => {
-    setSettingsAnchorEl(null);
   };
 
   return (
