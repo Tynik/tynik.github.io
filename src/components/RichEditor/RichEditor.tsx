@@ -15,6 +15,7 @@ import type { BlockRenderer } from './RichEditor.types';
 
 import { RichEditorStyled } from './RichEditor.styled';
 import { CodeBlockRenderer, MediaBlockRenderer } from './renderers';
+import { RichEditorControls } from '~/components/RichEditor/RichEditorControls';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires,@typescript-eslint/no-unsafe-assignment
 const hljsDefineSolidity = require('highlightjs-solidity');
@@ -39,23 +40,13 @@ export const RichEditor = forwardRef<Editor, RichEditorProps>(
   ({ editorState, onChange, ...props }, ref) => {
     const [readOnly, setReadOnly] = useState(false);
 
-    const toggleH1 = () => {
-      onChange(RichUtils.toggleInlineStyle(editorState, 'FONT_SIZE_H1'));
+    const onTabHandler = (e: React.KeyboardEvent) => {
+      e.preventDefault();
+
+      onChange(RichUtils.onTab(e, editorState, 4));
     };
 
-    const toggleH2 = () => {
-      onChange(RichUtils.toggleInlineStyle(editorState, 'FONT_SIZE_H2'));
-    };
-
-    const toggleBold = () => {
-      onChange(RichUtils.toggleInlineStyle(editorState, 'BOLD'));
-    };
-
-    const toggleCode = () => {
-      onChange(RichUtils.toggleBlockType(editorState, 'code'));
-    };
-
-    const handleKeyCommand = (command: string, editorState: EditorState): DraftHandleValue => {
+    const onKeyCommandHandler = (command: string, editorState: EditorState): DraftHandleValue => {
       const newState = RichUtils.handleKeyCommand(editorState, command);
 
       if (newState) {
@@ -66,7 +57,10 @@ export const RichEditor = forwardRef<Editor, RichEditorProps>(
       return 'not-handled';
     };
 
-    const handleReturn = (e: React.KeyboardEvent, editorState: EditorState): DraftHandleValue => {
+    const onReturnHandler = (
+      e: React.KeyboardEvent,
+      editorState: EditorState
+    ): DraftHandleValue => {
       if (
         e.code === 'Enter' &&
         (e.getModifierState('Shift') || e.getModifierState('Alt') || e.getModifierState('Control'))
@@ -78,7 +72,7 @@ export const RichEditor = forwardRef<Editor, RichEditorProps>(
       return 'not-handled';
     };
 
-    const blockRendererFn = (block: ContentBlock): BlockRenderer => {
+    const blockRenderer = (block: ContentBlock): BlockRenderer => {
       const type = block.getType();
 
       if (type === 'atomic') {
@@ -112,12 +106,7 @@ export const RichEditor = forwardRef<Editor, RichEditorProps>(
 
     return (
       <RichEditorStyled>
-        <div>
-          <button onClick={toggleH1}>H1</button>
-          <button onClick={toggleH2}>H2</button>
-          <button onClick={toggleBold}>B</button>
-          <button onClick={toggleCode}>``</button>
-        </div>
+        <RichEditorControls editorState={editorState} onChange={onChange} />
 
         <Box mt={1} display="flex" flexGrow={1}>
           <Editor
@@ -125,9 +114,10 @@ export const RichEditor = forwardRef<Editor, RichEditorProps>(
             editorState={editorState}
             onChange={onChange}
             customStyleMap={customStyleMap}
-            blockRendererFn={blockRendererFn}
-            handleKeyCommand={handleKeyCommand}
-            handleReturn={handleReturn}
+            blockRendererFn={blockRenderer}
+            handleKeyCommand={onKeyCommandHandler}
+            handleReturn={onReturnHandler}
+            onTab={onTabHandler}
             readOnly={readOnly}
             {...props}
           />

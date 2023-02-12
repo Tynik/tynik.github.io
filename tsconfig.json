@@ -4,10 +4,12 @@
     "target": "ES5",
     "module": "ESNext",
     "jsx": "react",
+    "strict": true,
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
-    "strict": true,
+    "esModuleInterop": true,
     "paths": {
       "~/*": ["./src/*"]
     }
