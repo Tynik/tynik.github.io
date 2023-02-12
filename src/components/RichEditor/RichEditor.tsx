@@ -11,7 +11,7 @@ import javascript from 'highlight.js/lib/languages/javascript';
 import 'draft-js/dist/Draft.css';
 import 'highlight.js/styles/github-dark-dimmed.css';
 
-import type { BlockRenderer } from './richEditor.types';
+import type { BlockRenderer } from './RichEditor.types';
 
 import { RichEditorStyled } from './RichEditor.styled';
 import { CodeBlockRenderer, MediaBlockRenderer } from './renderers';
