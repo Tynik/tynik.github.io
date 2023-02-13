@@ -2,23 +2,23 @@ import type { EditorState } from 'draft-js';
 import { convertToRaw, Editor } from 'draft-js';
 
 import type { PostCID } from '~/types';
-import { publishPostRequest, updatePostRequest } from '~/api';
+import { createDraftPostRequest, updatePostRequest } from '~/api';
 
 const getRichContent = (editorState: EditorState) =>
   JSON.stringify(convertToRaw(editorState.getCurrentContent()));
 
-type PublishPostOptions = {
+type CreateDraftPostOptions = {
   title: string;
   subtitle: string;
   ethAccount: string;
 };
 
-export const publishPost = (
+export const createDraftPost = (
   editor: Editor,
   editorState: EditorState,
-  options: PublishPostOptions
+  options: CreateDraftPostOptions
 ) => {
-  return publishPostRequest({
+  return createDraftPostRequest({
     richContent: getRichContent(editorState),
     content: editor.editor?.innerHTML ?? '',
     ...options,

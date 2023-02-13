@@ -17,11 +17,19 @@ export const authRequest = async (ethAccount: string) => {
   return netlifyRequest('auth', { params: { ethAccount } });
 };
 
-type PublishPostPayload = {
+type CreateDraftPostPayload = {
   title: string;
   subtitle: string;
   content: string;
   richContent: string;
+  ethAccount: string;
+};
+
+export const createDraftPostRequest = async (payload: CreateDraftPostPayload) =>
+  netlifyRequest('create-draft-post', { payload, method: 'POST' });
+
+type PublishPostPayload = {
+  cid: PostCID;
   ethAccount: string;
 };
 
@@ -98,11 +106,20 @@ export const getRichPostRequest = async (postCID: PostCID) => {
   } as RichPost;
 };
 
-type GetPostsResponse = {
+type GetPublishedPostsResponse = {
   list: PostCID[];
   total: number;
 };
 
-export const getPostsRequest = async () => {
-  return (await netlifyRequest<GetPostsResponse>('get-posts')).data;
+export const getPublishedPostsRequest = async () => {
+  return (await netlifyRequest<GetPublishedPostsResponse>('get-published-posts')).data;
+};
+
+type GetDraftPostsResponse = {
+  list: PostCID[];
+  total: number;
+};
+
+export const getDraftPostsRequest = async () => {
+  return (await netlifyRequest<GetDraftPostsResponse>('get-draft-posts')).data;
 };

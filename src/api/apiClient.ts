@@ -1,8 +1,11 @@
 export type NetlifyFunction =
   | 'auth'
-  | 'update-post'
+  | 'create-draft-post'
   | 'publish-post'
-  | 'get-posts'
+  | 'update-post'
+  | 'get-published-posts'
+  | 'get-draft-posts'
+  | 'get-archived-posts'
   | 'upload-post-file'
   | 'make-offer';
 
@@ -30,15 +33,19 @@ export const netlifyRequest = async <Response, Payload = void>(
     body = JSON.stringify(payload);
   }
 
-  return (await (
-    await fetch(
-      `${process.env.NETLIFY_SERVER || ''}/.netlify/functions/${funcName}?${new URLSearchParams(
-        params
-      ).toString()}`,
-      {
-        method,
-        body,
-      }
-    )
-  ).json()) as NetlifyResponse<Response>;
+  const response = await fetch(
+    `${process.env.NETLIFY_SERVER || ''}/.netlify/functions/${funcName}?${new URLSearchParams(
+      params
+    ).toString()}`,
+    {
+      method,
+      body,
+    }
+  );
+
+  if (!response.ok) {
+    return Promise.reject(await response.json());
+  }
+
+  return (await response.json()) as NetlifyResponse<Response>;
 };

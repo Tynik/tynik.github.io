@@ -8,7 +8,7 @@ import { toast } from 'react-toastify';
 
 import type { RichPost } from '~/types';
 
-import { uploadPostFileRequest } from '~/api';
+import { publishPostRequest, uploadPostFileRequest } from '~/api';
 import { RichEditor } from '~/components';
 import { useUser } from '~/providers';
 import { updatePost } from '~/helpers';
@@ -108,6 +108,25 @@ export const EditPostPageFit = ({ post }: EditPostPageFitProps) => {
     return 'handled';
   };
 
+  const publishPostHandler = async () => {
+    if (!user.ethAccount) {
+      return;
+    }
+
+    try {
+      await publishPostRequest({
+        cid: post.cid,
+        ethAccount: user.ethAccount,
+      });
+
+      toast('Successfully published', { type: 'success' });
+
+      navigate('/');
+    } catch (e) {
+      toast('Something went wrong', { type: 'error' });
+    }
+  };
+
   return (
     <Grid spacing={2} container>
       <Grid xs={12} item>
@@ -145,6 +164,10 @@ export const EditPostPageFit = ({ post }: EditPostPageFitProps) => {
 
           <Button onClick={savePostHandler} disabled={!isCanBeSaved}>
             Save
+          </Button>
+
+          <Button onClick={publishPostHandler} disabled={false}>
+            Publish
           </Button>
         </Stack>
       </Grid>

@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 
 import { RichEditor } from '~/components';
 import { useUser } from '~/providers';
-import { publishPost } from '~/helpers';
+import { createDraftPost } from '~/helpers';
 import { PreviewPostPage } from './PreviewPostPage';
 
 export const NewPostPage = () => {
@@ -27,7 +27,7 @@ export const NewPostPage = () => {
     setIsPreviewMode(!isPreviewMode);
   };
 
-  const publishPostHandler = async () => {
+  const createDraftPostHandler = async () => {
     const editorEl = editorRef.current;
 
     if (!title || !subtitle || !user.ethAccount || !editorEl) {
@@ -35,13 +35,13 @@ export const NewPostPage = () => {
     }
 
     try {
-      await publishPost(editorEl, editorState, {
+      await createDraftPost(editorEl, editorState, {
         title,
         subtitle,
         ethAccount: user.ethAccount,
       });
 
-      toast('Successfully published', { type: 'success' });
+      toast('Successfully created', { type: 'success' });
 
       navigate('/');
     } catch (e) {
@@ -96,8 +96,8 @@ export const NewPostPage = () => {
             Preview
           </Button>
 
-          <Button onClick={publishPostHandler} disabled={!isCanBeAdded}>
-            Publish
+          <Button onClick={createDraftPostHandler} disabled={!isCanBeAdded}>
+            Draft
           </Button>
         </Stack>
       </Grid>

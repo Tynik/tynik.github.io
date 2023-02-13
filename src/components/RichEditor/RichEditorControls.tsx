@@ -7,6 +7,7 @@ import {
   FormatBold as FormatBoldIcon,
   FormatItalic as FormatItalicIcon,
   FormatListNumbered as FormatListNumberedIcon,
+  Link as LinkIcon,
 } from '@mui/icons-material';
 import { RichUtils } from 'draft-js';
 
@@ -41,6 +42,10 @@ export const RichEditorControls = ({ editorState, onChange }: RichEditorControls
 
   const toggleItalic = () => {
     toggleInlineStyle('ITALIC');
+  };
+
+  const toggleLink = () => {
+    //
   };
 
   const toggleOrderedList = () => {
@@ -91,6 +96,14 @@ export const RichEditorControls = ({ editorState, onChange }: RichEditorControls
         onClick={toggleOrderedList}
       >
         <FormatListNumberedIcon fontSize="small" />
+      </Button>
+
+      <Button
+        variant={currentInlineStyle.has('LINK') ? 'contained' : 'outlined'}
+        size="small"
+        onClick={toggleLink}
+      >
+        <LinkIcon fontSize="small" />
       </Button>
 
       <Button

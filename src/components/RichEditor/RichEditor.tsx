@@ -40,12 +40,6 @@ export const RichEditor = forwardRef<Editor, RichEditorProps>(
   ({ editorState, onChange, ...props }, ref) => {
     const [readOnly, setReadOnly] = useState(false);
 
-    const onTabHandler = (e: React.KeyboardEvent) => {
-      e.preventDefault();
-
-      onChange(RichUtils.onTab(e, editorState, 4));
-    };
-
     const onKeyCommandHandler = (command: string, editorState: EditorState): DraftHandleValue => {
       const newState = RichUtils.handleKeyCommand(editorState, command);
 
@@ -117,7 +111,6 @@ export const RichEditor = forwardRef<Editor, RichEditorProps>(
             blockRendererFn={blockRenderer}
             handleKeyCommand={onKeyCommandHandler}
             handleReturn={onReturnHandler}
-            onTab={onTabHandler}
             readOnly={readOnly}
             {...props}
           />
