@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import {
   IconButton,
@@ -8,33 +8,30 @@ import {
   CardContent,
   Typography,
   Skeleton,
-  Menu,
-  MenuItem,
-  ListItemText,
-  ListItemIcon,
   CardActionArea,
   Grid,
 } from '@mui/material';
-import { MoreVert as MoreVertIcon, Edit as EditIcon } from '@mui/icons-material';
+import { MoreVert as MoreVertIcon } from '@mui/icons-material';
 
 import type { PostCID } from '~/types';
 import { getPostInfoRequest } from '~/api';
 import { useUser } from '~/providers';
+import { PostCardActionMenu } from './PostCardActionMenu';
 
 type PostCardProps = {
   postCID: PostCID;
 };
 
 export const PostCard = ({ postCID }: PostCardProps) => {
-  const navigate = useNavigate();
-
   const { isAuthenticated } = useUser();
 
-  const [actionsMenuAnchorEl, setActionsMenuAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [actionsMenuAnchorEl, setActionsMenuAnchorEl] = React.useState<HTMLElement | null>(null);
 
-  const { data: post } = useQuery(['get-post-info', postCID], () => getPostInfoRequest(postCID));
+  const { data: postInfo } = useQuery(['get-post-info', postCID], () =>
+    getPostInfoRequest(postCID)
+  );
 
-  if (!post) {
+  if (!postInfo) {
     return (
       <Grid xs={12} md={6} item>
         <Skeleton width="100%" height={50} variant="rounded" />
@@ -49,10 +46,6 @@ export const PostCard = ({ postCID }: PostCardProps) => {
     setActionsMenuAnchorEl(e.currentTarget);
   };
 
-  const onEditPost = () => {
-    navigate(`/post/${postCID}/edit`);
-  };
-
   return (
     <Grid xs={12} md={6} item>
       <Card
@@ -61,10 +54,10 @@ export const PostCard = ({ postCID }: PostCardProps) => {
           flexDirection: 'column',
         }}
       >
-        <CardActionArea component={Link} to={`/post/${post.cid}`} sx={{ height: '100%' }}>
+        <CardActionArea component={Link} to={`/post/${postInfo.cid}`} sx={{ height: '100%' }}>
           <CardHeader
-            title={post.title}
-            subheader={post.created && new Date(post.created).toDateString()}
+            title={postInfo.title}
+            subheader={postInfo.created && new Date(postInfo.created).toDateString()}
             action={
               isAuthenticated && (
                 <IconButton
@@ -101,37 +94,17 @@ export const PostCard = ({ postCID }: PostCardProps) => {
                 WebkitBoxOrient: 'vertical',
               }}
             >
-              {post.subtitle}
+              {postInfo.subtitle}
             </Typography>
           </CardContent>
         </CardActionArea>
       </Card>
 
-      <Menu
-        id="post-actions-menu"
-        anchorEl={actionsMenuAnchorEl}
-        open={Boolean(actionsMenuAnchorEl)}
+      <PostCardActionMenu
+        postInfo={postInfo}
+        actionsMenuAnchorEl={actionsMenuAnchorEl}
         onClose={() => setActionsMenuAnchorEl(null)}
-        MenuListProps={{
-          'aria-labelledby': 'post-actions',
-        }}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'right',
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'right',
-        }}
-      >
-        <MenuItem onClick={onEditPost}>
-          <ListItemIcon>
-            <EditIcon fontSize="small" />
-          </ListItemIcon>
-
-          <ListItemText>Edit</ListItemText>
-        </MenuItem>
-      </Menu>
+      />
     </Grid>
   );
 };

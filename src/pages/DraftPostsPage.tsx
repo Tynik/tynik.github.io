@@ -3,18 +3,18 @@ import { useQuery } from 'react-query';
 import { Grid, Typography } from '@mui/material';
 
 import { PostCard } from '~/components';
-import { getPublishedPostsRequest } from '~/api';
+import { getDraftPostsRequest } from '~/api';
 
-export const MainPage = () => {
-  const { data: publishedPosts } = useQuery(['get-published-posts'], getPublishedPostsRequest);
+export const DraftPostsPage = () => {
+  const { data: draftPosts } = useQuery(['get-draft-posts'], getDraftPostsRequest);
 
   return (
     <Grid spacing={2} container>
       <Grid xs={12} item>
-        <Typography variant="h4">Posts</Typography>
+        <Typography variant="h4">Drafts</Typography>
       </Grid>
 
-      {publishedPosts?.list.map(postCID => (
+      {draftPosts?.list.map(postCID => (
         <PostCard key={postCID} postCID={postCID} />
       ))}
     </Grid>

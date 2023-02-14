@@ -43,7 +43,7 @@ export const NewPostPage = () => {
 
       toast('Successfully created', { type: 'success' });
 
-      navigate('/');
+      navigate('/drafts');
     } catch (e) {
       console.error(e);
 
