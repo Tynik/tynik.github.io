@@ -2,6 +2,8 @@ import React from 'react';
 
 export type PostCID = string;
 
+export type PostStatus = 'DRAFT' | 'PUBLISHED' | 'ARCHIVED';
+
 export type TimelinePoint = {
   icon: React.ReactElement;
   name: string;
@@ -14,6 +16,7 @@ export type TimelinePoint = {
 
 export interface PostInfo {
   cid: PostCID;
+  status: PostStatus;
   title: string;
   subtitle: string;
   created: number;

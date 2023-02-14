@@ -1,4 +1,4 @@
-import type { PostInfo, Post, PostCID, RichPost } from '~/types';
+import type { PostInfo, Post, PostCID, RichPost, PostStatus } from '~/types';
 
 import { netlifyRequest } from './apiClient';
 
@@ -62,11 +62,31 @@ export const uploadPostFileRequest = async ({ files, ethAccount }: UploadPostFil
   return (await netlifyRequest('upload-post-file', { payload: fd, method: 'POST' })).data as string;
 };
 
-export const getPostInfoRequest = async (postCID: PostCID) =>
-  ({
+type PostMetaInfo = {
+  status: PostStatus;
+  created: number;
+};
+
+export const getPostMetaInfoRequest = async (postCID: PostCID) => {
+  return (await netlifyRequest<PostMetaInfo>('get-post', { params: { postCID } })).data;
+};
+
+export const getPostInfoRequest = async (postCID: PostCID): Promise<PostInfo> => {
+  const [postInfo, { status }] = await Promise.all([
+    (await (await fetch(`https://${postCID}.ipfs.w3s.link/post.json`)).json()) as {
+      title: string;
+      subtitle: string;
+      created: number;
+    },
+    getPostMetaInfoRequest(postCID),
+  ]);
+
+  return {
     cid: postCID,
-    ...(await (await fetch(`https://${postCID}.ipfs.w3s.link/post.json`)).json()),
-  } as PostInfo);
+    status,
+    ...postInfo,
+  };
+};
 
 export const getPostContentRequest = async (postCID: PostCID) =>
   (

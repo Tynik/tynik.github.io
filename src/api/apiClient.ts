@@ -1,5 +1,6 @@
 export type NetlifyFunction =
   | 'auth'
+  | 'get-post'
   | 'create-draft-post'
   | 'publish-post'
   | 'update-post'
