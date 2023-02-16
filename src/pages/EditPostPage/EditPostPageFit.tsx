@@ -1,24 +1,20 @@
 import React, { useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { TextField, Grid } from '@mui/material';
 import type { DraftHandleValue } from 'draft-js';
 import { Editor, EditorState, convertFromRaw, AtomicBlockUtils } from 'draft-js';
-import { Button, Stack, TextField, Grid } from '@mui/material';
-import {
-  Cancel as CancelIcon,
-  Save as SaveIcon,
-  Send as SendIcon,
-  Visibility as VisibilityIcon,
-} from '@mui/icons-material';
 
 import { toast } from 'react-toastify';
 
+import { useNavigate } from 'react-router-dom';
 import type { RichPost } from '~/types';
 
-import { publishPostRequest, uploadPostFileRequest } from '~/api';
+import { uploadPostFileRequest } from '~/api';
 import { RichEditor } from '~/components';
-import { useUser } from '~/providers';
 import { updatePost } from '~/helpers';
-import { PreviewPostPage } from './PreviewPostPage';
+import { useUser } from '~/providers';
+
+import { PreviewPostPage } from '../PreviewPostPage';
+import { EditPostPageControls } from './EditPostPageControls';
 
 type EditPostPageFitProps = {
   post: RichPost;
@@ -26,7 +22,6 @@ type EditPostPageFitProps = {
 
 export const EditPostPageFit = ({ post }: EditPostPageFitProps) => {
   const navigate = useNavigate();
-
   const user = useUser();
 
   const [title, setTitle] = useState(post.title);
@@ -57,35 +52,6 @@ export const EditPostPageFit = ({ post }: EditPostPageFitProps) => {
     );
   }
 
-  const savePostHandler = async () => {
-    const editorEl = editorRef.current;
-
-    if (!title || !subtitle || !user.ethAccount || !editorEl) {
-      return;
-    }
-
-    try {
-      await updatePost(editorEl, editorState, {
-        title,
-        subtitle,
-        cid: post.cid,
-        ethAccount: user.ethAccount,
-      });
-
-      toast('Successfully updated', { type: 'success' });
-
-      navigate('/');
-    } catch (e) {
-      console.error(e);
-
-      toast('Something went wrong', { type: 'error' });
-    }
-  };
-
-  const isCanBeSaved = Boolean(
-    user.ethAccount && title && subtitle && editorState.getCurrentContent().getPlainText()
-  );
-
   const handlePastedFiles = (files: Blob[]): DraftHandleValue => {
     uploadPostFileRequest({ files, ethAccount: '' })
       .then(fileURL => {
@@ -114,28 +80,34 @@ export const EditPostPageFit = ({ post }: EditPostPageFitProps) => {
     return 'handled';
   };
 
-  const publishPostHandler = async () => {
-    if (!user.ethAccount) {
+  const savePostHandler = async () => {
+    const editor = editorRef.current;
+
+    if (!title || !subtitle || !user.ethAccount || !editor) {
       return;
     }
 
     try {
-      await publishPostRequest({
+      await updatePost(editor, editorState, {
+        title,
+        subtitle,
         cid: post.cid,
         ethAccount: user.ethAccount,
       });
 
-      toast('Successfully published', { type: 'success' });
+      toast('Successfully updated', { type: 'success' });
 
       navigate('/');
     } catch (e) {
+      console.error(e);
+
       toast('Something went wrong', { type: 'error' });
     }
   };
 
-  const cancelHandler = () => {
-    navigate(`/post/${post.cid}`);
-  };
+  const isCanBeSaved = Boolean(
+    user.ethAccount && title && subtitle && editorState.getCurrentContent().getPlainText()
+  );
 
   return (
     <Grid spacing={2} container>
@@ -166,47 +138,15 @@ export const EditPostPageFit = ({ post }: EditPostPageFitProps) => {
           onChange={setEditorState}
           handlePastedFiles={handlePastedFiles}
         />
+      </Grid>
 
-        <Stack mt={2} spacing={2} direction="row" justifyContent="right">
-          <Button
-            onClick={togglePreviewMode}
-            disabled={!isCanBeSaved}
-            startIcon={<VisibilityIcon />}
-            variant="outlined"
-          >
-            Preview
-          </Button>
-
-          <Button
-            onClick={savePostHandler}
-            disabled={!isCanBeSaved}
-            startIcon={<SaveIcon />}
-            variant="outlined"
-            color="success"
-          >
-            Save
-          </Button>
-
-          {post.status !== 'PUBLISHED' && (
-            <Button
-              onClick={publishPostHandler}
-              startIcon={<SendIcon />}
-              variant="outlined"
-              color="info"
-            >
-              Publish
-            </Button>
-          )}
-
-          <Button
-            onClick={cancelHandler}
-            startIcon={<CancelIcon />}
-            variant="outlined"
-            color="error"
-          >
-            Cancel
-          </Button>
-        </Stack>
+      <Grid xs={12} item>
+        <EditPostPageControls
+          post={post}
+          canBeSaved={isCanBeSaved}
+          onTogglePreviewMode={togglePreviewMode}
+          onSave={savePostHandler}
+        />
       </Grid>
     </Grid>
   );
