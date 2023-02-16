@@ -1,3 +1,5 @@
+import type { ContractPost } from '../types';
+
 import {
   getMyProfileContract,
   getWeb3Client,
@@ -6,7 +8,7 @@ import {
   putWeb3PostFiles,
 } from '../netlify.helpers';
 
-type Payload = {
+type UpdatePostPayload = {
   cid: string;
   title: string;
   subtitle: string;
@@ -15,7 +17,7 @@ type Payload = {
   ethAccount: string;
 };
 
-export const handler = createHandler<Payload>(
+export const handler = createHandler<UpdatePostPayload>(
   { allowMethods: ['POST', 'OPTIONS'] },
   async ({ payload }) => {
     if (!payload) {
@@ -32,12 +34,9 @@ export const handler = createHandler<Payload>(
 
     const myProfileContract = getMyProfileContract(web3Client);
 
-    const postInfo = (await myProfileContract.methods.getPost(payload.cid).call()) as {
-      created: string;
-      index: string;
-    };
+    const post = (await myProfileContract.methods.getPost(payload.cid).call()) as ContractPost;
 
-    const postCID = await putWeb3PostFiles({ ...payload, created: +postInfo.created });
+    const postCID = await putWeb3PostFiles({ ...payload, created: +post.created });
 
     return {
       status: 'ok',

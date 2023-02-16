@@ -1,12 +1,7 @@
+import type { ContractPost } from '../types';
+
 import { createHandler, getMyProfileContract, getWeb3Client } from '../netlify.helpers';
-
-type PostStatus = 'DRAFT' | 'PUBLISHED' | 'ARCHIVED';
-
-const POST_STATUS_MAP: Record<string, PostStatus> = {
-  0: 'DRAFT',
-  1: 'PUBLISHED',
-  2: 'ARCHIVED',
-};
+import { CONTRACT_POST_STATUS_MAP } from '../constants';
 
 export const handler = createHandler({ allowMethods: ['GET', 'OPTIONS'] }, async ({ event }) => {
   const web3Client = getWeb3Client();
@@ -14,17 +9,13 @@ export const handler = createHandler({ allowMethods: ['GET', 'OPTIONS'] }, async
 
   const postCID = event.queryStringParameters?.postCID;
 
-  const result = (await myProfileContract.methods.getPost(postCID).call()) as {
-    status: string;
-    created: string;
-    index: string;
-  };
+  const post = (await myProfileContract.methods.getPost(postCID).call()) as ContractPost;
 
   return {
     status: 'ok',
     data: {
-      status: POST_STATUS_MAP[result.status],
-      created: +result.created,
+      status: CONTRACT_POST_STATUS_MAP[post.status],
+      created: +post.created,
     },
   };
 });

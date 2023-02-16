@@ -2,7 +2,7 @@ import { parse } from 'parse-multipart-data';
 
 import { createHandler, getWeb3StorageClient, Web3File } from '../netlify.helpers';
 
-type UploadFileData = {
+type UploadPostFileData = {
   file: {
     filename: string;
     type: string;
@@ -55,7 +55,7 @@ export const handler = createHandler({ allowMethods: ['POST', 'OPTIONS'] }, asyn
     }
 
     return result;
-  }, {} as UploadFileData);
+  }, {} as UploadPostFileData);
 
   const web3StorageClient = getWeb3StorageClient();
 

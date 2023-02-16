@@ -1,6 +1,6 @@
 import { createHandler, getTelegrafClient } from '../netlify.helpers';
 
-type Payload = {
+type MakerOfferPayload = {
   company: string;
   name: string;
   contact: string;
@@ -8,7 +8,7 @@ type Payload = {
   desc: string;
 };
 
-export const handler = createHandler<Payload>(
+export const handler = createHandler<MakerOfferPayload>(
   { allowMethods: ['POST', 'OPTIONS'] },
   async ({ payload }) => {
     if (!payload) {

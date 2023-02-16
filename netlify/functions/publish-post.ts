@@ -5,12 +5,12 @@ import {
   createHandler,
 } from '../netlify.helpers';
 
-type Payload = {
+type PublishPostPayload = {
   cid: string;
   ethAccount: string;
 };
 
-export const handler = createHandler<Payload>(
+export const handler = createHandler<PublishPostPayload>(
   { allowMethods: ['POST', 'OPTIONS'] },
   async ({ payload }) => {
     if (!payload) {

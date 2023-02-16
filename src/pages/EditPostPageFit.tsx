@@ -3,6 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import type { DraftHandleValue } from 'draft-js';
 import { Editor, EditorState, convertFromRaw, AtomicBlockUtils } from 'draft-js';
 import { Button, Stack, TextField, Grid } from '@mui/material';
+import {
+  Cancel as CancelIcon,
+  Save as SaveIcon,
+  Send as SendIcon,
+  Visibility as VisibilityIcon,
+} from '@mui/icons-material';
 
 import { toast } from 'react-toastify';
 
@@ -40,6 +46,17 @@ export const EditPostPageFit = ({ post }: EditPostPageFitProps) => {
     setIsPreviewMode(!isPreviewMode);
   };
 
+  if (isPreviewMode) {
+    return (
+      <PreviewPostPage
+        title={title}
+        subtitle={subtitle}
+        editor={editorRef.current}
+        onExit={togglePreviewMode}
+      />
+    );
+  }
+
   const savePostHandler = async () => {
     const editorEl = editorRef.current;
 
@@ -68,17 +85,6 @@ export const EditPostPageFit = ({ post }: EditPostPageFitProps) => {
   const isCanBeSaved = Boolean(
     user.ethAccount && title && subtitle && editorState.getCurrentContent().getPlainText()
   );
-
-  if (isPreviewMode) {
-    return (
-      <PreviewPostPage
-        title={title}
-        subtitle={subtitle}
-        editor={editorRef.current}
-        onExit={togglePreviewMode}
-      />
-    );
-  }
 
   const handlePastedFiles = (files: Blob[]): DraftHandleValue => {
     uploadPostFileRequest({ files, ethAccount: '' })
@@ -127,6 +133,10 @@ export const EditPostPageFit = ({ post }: EditPostPageFitProps) => {
     }
   };
 
+  const cancelHandler = () => {
+    navigate(`/post/${post.cid}`);
+  };
+
   return (
     <Grid spacing={2} container>
       <Grid xs={12} item>
@@ -158,16 +168,43 @@ export const EditPostPageFit = ({ post }: EditPostPageFitProps) => {
         />
 
         <Stack mt={2} spacing={2} direction="row" justifyContent="right">
-          <Button onClick={togglePreviewMode} disabled={!isCanBeSaved}>
+          <Button
+            onClick={togglePreviewMode}
+            disabled={!isCanBeSaved}
+            startIcon={<VisibilityIcon />}
+            variant="outlined"
+          >
             Preview
           </Button>
 
-          <Button onClick={savePostHandler} disabled={!isCanBeSaved}>
+          <Button
+            onClick={savePostHandler}
+            disabled={!isCanBeSaved}
+            startIcon={<SaveIcon />}
+            variant="outlined"
+            color="success"
+          >
             Save
           </Button>
 
-          <Button onClick={publishPostHandler} disabled={false}>
-            Publish
+          {post.status !== 'PUBLISHED' && (
+            <Button
+              onClick={publishPostHandler}
+              startIcon={<SendIcon />}
+              variant="outlined"
+              color="info"
+            >
+              Publish
+            </Button>
+          )}
+
+          <Button
+            onClick={cancelHandler}
+            startIcon={<CancelIcon />}
+            variant="outlined"
+            color="error"
+          >
+            Cancel
           </Button>
         </Stack>
       </Grid>

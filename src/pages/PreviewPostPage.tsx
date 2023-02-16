@@ -1,5 +1,7 @@
 import React from 'react';
 import { Button, Grid } from '@mui/material';
+import { Close as CloseIcon } from '@mui/icons-material';
+
 import type { Editor } from 'draft-js';
 
 import { ViewPostPageFit } from '~/pages/ViewPostPageFit';
@@ -25,7 +27,9 @@ export const PreviewPostPage = ({ title, subtitle, editor, onExit }: PreviewPost
       </Grid>
 
       <Grid xs={12} textAlign="right" item>
-        <Button onClick={onExit}>Exit Preview</Button>
+        <Button onClick={onExit} startIcon={<CloseIcon />} variant="outlined">
+          Exit Preview
+        </Button>
       </Grid>
     </Grid>
   );

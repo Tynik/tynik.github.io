@@ -1,20 +1,14 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, Chip, Grid } from '@mui/material';
+import { Edit as EditIcon } from '@mui/icons-material';
 
-import type { ChipProps } from '@mui/material';
-import type { PostStatus } from '~/types';
-
+import { POST_STATUS_COLOR } from '~/constants/post.constants';
 import { useCurrentPost } from '~/hooks';
 import { useUser } from '~/providers';
+
 import { PostSkeleton } from './components';
 import { ViewPostPageFit } from './ViewPostPageFit';
-
-const POST_STATUS_COLOR: Record<PostStatus, ChipProps['color']> = {
-  DRAFT: 'default',
-  PUBLISHED: 'success',
-  ARCHIVED: 'warning',
-};
 
 export const ViewPostPage = () => {
   const navigate = useNavigate();
@@ -44,7 +38,9 @@ export const ViewPostPage = () => {
 
       {isAuthenticated && (
         <Grid xs={12} textAlign="right" item>
-          <Button onClick={onEditPost}>Edit</Button>
+          <Button onClick={onEditPost} startIcon={<EditIcon />} variant="outlined">
+            Edit
+          </Button>
         </Grid>
       )}
     </Grid>

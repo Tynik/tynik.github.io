@@ -4,7 +4,7 @@ export const handler = createHandler({ allowMethods: ['GET', 'OPTIONS'] }, async
   const web3Client = getWeb3Client();
   const myProfileContract = getMyProfileContract(web3Client);
 
-  const result = (await myProfileContract.methods.getDraftPosts(0, 20).call()) as {
+  const draftPosts = (await myProfileContract.methods.getDraftPosts(0, 20).call()) as {
     0: string[];
     1: string;
   };
@@ -12,8 +12,8 @@ export const handler = createHandler({ allowMethods: ['GET', 'OPTIONS'] }, async
   return {
     status: 'ok',
     data: {
-      list: result['0'].filter(postCID => postCID),
-      total: +result['1'],
+      list: draftPosts['0'].filter(postCID => postCID),
+      total: +draftPosts['1'],
     },
   };
 });

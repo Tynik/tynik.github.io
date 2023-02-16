@@ -6,7 +6,7 @@ import {
   putWeb3PostFiles,
 } from '../netlify.helpers';
 
-type Payload = {
+type CreateDraftPostPayload = {
   title: string;
   subtitle: string;
   content: string;
@@ -14,7 +14,7 @@ type Payload = {
   ethAccount: string;
 };
 
-export const handler = createHandler<Payload>(
+export const handler = createHandler<CreateDraftPostPayload>(
   { allowMethods: ['POST', 'OPTIONS'] },
   async ({ payload }) => {
     if (!payload) {
