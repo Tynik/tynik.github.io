@@ -41,11 +41,12 @@ export const ViewPostPageFit = ({ post }: ViewPostPageFitProps) => {
   }, []);
 
   return (
-    <Grid spacing={2} container>
+    <Grid spacing={2} fontFamily="Georgia" container>
       <Grid xs={12} item>
         <Typography
-          variant="h4"
+          variant="h3"
           fontWeight="bold"
+          fontFamily="inherit"
           sx={{
             display: '-webkit-box',
             overflow: 'hidden',
@@ -60,6 +61,7 @@ export const ViewPostPageFit = ({ post }: ViewPostPageFitProps) => {
       <Grid xs={12} item>
         <Typography
           variant="h5"
+          fontFamily="inherit"
           sx={{
             display: '-webkit-box',
             overflow: 'hidden',

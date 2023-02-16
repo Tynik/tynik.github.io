@@ -1,12 +1,8 @@
 import { Box, css, styled, Theme } from '@mui/material';
 
 export const RichEditorCodeStyles = (theme: Theme) => css`
-  .code {
-    margin: ${theme.spacing(2)};
-    padding: ${theme.spacing(1)};
-
-    border-radius: ${theme.shape.borderRadius}px;
-    background-color: ${theme.palette.grey['800']};
+  pre code {
+    font-size: 1rem;
   }
 `;
 
