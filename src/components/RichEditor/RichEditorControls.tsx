@@ -1,4 +1,4 @@
-import type { EditorState, DraftBlockType } from 'draft-js';
+import type { DraftBlockType } from 'draft-js';
 
 import React from 'react';
 import { Button, Stack } from '@mui/material';
@@ -8,8 +8,9 @@ import {
   FormatItalic as FormatItalicIcon,
   FormatListNumbered as FormatListNumberedIcon,
   Link as LinkIcon,
+  FormatClear as FormatClearIcon,
 } from '@mui/icons-material';
-import { RichUtils } from 'draft-js';
+import { EditorState, Modifier, RichUtils } from 'draft-js';
 
 type RichEditorControlsProps = {
   editorState: EditorState;
@@ -42,6 +43,28 @@ export const RichEditorControls = ({ editorState, onChange }: RichEditorControls
 
   const toggleItalic = () => {
     toggleInlineStyle('ITALIC');
+  };
+
+  const removeInlineStyles = (editorState: EditorState) => {
+    const contentState = editorState.getCurrentContent();
+
+    const contentWithoutStyles = [
+      'FONT_SIZE_H1',
+      'FONT_SIZE_H2',
+      'BOLD',
+      'ITALIC',
+      'FONT_FAMILY',
+    ].reduce(
+      (newContentState, style) =>
+        Modifier.removeInlineStyle(newContentState, editorState.getSelection(), style),
+      contentState
+    );
+
+    return EditorState.push(editorState, contentWithoutStyles, 'change-inline-style');
+  };
+
+  const clearFormatting = () => {
+    onChange(removeInlineStyles(editorState));
   };
 
   const toggleLink = () => {
@@ -88,6 +111,10 @@ export const RichEditorControls = ({ editorState, onChange }: RichEditorControls
         onClick={toggleItalic}
       >
         <FormatItalicIcon fontSize="small" />
+      </Button>
+
+      <Button variant="outlined" size="small" onClick={clearFormatting}>
+        <FormatClearIcon fontSize="small" />
       </Button>
 
       <Button

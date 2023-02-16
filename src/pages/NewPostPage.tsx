@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Editor, EditorState } from 'draft-js';
 import { Button, Stack, TextField, Grid } from '@mui/material';
+import { Visibility as VisibilityIcon, Save as SaveIcon } from '@mui/icons-material';
 import { toast } from 'react-toastify';
 
 import { RichEditor } from '~/components';
@@ -92,11 +93,22 @@ export const NewPostPage = () => {
         <RichEditor ref={editorRef} editorState={editorState} onChange={setEditorState} />
 
         <Stack mt={2} spacing={2} direction="row" justifyContent="right">
-          <Button onClick={togglePreviewMode} disabled={!isCanBeAdded}>
+          <Button
+            onClick={togglePreviewMode}
+            disabled={!isCanBeAdded}
+            startIcon={<VisibilityIcon />}
+            variant="outlined"
+          >
             Preview
           </Button>
 
-          <Button onClick={createDraftPostHandler} disabled={!isCanBeAdded}>
+          <Button
+            onClick={createDraftPostHandler}
+            disabled={!isCanBeAdded}
+            startIcon={<SaveIcon />}
+            variant="outlined"
+            color="success"
+          >
             Draft
           </Button>
         </Stack>
