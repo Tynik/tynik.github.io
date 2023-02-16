@@ -5,25 +5,13 @@ import React, { forwardRef, useState } from 'react';
 import { Box } from '@mui/material';
 import { Editor, RichUtils, EditorState } from 'draft-js';
 
-import hljs from 'highlight.js/lib/core';
-import javascript from 'highlight.js/lib/languages/javascript';
-
 import 'draft-js/dist/Draft.css';
-import 'highlight.js/styles/github-dark-dimmed.css';
 
 import type { BlockRenderer } from './RichEditor.types';
 
 import { RichEditorStyled } from './RichEditor.styled';
 import { CodeBlockRenderer, MediaBlockRenderer } from './renderers';
 import { RichEditorControls } from '~/components/RichEditor/RichEditorControls';
-
-// eslint-disable-next-line @typescript-eslint/no-var-requires,@typescript-eslint/no-unsafe-assignment
-const hljsDefineSolidity = require('highlightjs-solidity');
-
-hljs.registerLanguage('javascript', javascript);
-
-// eslint-disable-next-line @typescript-eslint/no-unsafe-call
-hljsDefineSolidity(hljs);
 
 const customStyleMap: Record<string, React.CSSProperties> = {
   FONT_SIZE_H1: {

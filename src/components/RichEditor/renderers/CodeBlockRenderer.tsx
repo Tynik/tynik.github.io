@@ -7,14 +7,18 @@ import { Box, FormControl, InputLabel, MenuItem, Popover, Select } from '@mui/ma
 
 import type { ActiveBlockRendererComponent } from '../RichEditor.types';
 
-type Language = 'javascript' | 'solidity';
+type SourceCodeLanguage = 'typescript' | 'javascript' | 'solidity' | 'bash';
 
-type LanguageOption = {
-  value: Language;
+type SourceCodeLanguageOption = {
+  value: SourceCodeLanguage;
   label: string;
 };
 
-const LANGUAGES: LanguageOption[] = [
+const SOURCE_CODE_LANGUAGES: SourceCodeLanguageOption[] = [
+  {
+    value: 'typescript',
+    label: 'TypeScript',
+  },
   {
     value: 'javascript',
     label: 'JavaScript',
@@ -22,6 +26,10 @@ const LANGUAGES: LanguageOption[] = [
   {
     value: 'solidity',
     label: 'Solidity',
+  },
+  {
+    value: 'bash',
+    label: 'Bash',
   },
 ];
 
@@ -37,7 +45,7 @@ export const CodeBlockRenderer = (props: ActiveBlockRendererComponent) => {
 
   const [settingsAnchorEl, setSettingsAnchorEl] = useState<HTMLElement | null>(null);
 
-  const [language, setLanguage] = useState<Language>(
+  const [language, setLanguage] = useState<SourceCodeLanguage>(
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     codeAttributes.get('language') ?? 'javascript'
   );
@@ -57,8 +65,8 @@ export const CodeBlockRenderer = (props: ActiveBlockRendererComponent) => {
     setSettingsAnchorEl(null);
   };
 
-  const onChangeLanguage = (e: SelectChangeEvent<Language>) => {
-    setLanguage(e.target.value as Language);
+  const onChangeLanguage = (e: SelectChangeEvent<SourceCodeLanguage>) => {
+    setLanguage(e.target.value as SourceCodeLanguage);
 
     const data = block.getData();
     const newData = data.set('language', e.target.value);
@@ -97,7 +105,7 @@ export const CodeBlockRenderer = (props: ActiveBlockRendererComponent) => {
               label="Language"
               onChange={onChangeLanguage}
             >
-              {LANGUAGES.map(language => (
+              {SOURCE_CODE_LANGUAGES.map(language => (
                 <MenuItem key={language.value} value={language.value}>
                   {language.label}
                 </MenuItem>

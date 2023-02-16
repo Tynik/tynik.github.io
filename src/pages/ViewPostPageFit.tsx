@@ -1,9 +1,25 @@
 import React, { useEffect } from 'react';
 import { css, Grid, styled, Typography } from '@mui/material';
+
 import hljs from 'highlight.js/lib/core';
+import 'highlight.js/styles/github-dark-dimmed.css';
+
+import typescript from 'highlight.js/lib/languages/typescript';
+import javascript from 'highlight.js/lib/languages/javascript';
+import bash from 'highlight.js/lib/languages/bash';
 
 import type { Post } from '~/types';
 import { RichEditorCodeStyles } from '~/components/RichEditor/RichEditor.styled';
+
+// eslint-disable-next-line @typescript-eslint/no-var-requires,@typescript-eslint/no-unsafe-assignment
+const hljsDefineSolidity = require('highlightjs-solidity');
+
+hljs.registerLanguage('typescript', typescript);
+hljs.registerLanguage('javascript', javascript);
+hljs.registerLanguage('bash', bash);
+
+// eslint-disable-next-line @typescript-eslint/no-unsafe-call
+hljsDefineSolidity(hljs);
 
 const ContentStyled = styled('div')(
   ({ theme }) => css`
