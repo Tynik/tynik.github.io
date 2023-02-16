@@ -44,7 +44,7 @@ export const ViewPostPageFit = ({ post }: ViewPostPageFitProps) => {
     <Grid spacing={2} container>
       <Grid xs={12} item>
         <Typography
-          variant="h2"
+          variant="h4"
           fontWeight="bold"
           sx={{
             display: '-webkit-box',
@@ -59,7 +59,7 @@ export const ViewPostPageFit = ({ post }: ViewPostPageFitProps) => {
 
       <Grid xs={12} item>
         <Typography
-          variant="h4"
+          variant="h5"
           sx={{
             display: '-webkit-box',
             overflow: 'hidden',
@@ -71,7 +71,7 @@ export const ViewPostPageFit = ({ post }: ViewPostPageFitProps) => {
         </Typography>
       </Grid>
 
-      <Grid xs={12} item>
+      <Grid xs={12} fontSize={20} item>
         <ContentStyled dangerouslySetInnerHTML={{ __html: post.content }} />
       </Grid>
     </Grid>
