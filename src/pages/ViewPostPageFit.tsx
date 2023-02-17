@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { css, Grid, styled, Typography } from '@mui/material';
+import { css, Divider, Grid, styled, Typography } from '@mui/material';
 
 import hljs from 'highlight.js/lib/core';
 import 'highlight.js/styles/github-dark-dimmed.css';
@@ -71,6 +71,10 @@ export const ViewPostPageFit = ({ post }: ViewPostPageFitProps) => {
         >
           {post.subtitle}
         </Typography>
+      </Grid>
+
+      <Grid xs={12} item>
+        <Divider />
       </Grid>
 
       <Grid xs={12} fontSize={20} item>

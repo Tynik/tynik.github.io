@@ -97,7 +97,7 @@ export const EditPostPageFit = ({ post }: EditPostPageFitProps) => {
 
       toast('Successfully updated', { type: 'success' });
 
-      navigate('/');
+      navigate(post.status === 'PUBLISHED' ? '/' : '/drafts');
     } catch (e) {
       console.error(e);
 
