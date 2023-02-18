@@ -48,13 +48,7 @@ export const RichEditorControls = ({ editorState, onChange }: RichEditorControls
   const removeInlineStyles = (editorState: EditorState) => {
     const contentState = editorState.getCurrentContent();
 
-    const contentWithoutStyles = [
-      'FONT_SIZE_H1',
-      'FONT_SIZE_H2',
-      'BOLD',
-      'ITALIC',
-      'FONT_FAMILY',
-    ].reduce(
+    const contentWithoutStyles = ['FONT_SIZE_H1', 'FONT_SIZE_H2', 'BOLD', 'ITALIC', 'CODE'].reduce(
       (newContentState, style) =>
         Modifier.removeInlineStyle(newContentState, editorState.getSelection(), style),
       contentState
