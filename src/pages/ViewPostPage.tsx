@@ -9,6 +9,7 @@ import { useUser } from '~/providers';
 
 import { PostSkeleton } from './components';
 import { ViewPostPageFit } from './ViewPostPageFit';
+import { ViewPostPageMicrodata } from './ViewPostPageMicrodata';
 
 export const ViewPostPage = () => {
   const navigate = useNavigate();
@@ -26,6 +27,8 @@ export const ViewPostPage = () => {
 
   return (
     <Grid spacing={2} container>
+      <ViewPostPageMicrodata post={post} />
+
       {isAuthenticated && (
         <Grid xs={12} textAlign="right" item>
           <Chip label={post.status} color={POST_STATUS_COLOR[post.status]} size="small" />
