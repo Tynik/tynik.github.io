@@ -24,6 +24,12 @@ hljsDefineSolidity(hljs);
 const ContentStyled = styled('div')(
   ({ theme }) => css`
     ${RichEditorCodeStyles(theme)}
+
+    > * {
+      display: flex;
+      flex-direction: column;
+      gap: ${theme.spacing(1)};
+    }
   `
 );
 
