@@ -1,7 +1,7 @@
 import type { DraftBlockType } from 'draft-js';
 
-import React from 'react';
-import { Button, Stack } from '@mui/material';
+import React, { useEffect, useRef } from 'react';
+import { Button, Stack, styled } from '@mui/material';
 import {
   Code as CodeIcon,
   FormatBold as FormatBoldIcon,
@@ -12,6 +12,16 @@ import {
 } from '@mui/icons-material';
 import { EditorState, Modifier, RichUtils } from 'draft-js';
 
+import { useContent } from '~/components';
+
+const Controls = styled(Stack)(({ theme }) => ({
+  backgroundColor: theme.palette.background.default,
+  '&.stick': {
+    position: 'fixed',
+    zIndex: 9999,
+  },
+}));
+
 type RichEditorControlsProps = {
   editorState: EditorState;
   onChange: (editorState: EditorState) => void;
@@ -20,6 +30,50 @@ type RichEditorControlsProps = {
 export const RichEditorControls = ({ editorState, onChange }: RichEditorControlsProps) => {
   const currentBlockType = RichUtils.getCurrentBlockType(editorState);
   const currentInlineStyle = editorState.getCurrentInlineStyle();
+
+  const contentElRef = useContent();
+  const controlsElRef = useRef<HTMLElement | null>(null);
+
+  useEffect(() => {
+    const contentEl = contentElRef?.current;
+    const controlsEl = controlsElRef.current;
+    const controlsParent = controlsEl?.parentElement;
+
+    if (!contentEl || !controlsEl || !controlsParent) {
+      return () => {};
+    }
+
+    let initialOffset: number | null = null;
+
+    const stick = () => {
+      const contentScrollY = contentEl.offsetTop + contentEl.scrollTop;
+
+      if (initialOffset) {
+        if (contentScrollY <= initialOffset) {
+          initialOffset = null;
+          controlsEl.classList.remove('stick');
+
+          controlsParent.style.paddingTop = '0';
+        }
+        return;
+      }
+
+      if (contentScrollY > controlsEl.offsetTop) {
+        initialOffset = controlsEl.offsetTop;
+
+        controlsEl.style.top = `${contentEl.offsetTop}px`;
+        controlsEl.classList.add('stick');
+
+        controlsParent.style.paddingTop = `${controlsEl.clientHeight}px`;
+      }
+    };
+
+    contentEl.addEventListener('scroll', stick);
+
+    return () => {
+      contentEl.removeEventListener('scroll', stick);
+    };
+  }, [contentElRef, controlsElRef.current]);
 
   const toggleInlineStyle = (inlineStyle: string) => {
     onChange(RichUtils.toggleInlineStyle(editorState, inlineStyle));
@@ -74,7 +128,7 @@ export const RichEditorControls = ({ editorState, onChange }: RichEditorControls
   };
 
   return (
-    <Stack direction="row" spacing={1}>
+    <Controls ref={controlsElRef} direction="row" spacing={1}>
       <Button
         variant={currentInlineStyle.has('FONT_SIZE_H1') ? 'contained' : 'outlined'}
         size="small"
@@ -134,6 +188,6 @@ export const RichEditorControls = ({ editorState, onChange }: RichEditorControls
       >
         <CodeIcon fontSize="small" />
       </Button>
-    </Stack>
+    </Controls>
   );
 };

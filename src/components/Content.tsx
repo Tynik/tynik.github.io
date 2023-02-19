@@ -1,14 +1,16 @@
-import React from 'react';
-import type { PropsWithChildren } from 'react';
+import React, { createContext, useContext } from 'react';
+import type { PropsWithChildren, RefObject } from 'react';
 
 import { styled } from '@mui/material';
 import { useStretchHeight } from '~/hooks';
+
+const MAX_CONTENT_WIDTH = '1200px';
 
 const ContentStyled = styled('div')(({ theme }) => ({
   overflow: 'auto',
 
   '> *': {
-    maxWidth: '1200px',
+    maxWidth: MAX_CONTENT_WIDTH,
     minHeight: '100%',
 
     margin: '0 auto',
@@ -16,14 +18,20 @@ const ContentStyled = styled('div')(({ theme }) => ({
   },
 }));
 
-type ContentProps = PropsWithChildren;
+const ContentContext = createContext<RefObject<HTMLDivElement> | null>(null);
 
-export const Content = ({ children }: ContentProps) => {
+export const Content = ({ children }: PropsWithChildren) => {
   const contentRef = useStretchHeight<HTMLDivElement>();
 
   return (
     <ContentStyled ref={contentRef}>
-      <div>{children}</div>
+      <ContentContext.Provider value={contentRef}>
+        <div>{children}</div>
+      </ContentContext.Provider>
     </ContentStyled>
   );
+};
+
+export const useContent = () => {
+  return useContext(ContentContext);
 };
