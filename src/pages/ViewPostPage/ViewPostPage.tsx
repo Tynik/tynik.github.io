@@ -7,7 +7,7 @@ import { POST_STATUS_COLOR } from '~/constants/post.constants';
 import { useCurrentPost } from '~/hooks';
 import { useUser } from '~/providers';
 
-import { PostSkeleton } from './components';
+import { PostSkeleton } from '../components';
 import { ViewPostPageFit } from './ViewPostPageFit';
 import { ViewPostPageMicrodata } from './ViewPostPageMicrodata';
 

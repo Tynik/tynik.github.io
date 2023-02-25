@@ -4,7 +4,7 @@ import { Close as CloseIcon } from '@mui/icons-material';
 
 import type { Editor } from 'draft-js';
 
-import { ViewPostPageFit } from '~/pages/ViewPostPageFit';
+import { ViewPostPageFit } from '~/pages';
 
 type PreviewPostPageProps = {
   title: string;

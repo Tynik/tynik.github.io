@@ -10,8 +10,10 @@ import {
   TimelineSeparator,
 } from '@mui/lab';
 import { Place as PlaceIcon } from '@mui/icons-material';
+
 import { BIO, BIRTHDAY_YEAR, CURRENT_POSITION, FULL_NAME, TIMELINE } from '~/constants';
 import { Offer } from '~/components';
+import { ResumePageMicrodata } from './ResumePageMicrodata';
 
 export const ResumePage = () => {
   const [isMakeOffer, setIsMakeOffer] = React.useState(false);
@@ -26,6 +28,8 @@ export const ResumePage = () => {
 
   return (
     <Grid container spacing={2}>
+      <ResumePageMicrodata />
+
       <Grid item xs={12} md={4} position="relative">
         <Box sx={{ opacity: { xs: 0.4, md: 1 } }}>
           <img
