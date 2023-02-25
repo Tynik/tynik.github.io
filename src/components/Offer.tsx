@@ -12,7 +12,7 @@ import {
 } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 
-import { FULL_NAME } from '~/constants';
+import { MY_FULL_NAME } from '~/constants';
 import { makeOfferRequest } from '~/api';
 
 type OfferProps = {
@@ -49,7 +49,7 @@ export const Offer = ({ onClose }: OfferProps) => {
 
   return (
     <Dialog fullScreen={fullScreen} onClose={onClose} open>
-      <DialogTitle>Make Offer For {FULL_NAME}</DialogTitle>
+      <DialogTitle>Make Offer For {MY_FULL_NAME}</DialogTitle>
 
       <DialogContent>
         <DialogContentText>

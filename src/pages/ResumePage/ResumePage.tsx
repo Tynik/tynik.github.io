@@ -11,7 +11,14 @@ import {
 } from '@mui/lab';
 import { Place as PlaceIcon } from '@mui/icons-material';
 
-import { BIO, BIRTHDAY_YEAR, CURRENT_POSITION, FULL_NAME, TIMELINE } from '~/constants';
+import {
+  MY_BIO,
+  MY_BIRTH_YEAR,
+  MY_CURRENT_POSITION,
+  MY_FULL_NAME,
+  MY_PHOTO,
+  MY_TIMELINE,
+} from '~/constants';
 import { Offer } from '~/components';
 import { ResumePageMicrodata } from './ResumePageMicrodata';
 
@@ -22,9 +29,9 @@ export const ResumePage = () => {
     setIsMakeOffer(false);
   };
 
-  const timeline = useMemo(() => Object.keys(TIMELINE).sort((t1, t2) => (t1 > t2 ? -1 : 1)), []);
+  const timeline = useMemo(() => Object.keys(MY_TIMELINE).sort((t1, t2) => (t1 > t2 ? -1 : 1)), []);
 
-  const years = new Date().getFullYear() - BIRTHDAY_YEAR;
+  const years = new Date().getFullYear() - MY_BIRTH_YEAR;
 
   return (
     <Grid container spacing={2}>
@@ -32,11 +39,7 @@ export const ResumePage = () => {
 
       <Grid item xs={12} md={4} position="relative">
         <Box sx={{ opacity: { xs: 0.4, md: 1 } }}>
-          <img
-            src="https://bafybeicvt5t5hzfwox7atxv6wzojcumieufu4wksf36taklzbaps22eyba.ipfs.dweb.link/IMG_1459_Large.jpeg"
-            alt={FULL_NAME}
-            width="100%"
-          />
+          <img src={MY_PHOTO} alt={MY_FULL_NAME} width="100%" />
         </Box>
 
         <Box
@@ -49,11 +52,11 @@ export const ResumePage = () => {
           mt={14}
         >
           <Typography variant="h3" align="center" textTransform="uppercase" fontWeight={600}>
-            {FULL_NAME}
+            {MY_FULL_NAME}
           </Typography>
 
           <Typography variant="body2" align="center" color="text.secondary">
-            {CURRENT_POSITION}, {years}y
+            {MY_CURRENT_POSITION}, {years}y
           </Typography>
         </Box>
       </Grid>
@@ -61,16 +64,16 @@ export const ResumePage = () => {
       <Grid item xs={12} md={8}>
         <Box display={{ xs: 'none', md: 'block' }}>
           <Typography variant="h3" align="center" textTransform="uppercase" fontWeight={600}>
-            {FULL_NAME}
+            {MY_FULL_NAME}
           </Typography>
 
           <Typography variant="body2" align="center" color="text.secondary">
-            {CURRENT_POSITION}, {years}y
+            {MY_CURRENT_POSITION}, {years}y
           </Typography>
         </Box>
 
         <Box mt={2}>
-          <Typography>{BIO}</Typography>
+          <Typography>{MY_BIO}</Typography>
         </Box>
 
         <Box mt={2} textAlign="center">
@@ -104,7 +107,7 @@ export const ResumePage = () => {
                   <TimelineConnector />
 
                   <TimelineDot color="primary" variant="outlined">
-                    {TIMELINE[year].icon}
+                    {MY_TIMELINE[year].icon}
                   </TimelineDot>
 
                   <TimelineConnector />
@@ -112,7 +115,7 @@ export const ResumePage = () => {
 
                 <TimelineContent py="12px" px={2}>
                   <Typography variant="h6" component="p">
-                    {TIMELINE[year].name}
+                    {MY_TIMELINE[year].name}
                   </Typography>
 
                   <Stack
@@ -120,28 +123,28 @@ export const ResumePage = () => {
                     spacing={1}
                     sx={{ justifyContent: { xs: 'space-between', sm: 'normal' } }}
                   >
-                    {TIMELINE[year].position && (
+                    {MY_TIMELINE[year].position && (
                       <Typography color="text.secondary" component="p" variant="body2">
-                        {TIMELINE[year].position}
+                        {MY_TIMELINE[year].position}
                       </Typography>
                     )}
 
-                    {TIMELINE[year].location && (
+                    {MY_TIMELINE[year].location && (
                       <Stack direction="row" spacing={0.5} alignItems="center">
                         <PlaceIcon fontSize="small" />
 
                         <Typography component="p" variant="body2">
-                          {TIMELINE[year].location}
+                          {MY_TIMELINE[year].location}
                         </Typography>
                       </Stack>
                     )}
                   </Stack>
 
-                  <Typography>{TIMELINE[year].content}</Typography>
+                  <Typography>{MY_TIMELINE[year].content}</Typography>
 
-                  {(TIMELINE[year].stack?.length ?? 0) > 0 && (
+                  {(MY_TIMELINE[year].stack?.length ?? 0) > 0 && (
                     <Stack direction="row" mt={1} flexWrap="wrap" gap={1}>
-                      {TIMELINE[year].stack?.map(technology => (
+                      {MY_TIMELINE[year].stack?.map(technology => (
                         <Chip
                           key={technology}
                           label={technology}
@@ -152,14 +155,14 @@ export const ResumePage = () => {
                     </Stack>
                   )}
 
-                  {(TIMELINE[year].links?.length ?? 0) > 0 && (
+                  {(MY_TIMELINE[year].links?.length ?? 0) > 0 && (
                     <Box mt={1}>
                       <Typography variant="subtitle1" component="p" fontWeight={600}>
                         Links
                       </Typography>
 
                       <Stack color="text.secondary">
-                        {TIMELINE[year].links?.map(href => (
+                        {MY_TIMELINE[year].links?.map(href => (
                           <Link key={href} href={href} target="_blank">
                             {href}
                           </Link>

@@ -2,16 +2,14 @@ import React from 'react';
 
 import type { Post } from '~/types';
 
+import { ArticleMicrodata } from '~/components';
+
 type ViewPostPageMicrodataProps = {
   post: Post;
 };
 
 export const ViewPostPageMicrodata = ({ post }: ViewPostPageMicrodataProps) => {
   return (
-    <div itemType="https://schema.org/TechArticle" itemScope>
-      <meta itemProp="name" content={post.title} />
-      <meta itemProp="articleBody" content={post.content} />
-      <meta itemProp="proficiencyLevel" content="Expert" />
-    </div>
+    <ArticleMicrodata type="Tech" name={post.title} body={post.content} proficiencyLevel="Expert" />
   );
 };

@@ -9,12 +9,15 @@ import {
 
 import type { TimelinePoint } from '~/types';
 
-export const FULL_NAME = 'Mykhailo Aliinyk';
-export const BIRTHDAY_YEAR = 1992;
-export const CURRENT_POSITION = 'Principal Frontend Developer';
-export const BIO = '';
+export const MY_FULL_NAME = 'Mykhailo Aliinyk';
+export const MY_BIRTH_YEAR = 1992;
+export const MY_CURRENT_POSITION = 'Principal Frontend Developer';
+export const MY_EMAIL = 'm.aliynik@gmail.com';
+export const MY_PHOTO =
+  'https://bafybeicvt5t5hzfwox7atxv6wzojcumieufu4wksf36taklzbaps22eyba.ipfs.dweb.link/IMG_1459_Large.jpeg';
+export const MY_BIO = '';
 
-export const TIMELINE: Record<string, TimelinePoint> = {
+export const MY_TIMELINE: Record<string, TimelinePoint> = {
   '2022': {
     name: 'ManageGO. New Way',
     icon: <BusinessIcon />,

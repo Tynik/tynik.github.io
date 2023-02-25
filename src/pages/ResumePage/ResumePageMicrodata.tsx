@@ -1,6 +1,7 @@
 import React from 'react';
 
-import { CURRENT_POSITION, FULL_NAME } from '~/constants';
+import { MY_CURRENT_POSITION, MY_EMAIL, MY_FULL_NAME, MY_PHOTO } from '~/constants';
+import { PersonMicrodata } from '~/components';
 
 type ResumePageMicrodataProps = {
   //
@@ -8,13 +9,12 @@ type ResumePageMicrodataProps = {
 
 export const ResumePageMicrodata = (props: ResumePageMicrodataProps) => {
   return (
-    <div itemType="https://schema.org/Person" itemScope>
-      <meta itemProp="name" content={FULL_NAME} />
-      <meta itemProp="jobTitle" content={CURRENT_POSITION} />
-      <meta
-        itemProp="image"
-        content="https://bafybeicvt5t5hzfwox7atxv6wzojcumieufu4wksf36taklzbaps22eyba.ipfs.dweb.link/IMG_1459_Large.jpeg"
-      />
-    </div>
+    <PersonMicrodata
+      name={MY_FULL_NAME}
+      email={MY_EMAIL}
+      jobTitle={MY_CURRENT_POSITION}
+      image={MY_PHOTO}
+      gender="Male"
+    />
   );
 };
