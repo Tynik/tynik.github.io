@@ -12,11 +12,11 @@ import { PreviewPostPage } from './PreviewPostPage';
 
 export const NewPostPage = () => {
   const navigate = useNavigate();
-
   const user = useUser();
 
   const [title, setTitle] = useState<string | null>(null);
   const [subtitle, setSubtitle] = useState<string | null>(null);
+  const [slug, setSlug] = useState<string | null>(null);
 
   const [editorState, setEditorState] = useState(() => EditorState.createEmpty());
 
@@ -31,7 +31,7 @@ export const NewPostPage = () => {
   const createDraftPostHandler = async () => {
     const editorEl = editorRef.current;
 
-    if (!title || !subtitle || !user.ethAccount || !editorEl) {
+    if (!title || !subtitle || !slug || !user.ethAccount || !editorEl) {
       return;
     }
 
@@ -39,6 +39,7 @@ export const NewPostPage = () => {
       await createDraftPost(editorEl, editorState, {
         title,
         subtitle,
+        slug,
         ethAccount: user.ethAccount,
       });
 
@@ -85,6 +86,16 @@ export const NewPostPage = () => {
           value={subtitle || ''}
           onChange={e => setSubtitle(e.target.value)}
           error={subtitle === ''}
+          fullWidth
+        />
+      </Grid>
+
+      <Grid xs={12} item>
+        <TextField
+          label="Slug"
+          value={slug || ''}
+          onChange={e => setSlug(e.target.value)}
+          error={slug === ''}
           fullWidth
         />
       </Grid>

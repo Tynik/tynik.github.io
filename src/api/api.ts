@@ -1,4 +1,4 @@
-import type { PostInfo, Post, PostCID, RichPost, PostStatus } from '~/types';
+import type { PostInfoContent, Post, PostCID, RichPost, PostStatus } from '~/types';
 
 import { netlifyRequest } from './apiClient';
 
@@ -20,6 +20,7 @@ export const authRequest = async (ethAccount: string) => {
 type CreateDraftPostPayload = {
   title: string;
   subtitle: string;
+  slug: string;
   content: string;
   richContent: string;
   ethAccount: string;
@@ -27,6 +28,16 @@ type CreateDraftPostPayload = {
 
 export const createDraftPostRequest = async (payload: CreateDraftPostPayload) =>
   netlifyRequest('create-draft-post', { payload, method: 'POST' });
+
+type RestorePostPayload = {
+  cid: PostCID;
+  slug: string;
+  created: number;
+  ethAccount: string;
+};
+
+export const restorePostRequest = async (payload: RestorePostPayload) =>
+  netlifyRequest('restore-post', { payload, method: 'POST' });
 
 type PublishPostPayload = {
   cid: PostCID;
@@ -62,28 +73,26 @@ export const uploadPostFileRequest = async ({ files, ethAccount }: UploadPostFil
   return (await netlifyRequest('upload-post-file', { payload: fd, method: 'POST' })).data as string;
 };
 
-type PostMetaInfo = {
+export type PostInfo = {
+  cid: string;
   status: PostStatus;
+  slug: string;
   created: number;
 };
 
-export const getPostMetaInfoRequest = async (postCID: PostCID) => {
-  return (await netlifyRequest<PostMetaInfo>('get-post', { params: { postCID } })).data;
+export const getPostBySlugRequest = async (slug: string) => {
+  return (await netlifyRequest<PostInfo>('get-post-by-slug', { params: { slug } })).data;
 };
 
-export const getPostInfoRequest = async (postCID: PostCID): Promise<PostInfo> => {
-  const [postInfo, { status }] = await Promise.all([
-    (await (await fetch(`https://${postCID}.ipfs.w3s.link/post.json`)).json()) as {
-      title: string;
-      subtitle: string;
-      created: number;
-    },
-    getPostMetaInfoRequest(postCID),
-  ]);
+export const getPostInfoContentRequest = async (postCID: PostCID): Promise<PostInfoContent> => {
+  const postInfo = (await (await fetch(`https://${postCID}.ipfs.w3s.link/post.json`)).json()) as {
+    title: string;
+    subtitle: string;
+    created: number;
+  };
 
   return {
     cid: postCID,
-    status,
     ...postInfo,
   };
 };
@@ -95,16 +104,20 @@ export const getPostContentRequest = async (postCID: PostCID) =>
     }
   ).content;
 
-export const getPostRequest = async (postCID: PostCID) => {
+export const getPostRequest = async (slug: string): Promise<Post> => {
+  const post = await getPostBySlugRequest(slug);
+
   const [postInfo, content] = await Promise.all([
-    getPostInfoRequest(postCID),
-    getPostContentRequest(postCID),
+    getPostInfoContentRequest(post.cid),
+    getPostContentRequest(post.cid),
   ]);
 
   return {
     ...postInfo,
+    status: post.status,
+    slug: post.slug,
     content,
-  } as Post;
+  };
 };
 
 export const getRichPostContentRequest = async (postCID: PostCID) =>
@@ -114,20 +127,24 @@ export const getRichPostContentRequest = async (postCID: PostCID) =>
     }
   ).content;
 
-export const getRichPostRequest = async (postCID: PostCID) => {
+export const getRichPostRequest = async (slug: string): Promise<RichPost> => {
+  const post = await getPostBySlugRequest(slug);
+
   const [postInfo, content] = await Promise.all([
-    getPostInfoRequest(postCID),
-    getRichPostContentRequest(postCID),
+    getPostInfoContentRequest(post.cid),
+    getRichPostContentRequest(post.cid),
   ]);
 
   return {
     ...postInfo,
+    status: post.status,
+    slug: post.slug,
     richContent: content,
-  } as RichPost;
+  };
 };
 
 type GetPublishedPostsResponse = {
-  list: PostCID[];
+  list: PostInfo[];
   total: number;
 };
 
@@ -136,7 +153,7 @@ export const getPublishedPostsRequest = async () => {
 };
 
 type GetDraftPostsResponse = {
-  list: PostCID[];
+  list: PostInfo[];
   total: number;
 };
 

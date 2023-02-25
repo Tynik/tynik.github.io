@@ -6,11 +6,11 @@ import { EditPostPageFit } from './EditPostPageFit';
 import { PostSkeleton } from '../components';
 
 export const EditPostPage = () => {
-  const { post } = useRichCurrentPost();
+  const { richPost } = useRichCurrentPost();
 
-  if (!post) {
+  if (!richPost) {
     return <PostSkeleton />;
   }
 
-  return <EditPostPageFit post={post} />;
+  return <EditPostPageFit richPost={richPost} />;
 };

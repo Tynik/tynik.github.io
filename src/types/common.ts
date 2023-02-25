@@ -14,18 +14,21 @@ export type TimelinePoint = {
   links?: string[];
 };
 
-export interface PostInfo {
+export interface PostInfoContent {
   cid: PostCID;
-  status: PostStatus;
   title: string;
   subtitle: string;
   created: number;
 }
 
-export interface Post extends PostInfo {
+export interface Post extends PostInfoContent {
+  status: PostStatus;
+  slug: string;
   content: string;
 }
 
-export interface RichPost extends PostInfo {
+export interface RichPost extends PostInfoContent {
+  status: PostStatus;
+  slug: string;
   richContent: string;
 }

@@ -14,8 +14,8 @@ export const MainPage = () => {
         <Typography variant="h4">Posts</Typography>
       </Grid>
 
-      {publishedPosts?.list.map(postCID => (
-        <PostCard key={postCID} postCID={postCID} />
+      {publishedPosts?.list.map(postInfo => (
+        <PostCard key={postInfo.cid} postInfo={postInfo} />
       ))}
     </Grid>
   );

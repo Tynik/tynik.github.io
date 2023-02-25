@@ -4,13 +4,11 @@ import { useQuery } from 'react-query';
 import { getRichPostRequest } from '~/api';
 
 export const useRichCurrentPost = () => {
-  const { postCID } = useParams<{ postCID: string }>();
+  const { slug } = useParams<{ slug: string }>();
 
-  const { data: post } = useQuery(['get-rich-post', postCID], () => getRichPostRequest(postCID!), {
-    refetchOnWindowFocus: false,
-  });
+  const { data: richPost } = useQuery(['get-rich-post', slug], () => getRichPostRequest(slug!));
 
   return {
-    post,
+    richPost,
   };
 };

@@ -127,6 +127,10 @@ const App = () => {
                 <Button component={Link} to="/post">
                   Add Post
                 </Button>
+
+                <Button component={Link} to="/restore-post">
+                  Restore Post
+                </Button>
               </>
             )}
 

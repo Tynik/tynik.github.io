@@ -10,6 +10,7 @@ const getRichContent = (editorState: EditorState) =>
 type CreateDraftPostOptions = {
   title: string;
   subtitle: string;
+  slug: string;
   ethAccount: string;
 };
 

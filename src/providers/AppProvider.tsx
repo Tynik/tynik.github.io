@@ -6,7 +6,13 @@ import { createTheme, CssBaseline, GlobalStyles, ThemeProvider } from '@mui/mate
 
 import { UserProvider } from '~/providers';
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 const darkTheme = createTheme({
   palette: {

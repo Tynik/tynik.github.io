@@ -22,7 +22,7 @@ export const ViewPostPage = () => {
   }
 
   const onEditPost = () => {
-    navigate(`/post/${post.cid}/edit`);
+    navigate(`/post/${post.slug}/edit`);
   };
 
   return (

@@ -13,25 +13,25 @@ import {
 } from '@mui/material';
 import { MoreVert as MoreVertIcon } from '@mui/icons-material';
 
-import type { PostCID } from '~/types';
-import { getPostInfoRequest } from '~/api';
+import type { PostInfo } from '~/api';
+import { getPostInfoContentRequest } from '~/api';
 import { useUser } from '~/providers';
 import { PostCardActionMenu } from './PostCardActionMenu';
 
 type PostCardProps = {
-  postCID: PostCID;
+  postInfo: PostInfo;
 };
 
-export const PostCard = ({ postCID }: PostCardProps) => {
+export const PostCard = ({ postInfo }: PostCardProps) => {
   const { isAuthenticated } = useUser();
 
   const [actionsMenuAnchorEl, setActionsMenuAnchorEl] = React.useState<HTMLElement | null>(null);
 
-  const { data: postInfo } = useQuery(['get-post-info', postCID], () =>
-    getPostInfoRequest(postCID)
+  const { data: postInfoContent } = useQuery(['get-post-info', postInfo.cid], () =>
+    getPostInfoContentRequest(postInfo.cid)
   );
 
-  if (!postInfo) {
+  if (!postInfoContent) {
     return (
       <Grid xs={12} md={6} item>
         <Skeleton width="100%" height={50} variant="rounded" />
@@ -54,10 +54,10 @@ export const PostCard = ({ postCID }: PostCardProps) => {
           flexDirection: 'column',
         }}
       >
-        <CardActionArea component={Link} to={`/post/${postInfo.cid}`} sx={{ height: '100%' }}>
+        <CardActionArea component={Link} to={`/post/${postInfo.slug}`} sx={{ height: '100%' }}>
           <CardHeader
-            title={postInfo.title}
-            subheader={postInfo.created && new Date(postInfo.created).toDateString()}
+            title={postInfoContent.title}
+            subheader={postInfoContent.created && new Date(postInfoContent.created).toDateString()}
             action={
               isAuthenticated && (
                 <IconButton
@@ -94,7 +94,7 @@ export const PostCard = ({ postCID }: PostCardProps) => {
                 WebkitBoxOrient: 'vertical',
               }}
             >
-              {postInfo.subtitle}
+              {postInfoContent.subtitle}
             </Typography>
           </CardContent>
         </CardActionArea>

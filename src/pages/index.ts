@@ -4,3 +4,4 @@ export * from './NewPostPage';
 export * from './EditPostPage';
 export * from './ViewPostPage';
 export * from './ResumePage';
+export * from './RestorePostPage';

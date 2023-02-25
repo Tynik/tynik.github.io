@@ -15,14 +15,14 @@ import { publishPostRequest } from '~/api';
 import { useUser } from '~/providers';
 
 type EditPostPageControlsProps = {
-  post: RichPost;
+  richPost: RichPost;
   canBeSaved: boolean;
   onTogglePreviewMode: () => void;
   onSave: () => void;
 };
 
 export const EditPostPageControls = ({
-  post,
+  richPost,
   canBeSaved,
   onTogglePreviewMode,
   onSave,
@@ -38,7 +38,7 @@ export const EditPostPageControls = ({
 
     try {
       await publishPostRequest({
-        cid: post.cid,
+        cid: richPost.cid,
         ethAccount: user.ethAccount,
       });
 
@@ -51,7 +51,7 @@ export const EditPostPageControls = ({
   };
 
   const cancelPostEditHandler = () => {
-    navigate(`/post/${post.cid}`);
+    navigate(`/post/${richPost.slug}`);
   };
 
   return (
@@ -75,7 +75,7 @@ export const EditPostPageControls = ({
         Save
       </Button>
 
-      {post.status !== 'PUBLISHED' && (
+      {richPost.status !== 'PUBLISHED' && (
         <Button
           onClick={publishPostHandler}
           startIcon={<SendIcon />}

@@ -7,9 +7,9 @@ export const handler = createHandler({ allowMethods: ['GET', 'OPTIONS'] }, async
   const web3Client = getWeb3Client();
   const myProfileContract = getMyProfileContract(web3Client);
 
-  const postCID = event.queryStringParameters?.postCID;
+  const slug = event.queryStringParameters?.slug;
 
-  const post = (await myProfileContract.methods.getPost(postCID).call()) as ContractPost;
+  const post = (await myProfileContract.methods.getPostBySlug(slug).call()) as ContractPost;
 
   return {
     status: 'ok',

@@ -1,7 +1,9 @@
 export type NetlifyFunction =
   | 'auth'
   | 'get-post'
+  | 'get-post-by-slug'
   | 'create-draft-post'
+  | 'restore-post'
   | 'publish-post'
   | 'update-post'
   | 'get-published-posts'

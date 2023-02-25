@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { ListItemIcon, ListItemText, Menu, MenuItem } from '@mui/material';
 import { Edit as EditIcon } from '@mui/icons-material';
 
-import type { PostInfo } from '~/types';
+import type { PostInfo } from '~/api';
 
 type PostCardActionMenuProps = {
   postInfo: PostInfo;
@@ -19,7 +19,7 @@ export const PostCardActionMenu = ({
   const navigate = useNavigate();
 
   const onEditPost = () => {
-    navigate(`/post/${postInfo.cid}/edit`);
+    navigate(`/post/${postInfo.slug}/edit`);
   };
 
   return (

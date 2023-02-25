@@ -17,18 +17,18 @@ import { PreviewPostPage } from '../PreviewPostPage';
 import { EditPostPageControls } from './EditPostPageControls';
 
 type EditPostPageFitProps = {
-  post: RichPost;
+  richPost: RichPost;
 };
 
-export const EditPostPageFit = ({ post }: EditPostPageFitProps) => {
+export const EditPostPageFit = ({ richPost }: EditPostPageFitProps) => {
   const navigate = useNavigate();
   const user = useUser();
 
-  const [title, setTitle] = useState(post.title);
-  const [subtitle, setSubtitle] = useState(post.subtitle);
+  const [title, setTitle] = useState(richPost.title);
+  const [subtitle, setSubtitle] = useState(richPost.subtitle);
 
   const [editorState, setEditorState] = useState(() => {
-    const content = convertFromRaw(JSON.parse(post.richContent) as never);
+    const content = convertFromRaw(JSON.parse(richPost.richContent) as never);
 
     return EditorState.createWithContent(content);
   });
@@ -91,13 +91,13 @@ export const EditPostPageFit = ({ post }: EditPostPageFitProps) => {
       await updatePost(editor, editorState, {
         title,
         subtitle,
-        cid: post.cid,
+        cid: richPost.cid,
         ethAccount: user.ethAccount,
       });
 
       toast('Successfully updated', { type: 'success' });
 
-      navigate(post.status === 'PUBLISHED' ? '/' : '/drafts');
+      navigate(richPost.status === 'PUBLISHED' ? '/' : '/drafts');
     } catch (e) {
       console.error(e);
 
@@ -142,7 +142,7 @@ export const EditPostPageFit = ({ post }: EditPostPageFitProps) => {
 
       <Grid xs={12} item>
         <EditPostPageControls
-          post={post}
+          richPost={richPost}
           canBeSaved={isCanBeSaved}
           onTogglePreviewMode={togglePreviewMode}
           onSave={savePostHandler}
