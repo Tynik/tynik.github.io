@@ -1,11 +1,13 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Box, Button, Chip, Grid } from '@mui/material';
-import { Edit as EditIcon } from '@mui/icons-material';
+import { Box, Button, Chip, Grid, Stack } from '@mui/material';
+import { Edit as EditIcon, Send as SendIcon } from '@mui/icons-material';
 
+import { toast } from 'react-toastify';
 import { POST_STATUS_COLOR } from '~/constants/post.constants';
 import { useCurrentPost } from '~/hooks';
 import { useUser } from '~/providers';
+import { publishPostRequest } from '~/api';
 
 import { PostSkeleton } from '../components';
 import { ViewPostPageFit } from './ViewPostPageFit';
@@ -13,6 +15,7 @@ import { ViewPostPageMicrodata } from './ViewPostPageMicrodata';
 
 export const ViewPostPage = () => {
   const navigate = useNavigate();
+  const user = useUser();
 
   const { post } = useCurrentPost();
   const { isAuthenticated } = useUser();
@@ -25,6 +28,25 @@ export const ViewPostPage = () => {
     navigate(`/post/${post.slug}/edit`);
   };
 
+  const publishPostHandler = async () => {
+    if (!user.ethAccount) {
+      return;
+    }
+
+    try {
+      await publishPostRequest({
+        cid: post.cid,
+        ethAccount: user.ethAccount,
+      });
+
+      toast('Successfully published', { type: 'success' });
+
+      navigate('/');
+    } catch (e) {
+      toast('Something went wrong', { type: 'error' });
+    }
+  };
+
   return (
     <Grid spacing={2} container>
       <ViewPostPageMicrodata post={post} />
@@ -34,9 +56,22 @@ export const ViewPostPage = () => {
           <Box display="flex" gap={2} justifyContent="space-between" alignItems="center">
             <Chip label={post.status} color={POST_STATUS_COLOR[post.status]} size="small" />
 
-            <Button onClick={onEditPost} startIcon={<EditIcon />} variant="outlined">
-              Edit
-            </Button>
+            <Stack direction="row" spacing={2}>
+              <Button onClick={onEditPost} startIcon={<EditIcon />} variant="outlined">
+                Edit
+              </Button>
+
+              {post.status !== 'PUBLISHED' && (
+                <Button
+                  onClick={publishPostHandler}
+                  startIcon={<SendIcon />}
+                  variant="outlined"
+                  color="success"
+                >
+                  Publish
+                </Button>
+              )}
+            </Stack>
           </Box>
         </Grid>
       )}

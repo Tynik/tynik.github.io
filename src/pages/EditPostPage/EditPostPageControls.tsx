@@ -3,16 +3,11 @@ import { Button, Stack } from '@mui/material';
 import {
   Cancel as CancelIcon,
   Save as SaveIcon,
-  Send as SendIcon,
   Visibility as VisibilityIcon,
 } from '@mui/icons-material';
-import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 
 import type { RichPost } from '~/types';
-
-import { publishPostRequest } from '~/api';
-import { useUser } from '~/providers';
 
 type EditPostPageControlsProps = {
   richPost: RichPost;
@@ -28,27 +23,6 @@ export const EditPostPageControls = ({
   onSave,
 }: EditPostPageControlsProps) => {
   const navigate = useNavigate();
-
-  const user = useUser();
-
-  const publishPostHandler = async () => {
-    if (!user.ethAccount) {
-      return;
-    }
-
-    try {
-      await publishPostRequest({
-        cid: richPost.cid,
-        ethAccount: user.ethAccount,
-      });
-
-      toast('Successfully published', { type: 'success' });
-
-      navigate('/');
-    } catch (e) {
-      toast('Something went wrong', { type: 'error' });
-    }
-  };
 
   const cancelPostEditHandler = () => {
     navigate(`/post/${richPost.slug}`);
@@ -74,17 +48,6 @@ export const EditPostPageControls = ({
       >
         Save
       </Button>
-
-      {richPost.status !== 'PUBLISHED' && (
-        <Button
-          onClick={publishPostHandler}
-          startIcon={<SendIcon />}
-          variant="outlined"
-          color="info"
-        >
-          Publish
-        </Button>
-      )}
 
       <Button
         onClick={cancelPostEditHandler}

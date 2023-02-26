@@ -57,8 +57,6 @@ export const RestorePostPage = () => {
 
       navigate('/drafts');
     } catch (e) {
-      console.error(e);
-
       toast('Something went wrong', { type: 'error' });
     }
   };

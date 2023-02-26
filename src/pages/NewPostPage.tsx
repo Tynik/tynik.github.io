@@ -47,8 +47,6 @@ export const NewPostPage = () => {
 
       navigate('/drafts');
     } catch (e) {
-      console.error(e);
-
       toast('Something went wrong', { type: 'error' });
     }
   };

@@ -99,8 +99,6 @@ export const EditPostPageFit = ({ richPost }: EditPostPageFitProps) => {
 
       navigate(richPost.status === 'PUBLISHED' ? '/' : '/drafts');
     } catch (e) {
-      console.error(e);
-
       toast('Something went wrong', { type: 'error' });
     }
   };
