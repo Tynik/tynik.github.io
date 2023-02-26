@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import type { SelectChangeEvent } from '@mui/material';
 
-import { EditorBlock, Modifier } from 'draft-js';
+import { EditorBlock, Modifier, SelectionState } from 'draft-js';
 import { Box, FormControl, InputLabel, MenuItem, Popover, Select } from '@mui/material';
 
 import type { ActiveBlockRendererComponent } from '../RichEditor.types';
@@ -36,7 +36,6 @@ const SOURCE_CODE_LANGUAGES: SourceCodeLanguageOption[] = [
 export const CodeBlockRenderer = (props: ActiveBlockRendererComponent) => {
   const {
     contentState,
-    selection,
     block,
     blockProps: { setEditorReadOnly, onUpdateContent },
   } = props;
@@ -46,8 +45,9 @@ export const CodeBlockRenderer = (props: ActiveBlockRendererComponent) => {
   const [settingsAnchorEl, setSettingsAnchorEl] = useState<HTMLElement | null>(null);
 
   const [language, setLanguage] = useState<SourceCodeLanguage>(
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-    codeAttributes.get('language') ?? 'javascript'
+    () =>
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument,@typescript-eslint/no-unsafe-return
+      codeAttributes.get('language') ?? 'javascript'
   );
 
   useEffect(() => {
@@ -71,7 +71,9 @@ export const CodeBlockRenderer = (props: ActiveBlockRendererComponent) => {
     const data = block.getData();
     const newData = data.set('language', e.target.value);
 
-    onUpdateContent(Modifier.setBlockData(contentState, selection, newData));
+    const newSelection = SelectionState.createEmpty(block.getKey());
+
+    onUpdateContent(Modifier.setBlockData(contentState, newSelection, newData));
   };
 
   return (
