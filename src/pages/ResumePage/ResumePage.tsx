@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { Box, Button, Chip, Grid, Link, Stack, Typography } from '@mui/material';
+import { Box, Button, Chip, Grid, IconButton, Link, Stack, Typography } from '@mui/material';
 import {
   Timeline,
   TimelineConnector,
@@ -9,10 +9,9 @@ import {
   TimelineOppositeContent,
   TimelineSeparator,
 } from '@mui/lab';
-import { Place as PlaceIcon } from '@mui/icons-material';
+import { GitHub as GitHubIcon, Place as PlaceIcon } from '@mui/icons-material';
 
 import {
-  MY_BIO,
   MY_BIRTH_YEAR,
   MY_CURRENT_POSITION,
   MY_FULL_NAME,
@@ -58,31 +57,49 @@ export const ResumePage = () => {
           <Typography variant="body2" align="center" color="text.secondary">
             {MY_CURRENT_POSITION}, {years}y
           </Typography>
+
+          <Box textAlign="center">
+            <IconButton
+              component="a"
+              href="https://github.com/Tynik"
+              target="_blank"
+              title="Mykhailo Aliinyk GitHub Profile"
+            >
+              <GitHubIcon />
+            </IconButton>
+          </Box>
         </Box>
       </Grid>
 
       <Grid item xs={12} md={8}>
-        <Box display={{ xs: 'none', md: 'block' }}>
-          <Typography variant="h3" align="center" textTransform="uppercase" fontWeight={600}>
-            {MY_FULL_NAME}
-          </Typography>
+        <Stack spacing={2}>
+          <Stack display={{ xs: 'none', md: 'block' }} spacing={1}>
+            <Typography variant="h3" align="center" textTransform="uppercase" fontWeight={600}>
+              {MY_FULL_NAME}
+            </Typography>
 
-          <Typography variant="body2" align="center" color="text.secondary">
-            {MY_CURRENT_POSITION}, {years}y
-          </Typography>
-        </Box>
+            <Typography variant="body2" align="center" color="text.secondary">
+              {MY_CURRENT_POSITION}, {years}y
+            </Typography>
 
-        <Box mt={2}>
-          <Typography>{MY_BIO}</Typography>
-        </Box>
+            <Box textAlign="center">
+              <IconButton
+                component="a"
+                href="https://github.com/Tynik"
+                target="_blank"
+                title="Mykhailo Aliinyk GitHub Profile"
+              >
+                <GitHubIcon />
+              </IconButton>
+            </Box>
+          </Stack>
 
-        <Box mt={2} textAlign="center">
-          <Button variant="contained" color="error" onClick={() => setIsMakeOffer(true)}>
-            Make Offer
-          </Button>
-        </Box>
+          <Box textAlign="center">
+            <Button variant="contained" color="error" onClick={() => setIsMakeOffer(true)}>
+              Make Offer
+            </Button>
+          </Box>
 
-        <Box mt={2}>
           <Timeline position="right">
             {timeline.map((year, index) => (
               <TimelineItem key={year}>
@@ -174,7 +191,7 @@ export const ResumePage = () => {
               </TimelineItem>
             ))}
           </Timeline>
-        </Box>
+        </Stack>
       </Grid>
 
       {isMakeOffer && <Offer onClose={onCloseMakeOffer} />}

@@ -15,7 +15,6 @@ export const MY_CURRENT_POSITION = 'Principal Frontend Developer';
 export const MY_EMAIL = 'm.aliynik@gmail.com';
 export const MY_PHOTO =
   'https://bafybeicvt5t5hzfwox7atxv6wzojcumieufu4wksf36taklzbaps22eyba.ipfs.dweb.link/IMG_1459_Large.jpeg';
-export const MY_BIO = '';
 
 export const MY_TIMELINE: Record<string, TimelinePoint> = {
   '2022': {
