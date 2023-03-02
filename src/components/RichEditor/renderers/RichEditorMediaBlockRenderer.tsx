@@ -1,12 +1,12 @@
 import React from 'react';
 
 import type { ContentState } from 'draft-js';
-import type { ImageAttributes } from '../components';
+import type { RichEditorImageAttributes } from '../components';
 import type { ActiveBlockRendererComponent, OnUpdateEntityDateHandler } from '../RichEditor.types';
 
-import { Image } from '../components';
+import { RichEditorImage } from '../components';
 
-export const MediaBlockRenderer = ({
+export const RichEditorMediaBlockRenderer = ({
   contentState,
   block,
   blockProps: { onUpdateContent, setEditorReadOnly },
@@ -29,9 +29,15 @@ export const MediaBlockRenderer = ({
   };
 
   if (type === 'IMAGE') {
-    const imageAttributes = entity.getData() as ImageAttributes;
+    const imageAttributes = entity.getData() as RichEditorImageAttributes;
 
-    return <Image setEditorReadOnly={setEditorReadOnly} onUpdate={onUpdate} {...imageAttributes} />;
+    return (
+      <RichEditorImage
+        setEditorReadOnly={setEditorReadOnly}
+        onUpdate={onUpdate}
+        {...imageAttributes}
+      />
+    );
   }
 
   return null;

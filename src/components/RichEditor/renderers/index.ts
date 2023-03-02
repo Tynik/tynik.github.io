@@ -1,2 +1,2 @@
-export * from './MediaBlockRenderer';
-export * from './CodeBlockRenderer';
+export * from './RichEditorMediaBlockRenderer';
+export * from './RichEditorCodeBlockRenderer';

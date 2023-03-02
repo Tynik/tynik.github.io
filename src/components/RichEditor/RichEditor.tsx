@@ -10,7 +10,7 @@ import 'draft-js/dist/Draft.css';
 import type { BlockRenderer } from './RichEditor.types';
 
 import { RichEditorStyled } from './RichEditor.styled';
-import { CodeBlockRenderer, MediaBlockRenderer } from './renderers';
+import { RichEditorCodeBlockRenderer, RichEditorMediaBlockRenderer } from './renderers';
 import { RichEditorControls } from '~/components/RichEditor/RichEditorControls';
 
 const customStyleMap: Record<string, React.CSSProperties> = {
@@ -59,7 +59,7 @@ export const RichEditor = forwardRef<Editor, RichEditorProps>(
 
       if (type === 'atomic') {
         return {
-          component: MediaBlockRenderer,
+          component: RichEditorMediaBlockRenderer,
           editable: false,
           props: {
             setEditorReadOnly: setReadOnly,
@@ -72,7 +72,7 @@ export const RichEditor = forwardRef<Editor, RichEditorProps>(
 
       if (type === 'code') {
         return {
-          component: CodeBlockRenderer,
+          component: RichEditorCodeBlockRenderer,
           editable: true,
           props: {
             setEditorReadOnly: setReadOnly,

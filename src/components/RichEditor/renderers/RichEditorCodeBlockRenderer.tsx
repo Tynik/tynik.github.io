@@ -33,7 +33,7 @@ const SOURCE_CODE_LANGUAGES: SourceCodeLanguageOption[] = [
   },
 ];
 
-export const CodeBlockRenderer = (props: ActiveBlockRendererComponent) => {
+export const RichEditorCodeBlockRenderer = (props: ActiveBlockRendererComponent) => {
   const {
     contentState,
     block,

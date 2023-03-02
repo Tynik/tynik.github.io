@@ -20,19 +20,19 @@ import type { ActiveEntityComponent } from '../RichEditor.types';
 
 type ImageAlign = 'left' | 'center' | 'right';
 
-export type ImageSettingsForm = {
+export type RichEditorImageSettingsForm = {
   width: string;
   height: string;
   align: ImageAlign;
 };
 
-export type ImageAttributes = Partial<ImageSettingsForm> & {
+export type RichEditorImageAttributes = Partial<RichEditorImageSettingsForm> & {
   src: string;
 };
 
-type ImageProps = ActiveEntityComponent<ImageAttributes>;
+type ImageProps = ActiveEntityComponent<RichEditorImageAttributes>;
 
-export const Image = ({
+export const RichEditorImage = ({
   src,
   setEditorReadOnly,
   onUpdate,
@@ -42,13 +42,13 @@ export const Image = ({
 }: ImageProps) => {
   const [settingsAnchorEl, setSettingsAnchorEl] = useState<HTMLElement | null>(null);
 
-  const [imageAttributes, setImageAttributes] = useState<ImageSettingsForm>({
+  const [imageAttributes, setImageAttributes] = useState<RichEditorImageSettingsForm>({
     width,
     height,
     align,
   });
 
-  const { formFields, submit } = useHoneyForm<ImageSettingsForm>({
+  const { formFields, submit } = useHoneyForm<RichEditorImageSettingsForm>({
     fields: {
       width: {
         value: imageAttributes.width,
@@ -140,6 +140,7 @@ export const Image = ({
             {...formFields.width.props}
             autoFocus
           />
+
           <TextField
             margin="dense"
             variant="standard"

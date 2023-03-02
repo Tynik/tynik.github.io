@@ -1,1 +1,2 @@
-export * from './Image';
+export * from './RichEditorImage';
+export * from './RichEditorLink';

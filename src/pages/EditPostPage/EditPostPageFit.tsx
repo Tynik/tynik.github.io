@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import type { RichPost } from '~/types';
 
 import { uploadPostFileRequest } from '~/api';
-import { RichEditor } from '~/components';
+import { getRichEditorDecorators, RichEditor } from '~/components';
 import { updatePost } from '~/helpers';
 import { useUser } from '~/providers';
 
@@ -30,7 +30,7 @@ export const EditPostPageFit = ({ richPost }: EditPostPageFitProps) => {
   const [editorState, setEditorState] = useState(() => {
     const content = convertFromRaw(JSON.parse(richPost.richContent) as never);
 
-    return EditorState.createWithContent(content);
+    return EditorState.createWithContent(content, getRichEditorDecorators());
   });
 
   const [isPreviewMode, setIsPreviewMode] = useState(false);
@@ -55,11 +55,11 @@ export const EditPostPageFit = ({ richPost }: EditPostPageFitProps) => {
   const handlePastedFiles = (files: Blob[]): DraftHandleValue => {
     uploadPostFileRequest({ files, ethAccount: '' })
       .then(fileURL => {
-        const contentStateWithEntity = editorState
-          .getCurrentContent()
-          .createEntity('IMAGE', 'IMMUTABLE', {
-            src: fileURL,
-          });
+        const contentState = editorState.getCurrentContent();
+
+        const contentStateWithEntity = contentState.createEntity('IMAGE', 'IMMUTABLE', {
+          src: fileURL,
+        });
 
         const newEditorState = EditorState.set(editorState, {
           currentContent: contentStateWithEntity,

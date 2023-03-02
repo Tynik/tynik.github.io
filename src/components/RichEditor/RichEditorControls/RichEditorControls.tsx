@@ -7,12 +7,12 @@ import {
   FormatBold as FormatBoldIcon,
   FormatItalic as FormatItalicIcon,
   FormatListNumbered as FormatListNumberedIcon,
-  Link as LinkIcon,
   FormatClear as FormatClearIcon,
 } from '@mui/icons-material';
 import { EditorState, Modifier, RichUtils } from 'draft-js';
 
 import { useContent } from '~/components';
+import { RichEditorLinkControl } from './RichEditorLinkControl';
 
 const Controls = styled(Stack)(({ theme }) => ({
   backgroundColor: theme.palette.background.default,
@@ -28,8 +28,10 @@ type RichEditorControlsProps = {
 };
 
 export const RichEditorControls = ({ editorState, onChange }: RichEditorControlsProps) => {
-  const currentBlockType = RichUtils.getCurrentBlockType(editorState);
   const currentInlineStyle = editorState.getCurrentInlineStyle();
+  const contentState = editorState.getCurrentContent();
+
+  const currentBlockType = RichUtils.getCurrentBlockType(editorState);
 
   const contentElRef = useContent();
   const controlsElRef = useRef<HTMLElement | null>(null);
@@ -100,8 +102,6 @@ export const RichEditorControls = ({ editorState, onChange }: RichEditorControls
   };
 
   const removeInlineStyles = (editorState: EditorState) => {
-    const contentState = editorState.getCurrentContent();
-
     const contentWithoutStyles = ['FONT_SIZE_H1', 'FONT_SIZE_H2', 'BOLD', 'ITALIC', 'CODE'].reduce(
       (newContentState, style) =>
         Modifier.removeInlineStyle(newContentState, editorState.getSelection(), style),
@@ -113,10 +113,6 @@ export const RichEditorControls = ({ editorState, onChange }: RichEditorControls
 
   const clearFormatting = () => {
     onChange(removeInlineStyles(editorState));
-  };
-
-  const toggleLink = () => {
-    //
   };
 
   const toggleOrderedList = () => {
@@ -173,13 +169,7 @@ export const RichEditorControls = ({ editorState, onChange }: RichEditorControls
         <FormatListNumberedIcon fontSize="small" />
       </Button>
 
-      <Button
-        variant={currentInlineStyle.has('LINK') ? 'contained' : 'outlined'}
-        size="small"
-        onClick={toggleLink}
-      >
-        <LinkIcon fontSize="small" />
-      </Button>
+      <RichEditorLinkControl editorState={editorState} onChange={onChange} />
 
       <Button
         variant={currentBlockType === 'code' ? 'contained' : 'outlined'}
