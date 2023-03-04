@@ -30,6 +30,14 @@ const ContentStyled = styled('div')(
       flex-direction: column;
       gap: ${theme.spacing(1)};
     }
+
+    a {
+      color: ${theme.palette.primary.main};
+
+      &:hover {
+        color: ${theme.palette.primary.dark};
+      }
+    }
   `
 );
 

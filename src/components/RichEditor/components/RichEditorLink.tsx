@@ -22,7 +22,7 @@ export const RichEditorLink = ({ contentState, entityKey, decoratedText }: RichE
   };
 
   return (
-    <Link href={data.href} target={data.target}>
+    <Link href={data.href} target={data.target} rel="noopener">
       {decoratedText}
     </Link>
   );
