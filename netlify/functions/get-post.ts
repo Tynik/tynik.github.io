@@ -11,6 +11,13 @@ export const handler = createHandler({ allowMethods: ['GET', 'OPTIONS'] }, async
 
   const post = (await myProfileContract.methods.getPost(postCID).call()) as ContractPost;
 
+  if (!post.cid) {
+    return {
+      status: 'error',
+      statusCode: 404,
+    };
+  }
+
   return {
     status: 'ok',
     data: {

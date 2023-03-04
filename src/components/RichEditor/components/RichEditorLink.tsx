@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from '@mui/material';
 
 import type { PropsWithChildren } from 'react';
 import type { ContentState } from 'draft-js';
@@ -21,8 +22,8 @@ export const RichEditorLink = ({ contentState, entityKey, decoratedText }: RichE
   };
 
   return (
-    <a href={data.href} target={data.target}>
+    <Link href={data.href} target={data.target}>
       {decoratedText}
-    </a>
+    </Link>
   );
 };

@@ -166,9 +166,10 @@ export const createHandler = <Payload = unknown>(
       const payload =
         event.body && !event.isBase64Encoded ? (JSON.parse(event.body) as Payload) : null;
 
-      const result = await func({ event, context, payload });
+      const { statusCode, ...result } = (await func({ event, context, payload })) || {};
 
       return createResponse(result, {
+        statusCode,
         allowMethods: options?.allowMethods,
       });
     } catch (e) {

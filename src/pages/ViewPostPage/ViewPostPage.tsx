@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Box, Button, Chip, Grid, Stack } from '@mui/material';
+import { Alert, AlertTitle, Box, Button, Chip, Grid, Stack } from '@mui/material';
 import { Edit as EditIcon, Send as SendIcon } from '@mui/icons-material';
 
 import { toast } from 'react-toastify';
@@ -17,8 +17,16 @@ export const ViewPostPage = () => {
   const navigate = useNavigate();
   const user = useUser();
 
-  const { post } = useCurrentPost();
+  const { post, isPostLoadingError } = useCurrentPost();
   const { isAuthenticated } = useUser();
+
+  if (isPostLoadingError) {
+    return (
+      <Alert severity="error">
+        <AlertTitle>Error</AlertTitle>Loading post error
+      </Alert>
+    );
+  }
 
   if (!post) {
     return <PostSkeleton />;
