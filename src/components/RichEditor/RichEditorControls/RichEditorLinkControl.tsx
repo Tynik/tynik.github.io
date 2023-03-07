@@ -8,9 +8,7 @@ import {
   TextField,
 } from '@mui/material';
 import { Link as LinkIcon } from '@mui/icons-material';
-import { CompositeDecorator, Modifier, EditorState } from 'draft-js';
-
-import { getRichEditorSelectedText, createRichEditorLinkDecorator } from '~/components';
+import { EditorState, RichUtils } from 'draft-js';
 
 type RichEditorLinkControlProps = {
   editorState: EditorState;
@@ -30,22 +28,21 @@ export const RichEditorLinkControl = ({ editorState, onChange }: RichEditorLinkC
       target: '_blank',
     });
 
-    const selectedText = getRichEditorSelectedText(contentState, selectionState);
-
-    const contentStateWithLink = Modifier.replaceText(
-      contentStateWithEntity,
-      selectionState,
-      selectedText,
-      editorState.getCurrentInlineStyle(),
-      contentStateWithEntity.getLastCreatedEntityKey()
-    );
+    const nextEditorState = EditorState.set(editorState, {
+      currentContent: contentStateWithEntity,
+    });
 
     onChange(
-      EditorState.createWithContent(
-        contentStateWithLink,
-        new CompositeDecorator([createRichEditorLinkDecorator()])
+      RichUtils.toggleLink(
+        nextEditorState,
+        selectionState,
+        contentStateWithEntity.getLastCreatedEntityKey()
       )
     );
+  };
+
+  const removeLink = () => {
+    //
   };
 
   const onCreateLink = () => {
@@ -60,6 +57,7 @@ export const RichEditorLinkControl = ({ editorState, onChange }: RichEditorLinkC
         variant={0 ? 'contained' : 'outlined'}
         size="small"
         onClick={() => setIsCreateLink(true)}
+        disabled={selectionState.isCollapsed()}
       >
         <LinkIcon fontSize="small" />
       </Button>

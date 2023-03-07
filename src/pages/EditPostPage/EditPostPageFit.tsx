@@ -1,7 +1,13 @@
 import React, { useRef, useState } from 'react';
 import { TextField, Grid } from '@mui/material';
 import type { DraftHandleValue } from 'draft-js';
-import { Editor, EditorState, convertFromRaw, AtomicBlockUtils } from 'draft-js';
+import {
+  Editor,
+  EditorState,
+  convertFromRaw,
+  AtomicBlockUtils,
+  CompositeDecorator,
+} from 'draft-js';
 
 import { toast } from 'react-toastify';
 
@@ -9,7 +15,7 @@ import { useNavigate } from 'react-router-dom';
 import type { RichPost } from '~/types';
 
 import { uploadPostFileRequest } from '~/api';
-import { getRichEditorDecorators, RichEditor } from '~/components';
+import { createRichEditorLinkDecorator, RichEditor } from '~/components';
 import { updatePost } from '~/helpers';
 import { useUser } from '~/providers';
 
@@ -30,7 +36,10 @@ export const EditPostPageFit = ({ richPost }: EditPostPageFitProps) => {
   const [editorState, setEditorState] = useState(() => {
     const content = convertFromRaw(JSON.parse(richPost.richContent) as never);
 
-    return EditorState.createWithContent(content, getRichEditorDecorators());
+    return EditorState.createWithContent(
+      content,
+      new CompositeDecorator([createRichEditorLinkDecorator()])
+    );
   });
 
   const [isPreviewMode, setIsPreviewMode] = useState(false);

@@ -1,12 +1,5 @@
 import type { SelectionState, ContentState, EntityInstance } from 'draft-js';
 
-import { CompositeDecorator } from 'draft-js';
-
-import { createRichEditorLinkDecorator } from './decorators';
-
-export const getRichEditorDecorators = () =>
-  new CompositeDecorator([createRichEditorLinkDecorator()]);
-
 export const getRichEditorCurrentBlock = (
   contentState: ContentState,
   selectionState: SelectionState

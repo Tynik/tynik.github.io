@@ -34,7 +34,7 @@ export const RichEditorControls = ({ editorState, onChange }: RichEditorControls
   const currentBlockType = RichUtils.getCurrentBlockType(editorState);
 
   const contentElRef = useContent();
-  const controlsElRef = useRef<HTMLElement | null>(null);
+  const controlsElRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const contentEl = contentElRef?.current;

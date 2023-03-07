@@ -23,7 +23,8 @@ export const ViewPostPage = () => {
   if (isPostLoadingError) {
     return (
       <Alert severity="error">
-        <AlertTitle>Error</AlertTitle>Loading post error
+        <AlertTitle>Error</AlertTitle>
+        Loading post error
       </Alert>
     );
   }
