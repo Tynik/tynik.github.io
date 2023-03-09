@@ -37,7 +37,13 @@ export const ViewPostPageMicrodata = ({ post }: ViewPostPageMicrodataProps) => {
   }, [post.content]);
 
   return (
-    <ArticleMicrodata type="Tech" name={post.title} body={textContent} proficiencyLevel="Expert">
+    <ArticleMicrodata
+      type="Tech"
+      name={post.title}
+      body={textContent}
+      datePublished={new Date(post.created).toDateString()}
+      proficiencyLevel="Expert"
+    >
       <PersonMicrodata
         name={MY_FULL_NAME}
         email={MY_EMAIL}
