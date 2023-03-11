@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { TextField, Grid, Chip, Autocomplete } from '@mui/material';
+import { TextField, Grid } from '@mui/material';
 import {
   Editor,
   EditorState,
@@ -20,6 +20,7 @@ import { useUser } from '~/providers';
 
 import { PreviewPostPage } from '../PreviewPostPage';
 import { EditPostPageControls } from './EditPostPageControls';
+import { PostKeywordsField } from '../components';
 
 type EditPostPageFitProps = {
   richPost: RichPost;
@@ -113,26 +114,6 @@ export const EditPostPageFit = ({ richPost }: EditPostPageFitProps) => {
     }
   };
 
-  const addKeywordHandler: React.KeyboardEventHandler<HTMLDivElement> = event => {
-    if (event.key === 'Enter') {
-      const newKeyword = ((event.target as any).value as string).trim();
-
-      if (newKeyword.length > 0 && !keywords.includes(newKeyword)) {
-        setKeywords([...keywords, newKeyword]);
-
-        (event.target as any).value = '';
-      }
-    }
-  };
-
-  const removeKeywordHandler = (keywordIndex: number) => {
-    const newKeywords = [...keywords];
-
-    newKeywords.splice(keywordIndex, 1);
-
-    setKeywords(newKeywords);
-  };
-
   const isCanBeSaved = Boolean(
     user.ethAccount && title && subtitle && editorState.getCurrentContent().getPlainText()
   );
@@ -160,34 +141,7 @@ export const EditPostPageFit = ({ richPost }: EditPostPageFitProps) => {
       </Grid>
 
       <Grid xs={12} item>
-        <Autocomplete
-          value={keywords}
-          options={keywords}
-          onChange={(event, keywords) => {
-            setKeywords(keywords);
-          }}
-          renderTags={(keywords, getTagProps) =>
-            keywords.map((keyword, index) => (
-              <Chip
-                label={keyword}
-                {...getTagProps({ index })}
-                onDelete={() => removeKeywordHandler(index)}
-                sx={{ m: 0.5 }}
-              />
-            ))
-          }
-          renderInput={params => (
-            <TextField
-              {...params}
-              label="Keywords"
-              placeholder="Enter keywords"
-              onKeyDown={addKeywordHandler}
-            />
-          )}
-          multiple
-          freeSolo
-          fullWidth
-        />
+        <PostKeywordsField keywords={keywords} onChange={setKeywords} />
       </Grid>
 
       <Grid xs={12} item>

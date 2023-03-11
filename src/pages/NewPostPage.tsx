@@ -1,14 +1,16 @@
 import React, { useRef, useState } from 'react';
+import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
-import { Editor, EditorState } from 'draft-js';
 import { Button, Stack, TextField, Grid } from '@mui/material';
 import { Visibility as VisibilityIcon, Save as SaveIcon } from '@mui/icons-material';
-import { toast } from 'react-toastify';
+import { Editor, EditorState } from 'draft-js';
 
 import { RichEditor } from '~/components';
 import { useUser } from '~/providers';
 import { createDraftPost } from '~/helpers';
+
 import { PreviewPostPage } from './PreviewPostPage';
+import { PostKeywordsField } from './components';
 
 export const NewPostPage = () => {
   const navigate = useNavigate();
@@ -17,6 +19,7 @@ export const NewPostPage = () => {
   const [title, setTitle] = useState<string | null>(null);
   const [subtitle, setSubtitle] = useState<string | null>(null);
   const [slug, setSlug] = useState<string | null>(null);
+  const [keywords, setKeywords] = useState<string[]>([]);
 
   const [editorState, setEditorState] = useState(() => EditorState.createEmpty());
 
@@ -39,8 +42,8 @@ export const NewPostPage = () => {
       await createDraftPost(editorEl, editorState, {
         title,
         subtitle,
-        keywords: [],
         slug,
+        keywords,
         ethAccount: user.ethAccount,
       });
 
@@ -97,6 +100,10 @@ export const NewPostPage = () => {
           error={slug === ''}
           fullWidth
         />
+      </Grid>
+
+      <Grid xs={12} item>
+        <PostKeywordsField keywords={keywords} onChange={setKeywords} />
       </Grid>
 
       <Grid xs={12} item>
