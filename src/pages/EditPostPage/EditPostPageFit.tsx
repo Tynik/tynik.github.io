@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { TextField, Grid, Chip } from '@mui/material';
+import { TextField, Grid, Chip, Autocomplete } from '@mui/material';
 import {
   Editor,
   EditorState,
@@ -160,20 +160,32 @@ export const EditPostPageFit = ({ richPost }: EditPostPageFitProps) => {
       </Grid>
 
       <Grid xs={12} item>
-        <TextField
-          label="Keywords"
-          placeholder="Enter keywords"
-          onKeyDown={addKeywordHandler}
-          InputProps={{
-            startAdornment: keywords.map((keyword, index) => (
+        <Autocomplete
+          value={keywords}
+          options={keywords}
+          onChange={(event, keywords) => {
+            setKeywords(keywords);
+          }}
+          renderTags={(keywords, getTagProps) =>
+            keywords.map((keyword, index) => (
               <Chip
-                key={index}
                 label={keyword}
+                {...getTagProps({ index })}
                 onDelete={() => removeKeywordHandler(index)}
                 sx={{ m: 0.5 }}
               />
-            )),
-          }}
+            ))
+          }
+          renderInput={params => (
+            <TextField
+              {...params}
+              label="Keywords"
+              placeholder="Enter keywords"
+              onKeyDown={addKeywordHandler}
+            />
+          )}
+          multiple
+          freeSolo
           fullWidth
         />
       </Grid>
