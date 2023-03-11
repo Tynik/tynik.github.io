@@ -31,7 +31,7 @@ export const EditPostPageFit = ({ richPost }: EditPostPageFitProps) => {
 
   const [title, setTitle] = useState(richPost.title);
   const [subtitle, setSubtitle] = useState(richPost.subtitle);
-  const [keywords, setKeywords] = useState(richPost.keywords);
+  const [keywords, setKeywords] = useState(richPost.keywords ?? []);
 
   const [editorState, setEditorState] = useState(() => {
     const content = convertFromRaw(JSON.parse(richPost.richContent) as never);
