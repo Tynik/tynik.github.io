@@ -10,10 +10,14 @@ import {
   Skeleton,
   CardActionArea,
   Grid,
+  Chip,
+  Stack,
 } from '@mui/material';
 import { MoreVert as MoreVertIcon } from '@mui/icons-material';
 
 import type { PostInfo } from '~/api';
+
+import { getTextOverflowStyles } from '~/helpers';
 import { getPostInfoContentRequest } from '~/api';
 import { useUser } from '~/providers';
 import { PostCardActionMenu } from './PostCardActionMenu';
@@ -34,8 +38,8 @@ export const PostCard = ({ postInfo }: PostCardProps) => {
   if (!postInfoContent) {
     return (
       <Grid xs={12} md={6} item>
-        <Skeleton width="100%" height={45} variant="rounded" />
-        <Skeleton width="100%" height={90} variant="rounded" sx={{ mt: 1 }} />
+        <Skeleton width="100%" height={50} variant="rounded" />
+        <Skeleton width="100%" height={145} variant="rounded" sx={{ mt: 1 }} />
       </Grid>
     );
   }
@@ -52,6 +56,8 @@ export const PostCard = ({ postInfo }: PostCardProps) => {
         sx={{
           display: 'flex',
           flexDirection: 'column',
+          maxHeight: '200px',
+          height: '100%',
         }}
       >
         <CardActionArea component={Link} to={`/post/${postInfo.slug}`} sx={{ height: '100%' }}>
@@ -72,12 +78,7 @@ export const PostCard = ({ postInfo }: PostCardProps) => {
               )
             }
             titleTypographyProps={{
-              sx: {
-                display: '-webkit-box',
-                overflow: 'hidden',
-                WebkitLineClamp: '2',
-                WebkitBoxOrient: 'vertical',
-              },
+              sx: getTextOverflowStyles(),
             }}
             sx={{
               '& .MuiCardHeader-content': { overflow: 'hidden' },
@@ -85,17 +86,15 @@ export const PostCard = ({ postInfo }: PostCardProps) => {
           />
 
           <CardContent sx={{ flexGrow: 1 }}>
-            <Typography
-              variant="body1"
-              sx={{
-                display: '-webkit-box',
-                overflow: 'hidden',
-                WebkitLineClamp: '2',
-                WebkitBoxOrient: 'vertical',
-              }}
-            >
+            <Typography variant="body1" sx={getTextOverflowStyles()}>
               {postInfoContent.subtitle}
             </Typography>
+
+            <Stack mt={1} display="flex" direction="row" gap={1} overflow="hidden">
+              {postInfoContent.keywords.map(keyword => (
+                <Chip key={keyword} label={keyword} size="small" />
+              ))}
+            </Stack>
           </CardContent>
         </CardActionArea>
       </Card>

@@ -9,7 +9,9 @@ import javascript from 'highlight.js/lib/languages/javascript';
 import bash from 'highlight.js/lib/languages/bash';
 
 import type { Post } from '~/types';
+
 import { RichEditorCodeStyles } from '~/components/RichEditor/RichEditor.styled';
+import { getTextOverflowStyles } from '~/helpers';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires,@typescript-eslint/no-unsafe-assignment
 const hljsDefineSolidity = require('highlightjs-solidity');
@@ -61,28 +63,14 @@ export const ViewPostPageFit = ({ post }: ViewPostPageFitProps) => {
           variant="h3"
           fontWeight="bold"
           fontFamily="inherit"
-          sx={{
-            display: '-webkit-box',
-            overflow: 'hidden',
-            WebkitLineClamp: '2',
-            WebkitBoxOrient: 'vertical',
-          }}
+          sx={getTextOverflowStyles()}
         >
           {post.title}
         </Typography>
       </Grid>
 
       <Grid xs={12} item>
-        <Typography
-          variant="h5"
-          fontFamily="inherit"
-          sx={{
-            display: '-webkit-box',
-            overflow: 'hidden',
-            WebkitLineClamp: '2',
-            WebkitBoxOrient: 'vertical',
-          }}
-        >
+        <Typography variant="h5" fontFamily="inherit" sx={getTextOverflowStyles()}>
           {post.subtitle}
         </Typography>
       </Grid>

@@ -107,7 +107,7 @@ export const EditPostPageFit = ({ richPost }: EditPostPageFitProps) => {
 
       toast('Successfully updated', { type: 'success' });
 
-      navigate(richPost.status === 'PUBLISHED' ? '/' : '/drafts');
+      navigate(`/post/${richPost.slug}`);
     } catch (e) {
       toast('Something went wrong', { type: 'error' });
     }
