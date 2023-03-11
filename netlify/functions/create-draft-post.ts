@@ -9,6 +9,7 @@ import {
 type CreateDraftPostPayload = {
   title: string;
   subtitle: string;
+  keywords: string[];
   slug: string;
   content: string;
   richContent: string;
@@ -30,6 +31,7 @@ export const handler = createHandler<CreateDraftPostPayload>(
     const { slug, ethAccount, ...post } = payload;
 
     const postCreatedTime = new Date().getTime();
+
     const postCID = await putWeb3PostFiles({ ...post, created: postCreatedTime });
 
     const web3Client = getWeb3Client();

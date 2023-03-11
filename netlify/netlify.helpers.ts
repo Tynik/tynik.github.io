@@ -58,6 +58,7 @@ export const createWeb3PostFiles = (post: Post) => {
   const postInfoWeb3File = createWeb3JSONFile('post.json', {
     title: post.title,
     subtitle: post.subtitle,
+    keywords: post.keywords,
     created: post.created,
   });
 
@@ -74,13 +75,9 @@ export const createWeb3PostFiles = (post: Post) => {
 };
 
 export const putWeb3PostFiles = (post: Post) => {
-  const web3PostFiles = createWeb3PostFiles(post);
-
-  const web3StorageClient = getWeb3StorageClient();
-
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-expect-error
-  return web3StorageClient.put(web3PostFiles, {
+  return getWeb3StorageClient().put(createWeb3PostFiles(post), {
     name: 'maliinyk-posts',
   });
 };

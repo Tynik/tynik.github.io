@@ -34,8 +34,8 @@ export const PostCard = ({ postInfo }: PostCardProps) => {
   if (!postInfoContent) {
     return (
       <Grid xs={12} md={6} item>
-        <Skeleton width="100%" height={50} variant="rounded" />
-        <Skeleton width="100%" height={142} variant="rounded" sx={{ mt: 1 }} />
+        <Skeleton width="100%" height={45} variant="rounded" />
+        <Skeleton width="100%" height={90} variant="rounded" sx={{ mt: 1 }} />
       </Grid>
     );
   }

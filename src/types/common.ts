@@ -18,6 +18,7 @@ export interface PostInfoContent {
   cid: PostCID;
   title: string;
   subtitle: string;
+  keywords: string[];
   created: number;
 }
 

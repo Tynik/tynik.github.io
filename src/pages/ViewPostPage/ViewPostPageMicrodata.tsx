@@ -41,6 +41,7 @@ export const ViewPostPageMicrodata = ({ post }: ViewPostPageMicrodataProps) => {
       type="Tech"
       name={post.title}
       body={textContent}
+      keywords={post.keywords}
       datePublished={new Date(post.created).toDateString()}
       proficiencyLevel="Expert"
     >

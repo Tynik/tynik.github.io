@@ -12,6 +12,7 @@ type UpdatePostPayload = {
   cid: string;
   title: string;
   subtitle: string;
+  keywords: string[];
   content: string;
   richContent: string;
   ethAccount: string;
@@ -34,9 +35,11 @@ export const handler = createHandler<UpdatePostPayload>(
 
     const myProfileContract = getMyProfileContract(web3Client);
 
-    const post = (await myProfileContract.methods.getPost(payload.cid).call()) as ContractPost;
+    const { cid, ethAccount, ...postPayload } = payload;
 
-    const postCID = await putWeb3PostFiles({ ...payload, created: +post.created });
+    const post = (await myProfileContract.methods.getPost(cid).call()) as ContractPost;
+
+    const postCID = await putWeb3PostFiles({ ...postPayload, created: +post.created });
 
     return {
       status: 'ok',

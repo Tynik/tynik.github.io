@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react';
-import { TextField, Grid } from '@mui/material';
-import type { DraftHandleValue } from 'draft-js';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { TextField, Grid, Chip } from '@mui/material';
 import {
   Editor,
   EditorState,
@@ -9,9 +10,7 @@ import {
   CompositeDecorator,
 } from 'draft-js';
 
-import { toast } from 'react-toastify';
-
-import { useNavigate } from 'react-router-dom';
+import type { DraftHandleValue } from 'draft-js';
 import type { RichPost } from '~/types';
 
 import { uploadPostFileRequest } from '~/api';
@@ -32,6 +31,7 @@ export const EditPostPageFit = ({ richPost }: EditPostPageFitProps) => {
 
   const [title, setTitle] = useState(richPost.title);
   const [subtitle, setSubtitle] = useState(richPost.subtitle);
+  const [keywords, setKeywords] = useState(richPost.keywords);
 
   const [editorState, setEditorState] = useState(() => {
     const content = convertFromRaw(JSON.parse(richPost.richContent) as never);
@@ -100,6 +100,7 @@ export const EditPostPageFit = ({ richPost }: EditPostPageFitProps) => {
       await updatePost(editor, editorState, {
         title,
         subtitle,
+        keywords,
         cid: richPost.cid,
         ethAccount: user.ethAccount,
       });
@@ -110,6 +111,26 @@ export const EditPostPageFit = ({ richPost }: EditPostPageFitProps) => {
     } catch (e) {
       toast('Something went wrong', { type: 'error' });
     }
+  };
+
+  const addKeywordHandler: React.KeyboardEventHandler<HTMLDivElement> = event => {
+    if (event.key === 'Enter') {
+      const newKeyword = ((event.target as any).value as string).trim();
+
+      if (newKeyword.length > 0 && !keywords.includes(newKeyword)) {
+        setKeywords([...keywords, newKeyword]);
+
+        (event.target as any).value = '';
+      }
+    }
+  };
+
+  const removeKeywordHandler = (keywordIndex: number) => {
+    const newKeywords = [...keywords];
+
+    newKeywords.splice(keywordIndex, 1);
+
+    setKeywords(newKeywords);
   };
 
   const isCanBeSaved = Boolean(
@@ -134,6 +155,25 @@ export const EditPostPageFit = ({ richPost }: EditPostPageFitProps) => {
           value={subtitle || ''}
           onChange={e => setSubtitle(e.target.value)}
           error={subtitle === ''}
+          fullWidth
+        />
+      </Grid>
+
+      <Grid xs={12} item>
+        <TextField
+          label="Keywords"
+          placeholder="Enter keywords"
+          onKeyDown={addKeywordHandler}
+          InputProps={{
+            startAdornment: keywords.map((keyword, index) => (
+              <Chip
+                key={index}
+                label={keyword}
+                onDelete={() => removeKeywordHandler(index)}
+                sx={{ m: 0.5 }}
+              />
+            )),
+          }}
           fullWidth
         />
       </Grid>

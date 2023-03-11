@@ -1,4 +1,6 @@
-import React, { PropsWithChildren } from 'react';
+import React from 'react';
+
+import type { PropsWithChildren } from 'react';
 
 type ArticleMicrodataProps = {
   type: 'Tech';
@@ -33,11 +35,17 @@ export const ArticleMicrodata = ({
       <meta itemProp="wordCount" content={countWords.toString()} />
 
       {headline && <meta itemProp="headline" content={headline} />}
-      {keywords && <meta itemProp="keywords" content={keywords.join(', ')} />}
       {datePublished && <meta itemProp="datePublished" content={datePublished} />}
       {articleSection && <meta itemProp="articleSection" content={articleSection} />}
-      {dependencies && <meta itemProp="dependencies" content={dependencies.join(', ')} />}
       {proficiencyLevel && <meta itemProp="proficiencyLevel" content={proficiencyLevel} />}
+
+      {keywords && keywords.length > 0 && (
+        <meta itemProp="keywords" content={keywords.join(', ')} />
+      )}
+
+      {dependencies && dependencies.length > 0 && (
+        <meta itemProp="dependencies" content={dependencies.join(', ')} />
+      )}
 
       {children}
     </div>

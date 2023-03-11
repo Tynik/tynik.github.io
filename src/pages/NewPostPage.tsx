@@ -39,6 +39,7 @@ export const NewPostPage = () => {
       await createDraftPost(editorEl, editorState, {
         title,
         subtitle,
+        keywords: [],
         slug,
         ethAccount: user.ethAccount,
       });

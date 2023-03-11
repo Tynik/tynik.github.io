@@ -20,6 +20,7 @@ export const authRequest = async (ethAccount: string) => {
 type CreateDraftPostPayload = {
   title: string;
   subtitle: string;
+  keywords: string[];
   slug: string;
   content: string;
   richContent: string;
@@ -51,6 +52,7 @@ type UpdatePostPayload = {
   cid: PostCID;
   title: string;
   subtitle: string;
+  keywords: string[];
   content: string;
   richContent: string;
   ethAccount: string;
@@ -85,11 +87,12 @@ export const getPostBySlugRequest = async (slug: string) => {
 };
 
 export const getPostInfoContentRequest = async (postCID: PostCID): Promise<PostInfoContent> => {
-  const postInfo = (await (await fetch(`https://${postCID}.ipfs.w3s.link/post.json`)).json()) as {
-    title: string;
-    subtitle: string;
-    created: number;
-  };
+  const response = await fetch(`https://${postCID}.ipfs.w3s.link/post.json`);
+  if (!response.ok) {
+    return Promise.reject();
+  }
+
+  const postInfo = (await response.json()) as Omit<PostInfoContent, 'cid'>;
 
   return {
     cid: postCID,
@@ -97,12 +100,18 @@ export const getPostInfoContentRequest = async (postCID: PostCID): Promise<PostI
   };
 };
 
-export const getPostContentRequest = async (postCID: PostCID) =>
-  (
-    (await (await fetch(`https://${postCID}.ipfs.w3s.link/post-content.json`)).json()) as {
+export const getPostContentRequest = async (postCID: PostCID) => {
+  const response = await fetch(`https://${postCID}.ipfs.w3s.link/post-content.json`);
+  if (!response.ok) {
+    return Promise.reject();
+  }
+
+  return (
+    (await response.json()) as {
       content: string;
     }
   ).content;
+};
 
 export const getPostRequest = async (slug: string): Promise<Post> => {
   const post = await getPostBySlugRequest(slug);
@@ -120,12 +129,18 @@ export const getPostRequest = async (slug: string): Promise<Post> => {
   };
 };
 
-export const getRichPostContentRequest = async (postCID: PostCID) =>
-  (
-    (await (await fetch(`https://${postCID}.ipfs.w3s.link/post-rich-content.json`)).json()) as {
+export const getRichPostContentRequest = async (postCID: PostCID) => {
+  const response = await fetch(`https://${postCID}.ipfs.w3s.link/post-rich-content.json`);
+  if (!response.ok) {
+    return Promise.reject();
+  }
+
+  return (
+    (await response.json()) as {
       content: string;
     }
   ).content;
+};
 
 export const getRichPostRequest = async (slug: string): Promise<RichPost> => {
   const post = await getPostBySlugRequest(slug);

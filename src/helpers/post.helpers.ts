@@ -1,7 +1,8 @@
-import type { EditorState } from 'draft-js';
 import { convertToRaw, Editor } from 'draft-js';
 
+import type { EditorState } from 'draft-js';
 import type { PostCID } from '~/types';
+
 import { createDraftPostRequest, updatePostRequest } from '~/api';
 
 const getRichContent = (editorState: EditorState) =>
@@ -10,6 +11,7 @@ const getRichContent = (editorState: EditorState) =>
 type CreateDraftPostOptions = {
   title: string;
   subtitle: string;
+  keywords: string[];
   slug: string;
   ethAccount: string;
 };
@@ -30,6 +32,7 @@ type UpdatePostOptions = {
   cid: PostCID;
   title: string;
   subtitle: string;
+  keywords: string[];
   ethAccount: string;
 };
 
