@@ -15,12 +15,14 @@ export const requestEthAccounts = async () => {
   }
 };
 
+export const getWeb3Client = () => new Web3(window.ethereum as never);
+
 export const sentEthTransaction = async (from: string, to: string, value: string) => {
   if (!window.ethereum) {
     throw new Error('window.ethereum is undefined');
   }
 
-  const web3 = new Web3(window.ethereum as never);
+  const web3 = getWeb3Client();
 
   await window.ethereum.request({
     method: 'eth_sendTransaction',

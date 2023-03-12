@@ -6,8 +6,8 @@ import { Edit as EditIcon, Send as SendIcon } from '@mui/icons-material';
 import { toast } from 'react-toastify';
 import { POST_STATUS_COLOR } from '~/constants/post.constants';
 import { useCurrentPost } from '~/hooks';
+import { publishPost } from '~/helpers';
 import { useUser } from '~/providers';
-import { publishPostRequest } from '~/api';
 
 import { PostSkeleton } from '../components';
 import { ViewPostPageFit } from './ViewPostPageFit';
@@ -44,8 +44,8 @@ export const ViewPostPage = () => {
     }
 
     try {
-      await publishPostRequest({
-        cid: post.cid,
+      await publishPost({
+        postCID: post.cid,
         ethAccount: user.ethAccount,
       });
 

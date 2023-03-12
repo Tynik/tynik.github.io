@@ -1,19 +1,12 @@
-import {
-  getMyProfileContract,
-  getWeb3Client,
-  web3WalletAddPrivateKey,
-  createHandler,
-  putWeb3PostFiles,
-} from '../netlify.helpers';
+import { createHandler, putWeb3PostFiles } from '../netlify.helpers';
 
 type CreateDraftPostPayload = {
   title: string;
   subtitle: string;
   keywords: string[];
-  slug: string;
   content: string;
   richContent: string;
-  ethAccount: string;
+  created: number;
 };
 
 export const handler = createHandler<CreateDraftPostPayload>(
@@ -28,32 +21,11 @@ export const handler = createHandler<CreateDraftPostPayload>(
       };
     }
 
-    const { slug, ethAccount, ...post } = payload;
-
-    const postCreatedTime = new Date().getTime();
-
-    const postCID = await putWeb3PostFiles({ ...post, created: postCreatedTime });
-
-    const web3Client = getWeb3Client();
-    web3WalletAddPrivateKey(web3Client);
-
-    const myProfileContract = getMyProfileContract(web3Client);
+    const postCID = await putWeb3PostFiles(payload);
 
     return {
       status: 'ok',
-      data: await new Promise((resolve, reject) => {
-        myProfileContract.methods
-          .createDraftPost(postCID, slug, postCreatedTime)
-          .send({ from: ethAccount, gas: 1000000 })
-          .on('transactionHash', (transactionHash: string) => {
-            resolve({
-              transactionHash,
-            });
-          })
-          .on('error', error => {
-            reject(error);
-          });
-      }),
+      data: postCID,
     };
   }
 );

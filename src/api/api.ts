@@ -29,32 +29,13 @@ type CreateDraftPostPayload = {
   title: string;
   subtitle: string;
   keywords: string[];
-  slug: string;
   content: string;
   richContent: string;
-  ethAccount: string;
+  created: number;
 };
 
 export const createDraftPostRequest = async (payload: CreateDraftPostPayload) =>
-  netlifyRequest('create-draft-post', { payload, method: 'POST' });
-
-type RestorePostPayload = {
-  cid: PostCID;
-  slug: string;
-  created: number;
-  ethAccount: string;
-};
-
-export const restorePostRequest = async (payload: RestorePostPayload) =>
-  netlifyRequest('restore-post', { payload, method: 'POST' });
-
-type PublishPostPayload = {
-  cid: PostCID;
-  ethAccount: string;
-};
-
-export const publishPostRequest = async (payload: PublishPostPayload) =>
-  netlifyRequest('publish-post', { payload, method: 'POST' });
+  (await netlifyRequest<PostCID>('create-draft-post', { payload, method: 'POST' })).data;
 
 type UpdatePostPayload = {
   cid: PostCID;
@@ -63,11 +44,10 @@ type UpdatePostPayload = {
   keywords: string[];
   content: string;
   richContent: string;
-  ethAccount: string;
 };
 
 export const updatePostRequest = async (payload: UpdatePostPayload) =>
-  netlifyRequest('update-post', { payload, method: 'POST' });
+  (await netlifyRequest<PostCID>('update-post', { payload, method: 'POST' })).data;
 
 type UploadPostFilePayload = {
   files: Blob[];

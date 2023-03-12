@@ -31,6 +31,9 @@ module.exports = {
     new webpack.DefinePlugin({
       'process.env.LOCAL_ENV': JSON.stringify(process.env.LOCAL_ENV),
       'process.env.NETLIFY_SERVER': JSON.stringify(process.env.NETLIFY_SERVER),
+      'process.env.MY_PROFILE_CONTRACT_ADDRESS': JSON.stringify(
+        process.env.MY_PROFILE_CONTRACT_ADDRESS
+      ),
     }),
     new HtmlWebpackPlugin({
       template: './src/index.ejs',

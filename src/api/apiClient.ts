@@ -6,7 +6,6 @@ export type NetlifyFunction =
   | 'get-post-by-slug'
   | 'create-draft-post'
   | 'restore-post'
-  | 'publish-post'
   | 'update-post'
   | 'get-published-posts'
   | 'get-draft-posts'
@@ -25,7 +24,7 @@ type NetlifyRequestOptions<Payload> = {
   params?: Record<string, string>;
 };
 
-export const netlifyRequest = async <Response, Payload = void>(
+export const netlifyRequest = async <Response, Payload = any>(
   funcName: NetlifyFunction,
   { payload, method = 'GET', params = {} }: NetlifyRequestOptions<Payload> = {}
 ) => {

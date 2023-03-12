@@ -10,5 +10,5 @@ export const MyProfileContractBalance = () => {
     getMyProfileContractBalance
   );
 
-  return <Typography variant="h6">{balance} ETH</Typography>;
+  return <Typography variant="h6">{balance ?? '-'} ETH</Typography>;
 };

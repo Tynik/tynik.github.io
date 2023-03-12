@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import type { PostCID } from '~/types';
 
 import { useUser } from '~/providers';
-import { restorePostRequest } from '~/api';
+import { restorePost } from '~/helpers';
 
 type RestorePostForm = {
   cid: PostCID;
@@ -46,7 +46,7 @@ export const RestorePostPage = () => {
     }
 
     try {
-      await restorePostRequest({
+      await restorePost({
         cid: data.cid,
         slug: data.slug,
         created: data.created,

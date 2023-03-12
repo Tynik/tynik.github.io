@@ -31,19 +31,6 @@ const createWeb3JSONFile = (name: string, data: any) => {
 
 export const getWeb3Client = () => new Web3(process.env.WEB3_PROVIDER || 'http://127.0.0.1:7545');
 
-export const web3WalletAddPrivateKey = (
-  web3Client: Web3,
-  privateKey = process.env.SIGNER_PRIVATE_KEY
-) => {
-  if (process.env.NODE_ENV !== 'development') {
-    if (!privateKey) {
-      throw new Error('SIGNER_PRIVATE_KEY environment variable should be set');
-    }
-
-    web3Client.eth.accounts.wallet.add(web3Client.eth.accounts.privateKeyToAccount(privateKey));
-  }
-};
-
 export const getWeb3StorageClient = () => {
   const token = process.env.WEB3_STORAGE_TOKEN;
 

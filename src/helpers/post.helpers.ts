@@ -5,6 +5,9 @@ import type { PostCID } from '~/types';
 
 import { createDraftPostRequest, updatePostRequest } from '~/api';
 
+import { getWeb3Client } from './eth.helpers';
+import { getMyProfileContract } from './contracts.helpers';
+
 const getRichContent = (editorState: EditorState) =>
   JSON.stringify(convertToRaw(editorState.getCurrentContent()));
 
@@ -16,16 +19,26 @@ type CreateDraftPostOptions = {
   ethAccount: string;
 };
 
-export const createDraftPost = (
+export const createDraftPost = async (
   editor: Editor,
   editorState: EditorState,
-  options: CreateDraftPostOptions
+  { slug, ethAccount, ...options }: CreateDraftPostOptions
 ) => {
-  return createDraftPostRequest({
+  const web3 = getWeb3Client();
+  const myProfileContract = getMyProfileContract(web3);
+
+  const created = new Date().getTime();
+
+  const postCID = await createDraftPostRequest({
     richContent: getRichContent(editorState),
     content: editor.editor?.innerHTML ?? '',
+    created,
     ...options,
   });
+
+  return myProfileContract.methods
+    .createDraftPost(postCID, slug, created)
+    .send({ from: ethAccount, gas: 1000000 });
 };
 
 type UpdatePostOptions = {
@@ -36,14 +49,49 @@ type UpdatePostOptions = {
   ethAccount: string;
 };
 
-export const updatePost = (
+export const updatePost = async (
   editor: Editor,
   editorState: EditorState,
-  options: UpdatePostOptions
+  { ethAccount, ...options }: UpdatePostOptions
 ) => {
-  return updatePostRequest({
+  const web3 = getWeb3Client();
+  const myProfileContract = getMyProfileContract(web3);
+
+  const newPostCID = await updatePostRequest({
     richContent: getRichContent(editorState),
     content: editor.editor?.innerHTML ?? '',
     ...options,
   });
+
+  return myProfileContract.methods
+    .updatePost(options.cid, newPostCID)
+    .send({ from: ethAccount, gas: 1000000 });
+};
+
+type RestorePostOptions = {
+  cid: PostCID;
+  slug: string;
+  created: number;
+  ethAccount: string;
+};
+
+export const restorePost = ({ cid, slug, created, ethAccount }: RestorePostOptions) => {
+  const web3 = getWeb3Client();
+  const myProfileContract = getMyProfileContract(web3);
+
+  return myProfileContract.methods
+    .createDraftPost(cid, slug, created)
+    .send({ from: ethAccount, gas: 1000000 });
+};
+
+type PublishPostOptions = {
+  postCID: PostCID;
+  ethAccount: string;
+};
+
+export const publishPost = ({ postCID, ethAccount }: PublishPostOptions) => {
+  const web3 = getWeb3Client();
+  const myProfileContract = getMyProfileContract(web3);
+
+  return myProfileContract.methods.publishPost(postCID).send({ from: ethAccount, gas: 1000000 });
 };
