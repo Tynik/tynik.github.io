@@ -30,6 +30,7 @@ import {
 import { RoutesList } from '~/RoutesList';
 import { Content } from '~/components';
 import { useUser } from '~/providers';
+import { MyProfileContractBalance } from '~/MyProfileContractBalance';
 
 interface AppBarProps extends MuiAppBarProps {
   open?: boolean;
@@ -117,9 +118,11 @@ const App = () => {
 
           <Box sx={{ flexGrow: 1 }} />
 
-          <Stack direction="row" spacing={1}>
+          <Stack direction="row" alignItems="center" spacing={1}>
             {isAuthenticated && (
               <>
+                <MyProfileContractBalance />
+
                 <Button component={Link} to="/drafts">
                   Drafts
                 </Button>

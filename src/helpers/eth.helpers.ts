@@ -1,10 +1,8 @@
-export const requestEthAccounts = async () => {
-  if (!window.ethereum) {
-    throw new Error();
-  }
+import Web3 from 'web3';
 
+export const requestEthAccounts = async () => {
   try {
-    return await window.ethereum.request<string[]>({ method: 'eth_requestAccounts' });
+    return await window.ethereum?.request<string[]>({ method: 'eth_requestAccounts' });
   } catch (e) {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
@@ -15,4 +13,23 @@ export const requestEthAccounts = async () => {
     }
     throw e;
   }
+};
+
+export const sentEthTransaction = async (from: string, to: string, value: string) => {
+  if (!window.ethereum) {
+    throw new Error('window.ethereum is undefined');
+  }
+
+  const web3 = new Web3(window.ethereum as never);
+
+  await window.ethereum.request({
+    method: 'eth_sendTransaction',
+    params: [
+      {
+        from,
+        to,
+        value: web3.utils.toHex(web3.utils.toWei(value, 'ether')),
+      },
+    ],
+  });
 };

@@ -12,6 +12,7 @@ import { publishPostRequest } from '~/api';
 import { PostSkeleton } from '../components';
 import { ViewPostPageFit } from './ViewPostPageFit';
 import { ViewPostPageMicrodata } from './ViewPostPageMicrodata';
+import { ViewPostDonateButton } from './ViewPostDonateButton';
 
 export const ViewPostPage = () => {
   const navigate = useNavigate();
@@ -87,6 +88,10 @@ export const ViewPostPage = () => {
 
       <Grid xs={12} item>
         <ViewPostPageFit post={post} />
+      </Grid>
+
+      <Grid xs={12} textAlign="center" item>
+        <ViewPostDonateButton />
       </Grid>
     </Grid>
   );
