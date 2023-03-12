@@ -1,7 +1,5 @@
 export type NetlifyFunction =
   | 'auth'
-  | 'get-my-profile-contract-address'
-  | 'get-my-profile-contract-balance'
   | 'get-post'
   | 'get-post-by-slug'
   | 'create-draft-post'

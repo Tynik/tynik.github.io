@@ -1,14 +1,14 @@
-import React from 'react';
-import { useQuery } from 'react-query';
+import React, { useEffect, useState } from 'react';
 import { Typography } from '@mui/material';
 
-import { getMyProfileContractBalance } from '~/api';
+import { getMyProfileContractBalanceEth, getWeb3Client, noop } from '~/helpers';
 
 export const MyProfileContractBalance = () => {
-  const { data: balance } = useQuery(
-    ['get-my-profile-contract-balance'],
-    getMyProfileContractBalance
-  );
+  const [balance, setBalance] = useState('');
+
+  useEffect(() => {
+    getMyProfileContractBalanceEth(getWeb3Client()).then(setBalance).catch(noop);
+  }, []);
 
   return <Typography variant="h6">{balance ?? '-'} ETH</Typography>;
 };

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { toast } from 'react-toastify';
 import {
   Button,
   Dialog,
@@ -9,9 +10,7 @@ import {
 } from '@mui/material';
 import { AttachMoney as AttachMoneyIcon } from '@mui/icons-material';
 
-import { toast } from 'react-toastify';
-import { getMyProfileContractAddress } from '~/api';
-import { sentEthTransaction } from '~/helpers';
+import { getMyProfileContractAddress, sentEthTransaction } from '~/helpers';
 import { useUser } from '~/providers';
 
 export const ViewPostDonateButton = () => {
@@ -25,10 +24,8 @@ export const ViewPostDonateButton = () => {
   }
 
   const donate = async () => {
-    const contractAddress = await getMyProfileContractAddress();
-
     try {
-      await sentEthTransaction(ethAccount, contractAddress, donateEth);
+      await sentEthTransaction(ethAccount, getMyProfileContractAddress(), donateEth);
 
       setIsDonate(false);
 

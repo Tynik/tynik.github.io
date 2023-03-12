@@ -17,14 +17,6 @@ export const authRequest = async (ethAccount: string) => {
   return netlifyRequest('auth', { params: { ethAccount } });
 };
 
-export const getMyProfileContractAddress = async () => {
-  return (await netlifyRequest<string>('get-my-profile-contract-address')).data;
-};
-
-export const getMyProfileContractBalance = async () => {
-  return (await netlifyRequest<string>('get-my-profile-contract-balance')).data;
-};
-
 type CreateDraftPostPayload = {
   title: string;
   subtitle: string;
