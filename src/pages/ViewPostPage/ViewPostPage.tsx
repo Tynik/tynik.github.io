@@ -1,12 +1,12 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { Alert, AlertTitle, Box, Button, Chip, Grid, Stack } from '@mui/material';
 import { Edit as EditIcon, Send as SendIcon } from '@mui/icons-material';
 
-import { toast } from 'react-toastify';
+import { getWeb3Client, myProfileContractPublishPost } from '~/helpers';
 import { POST_STATUS_COLOR } from '~/constants/post.constants';
 import { useCurrentPost } from '~/hooks';
-import { publishPost } from '~/helpers';
 import { useUser } from '~/providers';
 
 import { PostSkeleton } from '../components';
@@ -44,10 +44,7 @@ export const ViewPostPage = () => {
     }
 
     try {
-      await publishPost({
-        postCID: post.cid,
-        ethAccount: user.ethAccount,
-      });
+      await myProfileContractPublishPost(getWeb3Client(), user.ethAccount, post.cid);
 
       toast('Successfully published', { type: 'success' });
 

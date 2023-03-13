@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import type { PostCID } from '~/types';
 
 import { useUser } from '~/providers';
-import { restorePost } from '~/helpers';
+import { getWeb3Client, myProfileContractRestorePost } from '~/helpers';
 
 type RestorePostForm = {
   cid: PostCID;
@@ -46,11 +46,10 @@ export const RestorePostPage = () => {
     }
 
     try {
-      await restorePost({
+      await myProfileContractRestorePost(getWeb3Client(), user.ethAccount, {
         cid: data.cid,
         slug: data.slug,
         created: data.created,
-        ethAccount: user.ethAccount,
       });
 
       toast('Successfully restored', { type: 'success' });
