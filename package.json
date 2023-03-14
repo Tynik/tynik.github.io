@@ -4,7 +4,7 @@
   "main": "public/index.html",
   "scripts": {
     "build": "NODE_ENV=production webpack",
-    "start": "MY_PROFILE_CONTRACT_ADDRESS=0x0d6BB9e00432A94f53107737150b4dc09D2Ea84F LOCAL_ENV=true NETLIFY_SERVER=http://localhost:9999 NODE_ENV=development webpack serve",
+    "start": "MY_PROFILE_CONTRACT_ADDRESS=0x4FaC55a5555746f936D176C515934Da5dB7F1D40 LOCAL_ENV=true NETLIFY_SERVER=http://localhost:9999 NODE_ENV=development webpack serve",
     "lint": "eslint ./src"
   },
   "devDependencies": {

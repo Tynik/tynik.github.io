@@ -1,6 +1,6 @@
 import React from 'react';
 
-export type PostCID = string;
+export type PostCid = string;
 
 export type PostStatus = 'DRAFT' | 'PUBLISHED' | 'ARCHIVED';
 
@@ -15,7 +15,7 @@ export type TimelinePoint = {
 };
 
 export interface PostInfoContent {
-  cid: PostCID;
+  cid: PostCid;
   title: string;
   subtitle: string;
   keywords: string[];

@@ -1,4 +1,4 @@
-import type { PostInfoContent, Post, PostCID, RichPost, PostStatus } from '~/types';
+import type { PostInfoContent, Post, PostCid, RichPost, PostStatus } from '~/types';
 
 import { netlifyRequest } from './apiClient';
 
@@ -27,10 +27,10 @@ type CreateDraftPostPayload = {
 };
 
 export const createDraftPostRequest = async (payload: CreateDraftPostPayload) =>
-  (await netlifyRequest<PostCID>('create-draft-post', { payload, method: 'POST' })).data;
+  (await netlifyRequest<PostCid>('create-draft-post', { payload, method: 'POST' })).data;
 
 type UpdatePostPayload = {
-  cid: PostCID;
+  cid: PostCid;
   title: string;
   subtitle: string;
   keywords: string[];
@@ -39,7 +39,7 @@ type UpdatePostPayload = {
 };
 
 export const updatePostRequest = async (payload: UpdatePostPayload) =>
-  (await netlifyRequest<PostCID>('update-post', { payload, method: 'POST' })).data;
+  (await netlifyRequest<PostCid>('update-post', { payload, method: 'POST' })).data;
 
 type UploadPostFilePayload = {
   files: Blob[];
@@ -66,7 +66,7 @@ export const getPostBySlugRequest = async (slug: string) => {
   return (await netlifyRequest<PostInfo>('get-post-by-slug', { params: { slug } })).data;
 };
 
-export const getPostInfoContentRequest = async (postCID: PostCID): Promise<PostInfoContent> => {
+export const getPostInfoContentRequest = async (postCID: PostCid): Promise<PostInfoContent> => {
   const response = await fetch(`https://${postCID}.ipfs.w3s.link/post.json`);
   if (!response.ok) {
     return Promise.reject();
@@ -80,7 +80,7 @@ export const getPostInfoContentRequest = async (postCID: PostCID): Promise<PostI
   };
 };
 
-export const getPostContentRequest = async (postCID: PostCID) => {
+export const getPostContentRequest = async (postCID: PostCid) => {
   const response = await fetch(`https://${postCID}.ipfs.w3s.link/post-content.json`);
   if (!response.ok) {
     return Promise.reject();
@@ -109,7 +109,7 @@ export const getPostRequest = async (slug: string): Promise<Post> => {
   };
 };
 
-export const getRichPostContentRequest = async (postCID: PostCID) => {
+export const getRichPostContentRequest = async (postCID: PostCid) => {
   const response = await fetch(`https://${postCID}.ipfs.w3s.link/post-rich-content.json`);
   if (!response.ok) {
     return Promise.reject();

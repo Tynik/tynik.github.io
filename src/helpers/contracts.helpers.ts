@@ -1,7 +1,7 @@
 import Web3 from 'web3';
 
 import type { AbiItem } from 'web3-utils';
-import type { PostCID } from '~/types';
+import type { PostCid } from '~/types';
 
 import MyProfileContract from '~/smart-contracts/MyProfile.json';
 
@@ -25,7 +25,7 @@ export const getMyProfileContractETHBalance = async (web3: Web3) => {
 };
 
 type MyProfileContractCreateDraftPostOptions = {
-  cid: PostCID;
+  cid: PostCid;
   slug: string;
   created: number;
 };
@@ -43,24 +43,25 @@ export const myProfileContractCreateDraftPost = (
 };
 
 type MyProfileContractUpdatePostOptions = {
-  oldCID: PostCID;
-  newCID: PostCID;
+  oldCid: PostCid;
+  newCid: PostCid;
+  slug: string;
 };
 
 export const myProfileContractUpdatePost = (
   web3: Web3,
   ethAccount: string,
-  { oldCID, newCID }: MyProfileContractUpdatePostOptions
+  { oldCid, newCid, slug }: MyProfileContractUpdatePostOptions
 ) => {
   const myProfileContract = getMyProfileContract(web3);
 
   return myProfileContract.methods
-    .updatePost(oldCID, newCID)
+    .updatePost(oldCid, newCid, slug)
     .send({ from: ethAccount, gas: 1000000 });
 };
 
 type MyProfileContractRestorePostOptions = {
-  cid: PostCID;
+  cid: PostCid;
   slug: string;
   created: number;
 };
@@ -77,7 +78,7 @@ export const myProfileContractRestorePost = (
     .send({ from: ethAccount, gas: 1000000 });
 };
 
-export const myProfileContractPublishPost = (web3: Web3, ethAccount: string, cid: PostCID) => {
+export const myProfileContractPublishPost = (web3: Web3, ethAccount: string, cid: PostCid) => {
   const myProfileContract = getMyProfileContract(web3);
 
   return myProfileContract.methods.publishPost(cid).send({ from: ethAccount, gas: 1000000 });

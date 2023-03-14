@@ -1,7 +1,7 @@
 import { convertToRaw, Editor } from 'draft-js';
 
 import type { EditorState } from 'draft-js';
-import type { PostCID } from '~/types';
+import type { PostCid } from '~/types';
 
 import { createDraftPostRequest, updatePostRequest } from '~/api';
 
@@ -41,9 +41,10 @@ export const createDraftPost = async (
 };
 
 type UpdatePostOptions = {
-  cid: PostCID;
+  cid: PostCid;
   title: string;
   subtitle: string;
+  slug: string;
   keywords: string[];
   ethAccount: string;
 };
@@ -60,7 +61,8 @@ export const updatePost = async (
   });
 
   return myProfileContractUpdatePost(getWeb3Client(), ethAccount, {
-    oldCID: options.cid,
-    newCID: newPostCID,
+    oldCid: options.cid,
+    newCid: newPostCID,
+    slug: options.slug,
   });
 };

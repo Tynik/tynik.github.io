@@ -6,13 +6,13 @@ import { Button, Grid, TextField } from '@mui/material';
 import { Restore as RestoreIcon } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 
-import type { PostCID } from '~/types';
+import type { PostCid } from '~/types';
 
 import { useUser } from '~/providers';
 import { getWeb3Client, myProfileContractRestorePost } from '~/helpers';
 
 type RestorePostForm = {
-  cid: PostCID;
+  cid: PostCid;
   slug: string;
   created: number;
 };

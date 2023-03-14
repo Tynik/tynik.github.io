@@ -32,6 +32,7 @@ export const EditPostPageFit = ({ richPost }: EditPostPageFitProps) => {
 
   const [title, setTitle] = useState(richPost.title);
   const [subtitle, setSubtitle] = useState(richPost.subtitle);
+  const [slug, setSlug] = useState(richPost.slug);
   const [keywords, setKeywords] = useState(richPost.keywords ?? []);
 
   const [editorState, setEditorState] = useState(() => {
@@ -101,6 +102,7 @@ export const EditPostPageFit = ({ richPost }: EditPostPageFitProps) => {
       await updatePost(editor, editorState, {
         title,
         subtitle,
+        slug,
         keywords,
         cid: richPost.cid,
         ethAccount: user.ethAccount,
@@ -108,7 +110,7 @@ export const EditPostPageFit = ({ richPost }: EditPostPageFitProps) => {
 
       toast('Successfully updated', { type: 'success' });
 
-      navigate(`/post/${richPost.slug}`);
+      navigate(`/post/${slug}`);
     } catch (e) {
       toast('Something went wrong', { type: 'error' });
     }
@@ -136,6 +138,16 @@ export const EditPostPageFit = ({ richPost }: EditPostPageFitProps) => {
           value={subtitle || ''}
           onChange={e => setSubtitle(e.target.value)}
           error={subtitle === ''}
+          fullWidth
+        />
+      </Grid>
+
+      <Grid xs={12} item>
+        <TextField
+          label="Slug"
+          value={slug || ''}
+          onChange={e => setSlug(e.target.value)}
+          error={slug === ''}
           fullWidth
         />
       </Grid>
